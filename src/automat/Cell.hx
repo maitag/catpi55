@@ -30,21 +30,23 @@ enum abstract CellType(Int) from Int to Int {
 	public static var mask(get, never):Int;
 	static inline function get_mask():Int return 0x0F;
 
+	public function toString():String return util.EnumMacro.nameByValue(automat.CellType).get(this);
 }
 
 
 // ----------------------------------------------------
 
 abstract Cell(Int) from Int to Int {
-	public inline function new() {
-		this = 0;
+	public inline function new(?type:CellType) {
+		this = (type == null) ? 0 : type;
 	}
 
 	public var type(get, set):CellType;
 	inline function get_type():CellType return this & CellType.mask;
 	inline function set_type(type:CellType):CellType return this = (this & ~CellType.mask) | type;
 
-	// to check the CellType (optimization later: no need of "& CellType.mask" if it keep stay at the first bits!)
+
+	// to check the CellType category
 
 	public var isSolid(get, never):Bool;
 	inline function get_isSolid():Bool return CellType.isSolid(this & CellType.mask);
@@ -57,5 +59,8 @@ abstract Cell(Int) from Int to Int {
 
 	// parameters in depend of the type
 
+
+	// debug:
+	public function toString():String return 'type:$type';
 
 }

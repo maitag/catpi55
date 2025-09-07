@@ -8,21 +8,19 @@ class Test extends Application {
 	public function new() {
 		super();
 		
-		
-		// -------- test cell ----------
-
+		// -------- test Pos ----------
 		trace(Pos.xMax, Pos.yMax);
+		
 
-		var c0 = new Cell();
+		// -------- test cell ----------
+		var c0 = new Cell(WATER);
 		trace(c0);
-		c0.type= EARTH;
-		trace(c0.isSolid);
-		c0.type= WATER;
+		trace(c0.type);
 		trace(c0.isSolid);
 		trace(c0.isFluid);
+		trace(c0.isGas);
 
 		// -------- test grid ----------
-		
 		var grid = new Grid();
 
 		trace(Grid.WIDTH, Grid.HEIGHT);

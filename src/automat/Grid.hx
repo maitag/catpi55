@@ -3,45 +3,50 @@ package automat;
 import haxe.ds.Vector;
 
 class Grid {
-
+	// -------------------------------------------------
+	// -------------------- DATA -----------------------
+	// -------------------------------------------------
 	public static inline final WIDTH:Int = 64;
 	public static inline final HEIGHT:Int = 64;
 
 	#if CellGrid_Bytes
-
 	var data = haxe.io.Bytes.alloc(WIDTH*HEIGHT*4);
 	inline function _get(p:Int):Int return data.getInt32(p<<2);
 	inline function _set(p:Int, v:Int) data.setInt32(p<<2, v);
-
 	#else
-
-	var data = new haxe.ds.Vector<Int>(WIDTH*HEIGHT);
+	var data = new Vector<Int>(WIDTH*HEIGHT);
 	inline function _get(p:Int):Int return data.get(p);
 	inline function _set(p:Int, v:Int) data.set(p, v);
-
 	#end
 
 	public function get(pos:Pos):Int return _get(pos);
 	public function set(pos:Pos, value:Int) _set(pos, value);
 
-	// --------------------------------------------------------
+	// ---- constructor ----
+	public function new() {
+	}
 
-	public var viewers = new Array<Viewer>();
-
+	// -------------------------------------------------
+	// ---------------- linked GRIDs -------------------
+	// -------------------------------------------------
 	public var top:Grid = null;
 	public var bottom:Grid = null;
 	public var left:Grid = null;
 	public var right:Grid = null;
 
-	// --------------------------------------------------------
+	// -------------------------------------------------
+	// ------------------- VIEWER ----------------------
+	// -------------------------------------------------
+	public var viewers = new Array<Viewer>();
 
-	public function new() {
-	}
+	// -------------------------------------------------
+
 		
 
 
-	// ------------------ SIMMULATION --------------------
-
+	// -------------------------------------------------
+	// ---------------- SIMMULATION --------------------
+	// -------------------------------------------------
 	public static inline var MAX_STEPS = 10;
 	public static inline var MAX_ACTIONS = 9;
 
@@ -66,7 +71,6 @@ class Grid {
 		if (timeStep >= MAX_STEPS * (MAX_ACTIONS+1)) timeStep = 0;
 	}
 
-	
 	public inline function setAction(action:Action, delayStep:Int) {
 
 		var actionTimeStep = timeStep + delayStep * (MAX_ACTIONS+1);
@@ -85,9 +89,6 @@ class Grid {
 
 
 
-	// -------------------------------------------------
-
-	// TODO: load and save all Grid DATA ---------------
 
 }
 
