@@ -8,18 +8,24 @@ class Test extends Application {
 	public function new() {
 		super();
 		
+		/*
 		// -------- test Pos ----------
 		trace(Pos.xMax, Pos.yMax);
-		
+		*/
+
+
 
 		// -------- test cell ----------
-		var c0 = new Cell(WATER);
+		var c0 = new Cell(AIR,42);
 		trace(c0);
-		trace(c0.type);
-		trace(c0.isSolid);
-		trace(c0.isFluid);
-		trace(c0.isGas);
+		trace("TYPE:", c0.type);
+		trace("PARAM:",c0.param);
+		trace("cell and type isSolid:", c0.isSolid, c0.type.isSolid);
+		trace("cell and type isFluid:",c0.isFluid, c0.type.isFluid);
+		trace("cell and type isGas:",c0.isGas, c0.type.isGas);
 
+
+		/*
 		// -------- test grid ----------
 		var grid = new Grid();
 
@@ -33,6 +39,6 @@ class Test extends Application {
 
 
 		grid.step();
-		
+		*/
 	}
 }
