@@ -77,9 +77,10 @@ abstract GasParam(Int) from CellParam to CellParam {
 abstract Cell(Int) from Int to Int {
 	public inline function new(type:CellType, ?param:CellParam) {
 		if (param == null) {
-			if (type.isSolid) {trace("todo: SET SOLID DEFAULTS");param = 1;}
+			param = 0;
+			/*if (type.isSolid) {trace("todo: SET SOLID DEFAULTS");param = 1;}
 			else if (type.isFluid) {trace("todo: SET FLUID DEFAULTS");param = 2;}
-			else {trace("todo: SET GAS DEFAULTS");param = 3;}
+			else {trace("todo: SET GAS DEFAULTS");param = 3;}*/
 		}
 		this = (param << CellType.bits) | type;
 	}

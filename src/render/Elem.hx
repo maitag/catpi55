@@ -1,4 +1,4 @@
-package view.render;
+package render;
 
 
 interface Elem {

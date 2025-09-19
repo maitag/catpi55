@@ -1,9 +1,10 @@
-package view.render;
+package render;
+
 
 import peote.view.Element;
 import peote.view.Color;
 
-class ElemSolid implements Element implements Elem
+class ElemSolid implements Element
 {
 	// position in pixel (relative to upper left corner of Display)
 	@posX public var x:Int=0;
@@ -14,9 +15,7 @@ class ElemSolid implements Element implements Elem
 	@sizeY public var h:Int=32;
 		
 	// color (RGBA)
-	@color public var c:Color;
+	@color public var c:Color = Color.BLUE;
 		
-	public function new() {
-		c = Color.GREY2;
-	}
+	public function new() {}
 }

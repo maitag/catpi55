@@ -19,8 +19,8 @@ class Grid {
 	inline function _set(p:Int, v:Int) data.set(p, v);
 	#end
 
-	public function get(pos:Pos):Int return _get(pos);
-	public function set(pos:Pos, value:Int) _set(pos, value);
+	public function get(pos:Pos):Cell return _get(pos);
+	public function set(pos:Pos, cell:Cell) _set(pos, cell);
 
 	// ---- constructor ----
 	public function new() {

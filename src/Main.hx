@@ -1,5 +1,6 @@
 package;
 
+import view.View;
 import haxe.CallStack;
 
 import lime.app.Application;
@@ -32,33 +33,23 @@ class Main extends Application
 	public function start(window:Window)
 	{
 		var peoteView = new PeoteView(window);
-
-		var buffer = new Buffer<view.render.ElemSolid>(32, 32, true);
-		var display = new Display(0, 0, 64*32, 64*32, Color.GREEN);
-		var program = new Program(buffer);
-
-		peoteView.addDisplay(display);
-		display.addProgram(program);
-
-		var solid = new view.render.ElemSolid();
-		buffer.addElement(solid);
+		var view = new View(peoteView);
 	}
 	
 	// ------------------------------------------------------------
 	// ----------------- LIME EVENTS ------------------------------
 	// ------------------------------------------------------------	
 
-	override function onPreloadComplete():Void {
-		// access embeded assets from here
-	}
-
+	
 	override function update(deltaTime:Int):Void {
 		// for game-logic update
 	}
-
+	
 	// override function render(context:lime.graphics.RenderContext):Void {}
 	// override function onRenderContextLost ():Void trace(" --- WARNING: LOST RENDERCONTEXT --- ");		
 	// override function onRenderContextRestored (context:lime.graphics.RenderContext):Void trace(" --- onRenderContextRestored --- ");		
+		
+	// override function onPreloadComplete():Void {} // access embeded assets from here
 
 	// ----------------- MOUSE EVENTS ------------------------------
 	// override function onMouseMove (x:Float, y:Float):Void {}	
