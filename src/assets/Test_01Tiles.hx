@@ -6,8 +6,7 @@ enum abstract TestTiles(Int) from Int to Int {
 	var Cube = 0;
 	var Diamond = 6;
 	var Gem = 4;
-	var Icosphere = 1;
-	var Sun = -9;
+	var Sphere = 1;
 	var Suzanne = 7;
 	var Teapot = 3;
 }
