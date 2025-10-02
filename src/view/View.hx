@@ -19,6 +19,7 @@ class View {
 		this.peoteView = peoteView;
 
 		var render = new Render(peoteView);
+
 	}
 
 }

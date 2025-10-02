@@ -7,13 +7,17 @@ class ElemStatic implements peote.view.Element
 	@posY public var y:Int = 0;
 		
 	// size in pixel
-	@sizeX public var w:Int = 128;
-	@sizeY public var h:Int = 128;
+	@sizeX public var w:Int = 64;
+	@sizeY public var h:Int = 64;
 	
 	// tile number
 	@texTile public var tile:Int = 0;
 
-	// var OPTIONS = { texRepeatX:true, texRepeatY:true };
+	// scale out the gap;
+	@const @texSizeX var texSizeX:Float;
+	@const @texSizeY var texSizeY:Float;
+
+	var OPTIONS = { texRepeatX:false, texRepeatY:false };
 
 	// --------------------------------------------------------------------------
 	
