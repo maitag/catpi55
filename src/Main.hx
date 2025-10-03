@@ -57,8 +57,8 @@ class Main extends Application
 	// override function onMouseDown (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
 	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
-		if (deltaY<0) peoteView.zoom -= 0.1;
-		else peoteView.zoom += 0.1;
+		if (deltaY<0) peoteView.zoom /= 1.1;
+		else peoteView.zoom *= 1.1;
 	}
 	// override function onMouseMoveRelative (x:Float, y:Float):Void {}
 

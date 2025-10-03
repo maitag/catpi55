@@ -100,7 +100,7 @@ class Render {
 		var e5 = new ElemStatic(Tiles.Icosphere, Tiles.tileWidth*1, Tiles.tileHeight*1, Tiles.tileWidth, Tiles.tileHeight);
 		bufferStatic.addElement(e5);
 	
-		var e6 = new ElemStatic(Tiles.Icosphere, Tiles.tileWidth*2, Tiles.tileHeight*1, Tiles.tileWidth, Tiles.tileHeight);
+		var e6 = new ElemStatic(Tiles.Suzanne, Tiles.tileWidth*2, Tiles.tileHeight*1, Tiles.tileWidth, Tiles.tileHeight);
 		bufferStatic.addElement(e6);
 	
 	
