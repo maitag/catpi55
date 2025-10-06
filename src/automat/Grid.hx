@@ -49,8 +49,9 @@ class Grid {
 	// -------------------------------------------------
 	public static inline var MAX_STEPS = 10;
 	public static inline var MAX_ACTIONS = 9;
+	public static inline var STEP_SIZE = MAX_ACTIONS + 1;
 
-	public var timeSlicer = new Vector<Int>(MAX_STEPS * (MAX_ACTIONS+1));
+	public var timeSlicer = new Vector<Int>(MAX_STEPS * STEP_SIZE);
 
 	public var timeStep:Int = 0;
 
@@ -58,8 +59,8 @@ class Grid {
 	public inline function getAction(i:Int) return timeSlicer.get(timeStep + 1 + i);
 
 	// todo: maybe needs a "lock" if setAction called from outwards!
-	public function step() {
-		
+	public function step()
+	{		
 		// get all actions to the actual time
 		for (i in 0...getActionLength()) {
 			Sim.step(this, getAction(i));
@@ -67,15 +68,17 @@ class Grid {
 		
 		// ready for the next timestep
 		timeSlicer.set(timeStep, 0); // resets all actions at timeStep;
-		timeStep += MAX_ACTIONS + 1;
-		if (timeStep >= MAX_STEPS * (MAX_ACTIONS+1)) timeStep = 0;
+		timeStep += STEP_SIZE;
+		if (timeStep >= MAX_STEPS * STEP_SIZE) timeStep = 0;
 	}
 
-	public inline function setAction(action:Action, delayStep:Int) {
+	public inline function setAction(action:Action, delayStep:Int)
+	{
+		if (delayStep >= MAX_STEPS) throw("delayStep into setAction is greater then timeslicers MAX_STEPS");
 
-		var actionTimeStep = timeStep + delayStep * (MAX_ACTIONS+1);
-		if (actionTimeStep >= MAX_STEPS * MAX_ACTIONS) actionTimeStep -= MAX_STEPS * (MAX_ACTIONS+1);
-
+		var actionTimeStep = timeStep + delayStep * STEP_SIZE;
+		if (actionTimeStep >= MAX_STEPS * STEP_SIZE) actionTimeStep -= MAX_STEPS * STEP_SIZE;
+		
 		// get the actions-amount at this time
 		var actionsPerStep = timeSlicer.get(actionTimeStep);
 		if (actionsPerStep >= MAX_ACTIONS) throw("grid-timeslicer actions OVERFLOW");

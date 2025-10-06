@@ -78,6 +78,8 @@ class Render {
 			zoomFix + Tiles.tileHeight+Tiles.gap+Tiles.gap
 		)}');
 		
+		// textureStatic.setSmooth(true, false);
+
 		programStatic.blendEnabled = true;
 
 		display.addProgram(programStatic);

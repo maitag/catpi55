@@ -2,7 +2,7 @@ package automat;
 
 import lime.app.Application;
 
-class Test extends Application {
+class TestAutomat extends Application {
 
 
 	public function new() {
@@ -16,6 +16,7 @@ class Test extends Application {
 
 
 		// -------- test cell ----------
+		/*
 		var c0 = new Cell(WATER,42);
 		trace(c0);
 		trace("TYPE:", (c0.type:Int));
@@ -23,7 +24,7 @@ class Test extends Application {
 		trace("cell and type isSolid:", c0.isSolid, c0.type.isSolid);
 		trace("cell and type isFluid:",c0.isFluid, c0.type.isFluid);
 		trace("cell and type isGas:",c0.isGas, c0.type.isGas);
-
+		*/
 
 		/*
 		// -------- test grid ----------
@@ -43,8 +44,17 @@ class Test extends Application {
 
 		// -------- grid testdata ----------
 		var grid = createTestGrid(TESTGRID);
+		// trace(grid.get(new Pos(1,1)));
 
-		trace(grid.get(new Pos(1,1)));
+		grid.setAction(new Action(CELL_MOVE, new Pos(1,1)), 0); // immediadly
+		grid.setAction(new Action(CELL_EMPTY, new Pos(3,4)), Grid.MAX_STEPS-1); // max delay time 
+
+		// simmulate 10 timesteps
+		for (i in 0...10) {
+			trace('step $i');
+			grid.step();
+		}
+
 
 	}
 

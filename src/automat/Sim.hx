@@ -12,9 +12,9 @@ class Sim {
 
 		switch (action.type) {
 
-			case CELL_MOVE: trace("move", action.pos);
+			case CELL_MOVE: trace(action);
 
-			case CELL_EMPTY: trace("gets empty", action.pos);
+			case CELL_EMPTY: trace(action);
 
 
 			// TODO

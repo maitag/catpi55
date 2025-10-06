@@ -10,6 +10,10 @@ enum abstract ActionType(Int) from Int to Int {
 
 	public static var mask(get, never):Int;
 	static inline function get_mask():Int return 0x0F;
+
+
+	// debug:
+	public function toString():String return util.EnumMacro.nameByValue(automat.ActionType).get(this);
 }
 
 // ------------------------------------------------------
@@ -29,5 +33,7 @@ abstract Action(Int) from Int to Int {
 	inline function set_pos(pos:Pos):Pos return (pos << ActionType.bits) | type;
 
 
+	// debug:
+	public function toString():String return 'type:$type, pos:$pos';
 
 }

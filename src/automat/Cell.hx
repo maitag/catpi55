@@ -40,6 +40,7 @@ enum abstract CellType(Int) from Int to Int {
 	public static inline var mask:Int = (1 << bits)-1;
 
 	
+	// debug:
 	public function toString():String return util.EnumMacro.nameByValue(automat.CellType).get(this);
 }
 
