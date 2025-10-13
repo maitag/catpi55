@@ -2,6 +2,8 @@ package automat;
 
 import lime.app.Application;
 
+import automat.Pos.xy as P;
+
 class TestAutomat extends Application {
 
 
@@ -13,6 +15,10 @@ class TestAutomat extends Application {
 		trace(Pos.xMax, Pos.yMax);
 		var p = new Pos(36,4);
 		trace("pos:",p.x,p.y);
+		p = Pos.xy(4,5);
+		trace("pos:",p.x,p.y);
+		
+		trace("pos:", P(23, 42) );
 		*/
 
 		// -------- test cell ----------
@@ -65,7 +71,14 @@ class TestAutomat extends Application {
 			i+=1;
 		}
 		trace( (haxe.Timer.stamp() - t) );
+
+
 	}
+
+
+	// ----------------------------------------------------------------
+	// ----------------------------------------------------------------
+	// ----------------------------------------------------------------
 
 	public static function createTestGrid(testGrid:String):Grid
 	{

@@ -42,6 +42,7 @@ abstract Pos(Int) from Int to Int {
 
 	public inline function new(x:Int, y:Int) set(x, y);
 	public inline function set(x:Int, y:Int) this = (y << xBits) | x;
+	public static inline function xy(x:Int, y:Int):Pos return new Pos(x, y);
 
 	// debug:
 	public function toString():String return 'x:$x, y:$y';
@@ -184,6 +185,18 @@ class PosMacro {
 				expr: macro this = (y << xBits) | x,
 				params: [],
 				ret: null
+			})
+		});
+
+		fields.push({
+			name: "xy",
+			access: [AStatic, AInline, APublic],
+			pos: Context.currentPos(),
+			kind: FFun({
+				args: [{name:"x", opt:false, meta:[], type: macro:Int}, {name:"y", opt:false, meta:[], type: macro:Int}],
+				expr: macro return new Pos(x, y),
+				params: [],
+				ret: macro:Pos
 			})
 		});
 
