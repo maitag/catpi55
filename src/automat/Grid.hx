@@ -1,5 +1,6 @@
 package automat;
 
+import automat.Cell.CellActor;
 import haxe.ds.Vector;
 
 class Grid {
@@ -24,6 +25,8 @@ class Grid {
 
 	// ---- constructor ----
 	public function new() {
+		// init timeslicer vector (e.g. on neko it is initialized by "null")
+		for (i in 0...MAX_STEPS) timeSlicer.set(i*STEP_SIZE, 0);
 	}
 
 	// -------------------------------------------------
@@ -41,17 +44,22 @@ class Grid {
 
 	// -------------------------------------------------
 
-		
-
+	public inline function getActor(pos:Pos):CellActor return get(pos).actor;	
+	public inline function setActor(pos:Pos, actor:CellActor) {
+		var cell = get(pos);
+		cell.actor = actor;
+		set(pos, cell);
+	}
 
 	// -------------------------------------------------
 	// ---------------- SIMMULATION --------------------
 	// -------------------------------------------------
-	public static inline var MAX_STEPS = 10;
-	public static inline var MAX_ACTIONS = 9;
-	public static inline var STEP_SIZE = MAX_ACTIONS + 1;
+	public static inline var MAX_STEPS:Int = 10;
+	public static inline var MAX_ACTIONS:Int = 9;
+	public static inline var STEP_SIZE:Int = MAX_ACTIONS + 1;
 
 	public var timeSlicer = new Vector<Int>(MAX_STEPS * STEP_SIZE);
+	public var actors = new Vector<Actor>((WIDTH*HEIGHT+WIDTH*HEIGHT) >> 2);
 
 	public var timeStep:Int = 0;
 
@@ -76,13 +84,15 @@ class Grid {
 	{
 		if (delayStep >= MAX_STEPS) throw("delayStep into setAction is greater then timeslicers MAX_STEPS");
 
-		var actionTimeStep = timeStep + delayStep * STEP_SIZE;
+		var actionTimeStep:Int = timeStep + delayStep * STEP_SIZE;
 		if (actionTimeStep >= MAX_STEPS * STEP_SIZE) actionTimeStep -= MAX_STEPS * STEP_SIZE;
 		
 		// get the actions-amount at this time
-		var actionsPerStep = timeSlicer.get(actionTimeStep);
+		var actionsPerStep:Int = timeSlicer.get(actionTimeStep);
 		if (actionsPerStep >= MAX_ACTIONS) throw("grid-timeslicer actions OVERFLOW");
-		
+
+		trace(actionTimeStep , actionsPerStep); // TODO: in neko the actionsPerStep is null!
+
 		timeSlicer.set(actionTimeStep + 1 + actionsPerStep, action);
 
 		// increase the actions-amount for this time

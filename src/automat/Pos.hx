@@ -14,7 +14,7 @@ package automat;
 
 // this is manual haxe code for using fully Int 32 bitsize
 /*
-private abstract Pos(Int) to Int {
+abstract Pos(Int) from Int to Int {
 
 	// lower bits for x position
 	public static inline var xBits:Int = 16;
@@ -45,8 +45,8 @@ private abstract Pos(Int) to Int {
 
 	// debug:
 	public function toString():String return 'x:$x, y:$y';
-}*/
-
+}
+*/
 #else 
 
 import haxe.macro.Expr;

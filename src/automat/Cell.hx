@@ -74,6 +74,12 @@ abstract GasParam(Int) from CellParam to CellParam {
 }
 
 // ----------------------------------------------------
+abstract CellActor(Int) from Int to Int {
+	public static inline var bits:Int = 12;
+	public static inline var mask:Int = ((1 << bits)-1) << (CellType.bits + CellParam.bits);
+}
+
+// ----------------------------------------------------
 
 abstract Cell(Int) from Int to Int {
 	public inline function new(type:CellType, ?param:CellParam) {
@@ -115,9 +121,15 @@ abstract Cell(Int) from Int to Int {
 	inline function set_param(param:CellParam):CellParam return this = (this & ~CellParam.mask) | (param << CellType.bits);
 
 
+	// --------- ACTOR index -------------
+
+	public var actor(get, set):CellActor;
+	inline function get_actor():CellActor return (this & CellActor.mask) >> CellActor.bits;
+	inline function set_actor(actor:CellActor):CellActor return this = (this & ~CellActor.mask) | (actor << CellActor.bits);
+	// TODO: problem on neko with the bitops
 
 
 	// debug:
-	public function toString():String return 'type:$type, param:$param';
+	public function toString():String return 'type:$type, param:$param, actor-index:$actor';
 
 }

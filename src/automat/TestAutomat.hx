@@ -11,13 +11,14 @@ class TestAutomat extends Application {
 		/*
 		// -------- test Pos ----------
 		trace(Pos.xMax, Pos.yMax);
+		var p = new Pos(36,4);
+		trace("pos:",p.x,p.y);
 		*/
-
-
 
 		// -------- test cell ----------
 		/*
 		var c0 = new Cell(WATER,42);
+		c0.actor = 5;
 		trace(c0);
 		trace("TYPE:", (c0.type:Int));
 		trace("PARAM:",(c0.param:Int));
@@ -54,8 +55,16 @@ class TestAutomat extends Application {
 			trace('step $i');
 			grid.step();
 		}
-
-
+		
+		var t = haxe.Timer.stamp();
+		var i:Int = 0;
+		while (i < 1000000) {
+			var actor = grid.getActor( new Pos(Std.random(64),Std.random(64)) );
+			if ((actor:Int) < 132) actor++;
+			grid.setActor( new Pos(Std.random(64),Std.random(64)) , actor );
+			i+=1;
+		}
+		trace( (haxe.Timer.stamp() - t) );
 	}
 
 	public static function createTestGrid(testGrid:String):Grid
@@ -72,10 +81,10 @@ class TestAutomat extends Application {
 				case "E": grid.set( i, new Cell(EARTH) );
 				case "R": grid.set( i, new Cell(ROCK) );
 				// TODO:
-				case "P": // grid.set( i, new Cell(AIR, new Actor(PLAYER) ));
-				case "1": // grid.set( i, );
-				case "2": // grid.set( i, );
-				case "3": // grid.set( i, );
+				// case "P": // grid.set( i, new Cell(AIR, new Actor(PLAYER) ));
+				case "1": grid.set( i, new Cell(AIR)  );
+				case "2": grid.set( i, new Cell(AIR)  );
+				case "3": grid.set( i, new Cell(AIR)  );
 
 				default: throw('unknown "$c" in TESTGRID');
 			}
