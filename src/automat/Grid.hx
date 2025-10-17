@@ -43,8 +43,12 @@ class Grid {
 	public var viewers = new Array<Viewer>();
 
 	// -------------------------------------------------
+	// ------------------- ACTOR -----------------------
+	// -------------------------------------------------
 
-	public inline function getActor(pos:Pos):CellActor return get(pos).actor;	
+	public var actors = new Vector<Actor>((WIDTH*HEIGHT+WIDTH*HEIGHT) >> 2);
+
+	public inline function getActor(pos:Pos):CellActor return get(pos).actor;
 	public inline function setActor(pos:Pos, actor:CellActor) {
 		var cell = get(pos);
 		cell.actor = actor;
@@ -59,7 +63,6 @@ class Grid {
 	public static inline var STEP_SIZE:Int = MAX_ACTIONS + 1;
 
 	public var timeSlicer = new Vector<Int>(MAX_STEPS * STEP_SIZE);
-	public var actors = new Vector<Actor>((WIDTH*HEIGHT+WIDTH*HEIGHT) >> 2);
 
 	public var timeStep:Int = 0;
 

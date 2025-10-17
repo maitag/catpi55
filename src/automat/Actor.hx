@@ -4,7 +4,9 @@ class Actor {
     public var pos:Pos;
     // public var type:ActorType;
 
-    public function new() {
-        
+    public var name:String;
+
+    public function new(name) {
+        this.name = name;
     }
 }

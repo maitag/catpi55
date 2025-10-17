@@ -33,22 +33,47 @@ class TestAutomat extends Application {
 		trace("cell and type isGas:",c0.isGas, c0.type.isGas);
 		*/
 
+		// -------- test MainActorList ----------
+		var mainActorList = new MainActorList(3);
+
+		trace("add Actor 0 at index:" + mainActorList.add(new Actor("Actor 0")));
+		trace("add Actor 1 at index:" + mainActorList.add(new Actor("Actor 1")));
+		trace("add Actor 2 at index:" + mainActorList.add(new Actor("Actor 2")));
+		trace("get at index 0:" + mainActorList.get(0).name);
+		trace("get at index 1:" + mainActorList.get(1).name);
+		trace("get at index 2:" + mainActorList.get(2).name);
+		trace("length", mainActorList.length, "\n-----");
+		
+		trace("remove at index 1" ); mainActorList.remove(1);
+		trace("remove at index 0" ); mainActorList.remove(0);
+		trace("length", mainActorList.length, "\n-----");
+
+		trace("add Actor 3 at index:" + mainActorList.add(new Actor("Actor 3")));
+		trace("add Actor 4 at index:" + mainActorList.add(new Actor("Actor 4")));
+		trace("remove at index 2" ); mainActorList.remove(2);
+		trace("add Actor 5 at index:" + mainActorList.add(new Actor("Actor 5")));
+
+		trace("get at index 0:" + mainActorList.get(0).name);
+		trace("get at index 1:" + mainActorList.get(1).name);
+		trace("get at index 2:" + mainActorList.get(2).name);
+		trace("length", mainActorList.length);
+
 		/*
 		// -------- test grid ----------
 		var grid = new Grid();
 
 		trace(Grid.WIDTH, Grid.HEIGHT);
 		
+		var c0 = new Cell(WATER,42);
 		grid.set(new Pos(0,0), c0);
 		grid.set(new Pos(0,1), 42);
 
 		trace(grid.get(new Pos(0,0)));
 		trace(grid.get(new Pos(0,1)));
-
-
-		grid.step();
 		*/
 
+
+		/*
 		// -------- grid testdata ----------
 		var grid = createTestGrid(TESTGRID);
 		// trace(grid.get(new Pos(1,1)));
@@ -61,7 +86,9 @@ class TestAutomat extends Application {
 			trace('step $i');
 			grid.step();
 		}
-		
+		*/
+
+		/*
 		var t = haxe.Timer.stamp();
 		var i:Int = 0;
 		while (i < 1000000) {
@@ -71,7 +98,7 @@ class TestAutomat extends Application {
 			i+=1;
 		}
 		trace( (haxe.Timer.stamp() - t) );
-
+		*/
 
 	}
 
