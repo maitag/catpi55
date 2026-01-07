@@ -24,7 +24,10 @@
 	
 	<haxelib name="lime" />	
 	<haxelib name="peote-view" />
+	<haxelib name="viktor" />
 	
+	<haxedef name="viktor_safe" />
+
 	<!-- force compiling for a special opengl-es version (only set one of them) -->
 	<!-- this optimizes the build and forces no-runtimecheck for the gl-features -->
 	<!-- <haxedef name="peoteview_es3" if="html5" /> -->

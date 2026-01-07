@@ -45,8 +45,8 @@ class Grid {
 	// -------------------------------------------------
 	// ------------------- ACTOR -----------------------
 	// -------------------------------------------------
-
-	public var actors = new Vector<Actor>((WIDTH*HEIGHT+WIDTH*HEIGHT) >> 2);
+	public var baseActors = new Viktoria<Int>(CellActor.BASE_MAX);
+	public var mainActors = new Viktor<Actor>(CellActor.MAIN_MAX);
 
 	public inline function getActor(pos:Pos):CellActor return get(pos).actor;
 	public inline function setActor(pos:Pos, actor:CellActor) {

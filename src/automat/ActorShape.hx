@@ -1,9 +1,21 @@
 package automat;
 
+import automat.Cell.CellActor;
+import util.BitGrid;
+
 import automat.Pos.xy as P;
 
-class BaseActor {
 
+class ActorShape {
+
+	static function moveDown(grid:Grid, actor:CellActor, pos:Pos):Bool {
+		// TODO
+
+		return true;
+	}
+
+	
+/*
 	static inline function CheckUp_1(g:Grid, x:Int, y:Int) {
 		if (g.getActor( P(x,y-1) ) == 0) return true;
 		else return false;
@@ -34,8 +46,6 @@ class BaseActor {
 		else return false;
 	}
 
-
-
 	static inline function MoveUp_11(g:Grid, shapeNum:Int, x:Int, y:Int) {
 		g.setActor( P(x,y-1), shapeNum ); g.setActor( P(x+1,y-1), shapeNum+1 );
 		g.setActor( P(x,y), 0 ); g.setActor( P(x+1,y), 0 );
@@ -46,30 +56,7 @@ class BaseActor {
 		g.setActor( P(x,y+1),0 ); g.setActor( P(x+1,y+1), 0 );
 	}
 
+*/
 
-	static inline var zweierPos:Int = 20;
-	static inline var zweierTiles_11:Int = 4;
-	static inline var zweierTiles_1_1:Int = 3;
 
-	static inline var dreierPos:Int = 2 * (zweierTiles_11 + zweierTiles_1_1);
-	static inline var dreierTiles_111:Int = 1;
-	static inline var dreierTiles_1_1_1:Int = 1;
-	static inline var dreierTiles_11_10:Int = 1;
-	static inline var dreierTiles_11_01:Int = 1;
-	static inline var dreierTiles_01_11:Int = 1;
-	static inline var dreierTiles_10_11:Int = 1;
-
-	static inline var viererPos:Int = 3 * (dreierTiles_111 + dreierTiles_1_1_1 + dreierTiles_11_10 + dreierTiles_11_01 + dreierTiles_01_11 + dreierTiles_10_11);
-	static inline var viererTiles_11_11:Int = 5;
-
-	static function moveDown(grid:Grid, pos:Pos, shapeNum:Int):Bool {
-		// ...
-
-		if (shapeNum>=dreierPos)
-		{
-
-		}
-
-		return true;
-	}
 }

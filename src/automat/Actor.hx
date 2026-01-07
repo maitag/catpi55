@@ -6,7 +6,12 @@ class Actor {
 
     public var name:String;
 
-    public function new(name) {
+    public var shape:Int;
+
+    public function new(name:String, shape:Int) {
         this.name = name;
+        this.shape = shape;
     }
+
+    
 }

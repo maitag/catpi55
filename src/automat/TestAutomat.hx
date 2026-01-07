@@ -2,6 +2,7 @@ package automat;
 
 import lime.app.Application;
 
+import util.BitGrid;
 import automat.Pos.xy as P;
 
 class TestAutomat extends Application {
@@ -33,30 +34,6 @@ class TestAutomat extends Application {
 		trace("cell and type isGas:",c0.isGas, c0.type.isGas);
 		*/
 
-		// -------- test MainActorList ----------
-		var mainActorList = new MainActorList(3);
-
-		trace("add Actor 0 at index:" + mainActorList.add(new Actor("Actor 0")));
-		trace("add Actor 1 at index:" + mainActorList.add(new Actor("Actor 1")));
-		trace("add Actor 2 at index:" + mainActorList.add(new Actor("Actor 2")));
-		trace("get at index 0:" + mainActorList.get(0).name);
-		trace("get at index 1:" + mainActorList.get(1).name);
-		trace("get at index 2:" + mainActorList.get(2).name);
-		trace("length", mainActorList.length, "\n-----");
-		
-		trace("remove at index 1" ); mainActorList.remove(1);
-		trace("remove at index 0" ); mainActorList.remove(0);
-		trace("length", mainActorList.length, "\n-----");
-
-		trace("add Actor 3 at index:" + mainActorList.add(new Actor("Actor 3")));
-		trace("add Actor 4 at index:" + mainActorList.add(new Actor("Actor 4")));
-		trace("remove at index 2" ); mainActorList.remove(2);
-		trace("add Actor 5 at index:" + mainActorList.add(new Actor("Actor 5")));
-
-		trace("get at index 0:" + mainActorList.get(0).name);
-		trace("get at index 1:" + mainActorList.get(1).name);
-		trace("get at index 2:" + mainActorList.get(2).name);
-		trace("length", mainActorList.length);
 
 		/*
 		// -------- test grid ----------
@@ -72,6 +49,20 @@ class TestAutomat extends Application {
 		trace(grid.get(new Pos(0,1)));
 		*/
 
+		// -------- test BitGrid ----------
+
+		var bitGrid:BitGrid = [
+			"#  #   ##   #   #  ####",
+			"#  #  #  #   # #   #   ",
+			"####  ####    #    ####",
+			"#  #  #  #   # #   #   ",
+			"#  #  #  #  #   #  ####",
+		];
+
+		trace(bitGrid.width, bitGrid.height);
+		// bitGrid.set(0,0, false);
+		// bitGrid.set(1,0);
+		trace("\n"+bitGrid);
 
 		/*
 		// -------- grid testdata ----------
@@ -88,7 +79,20 @@ class TestAutomat extends Application {
 		}
 		*/
 
+
+		// -------- add/remove Actors ----------
+
+		var grid = createTestGrid(TESTGRID);
+		
+		// grid.addAtomActor(P(5,5), AtomActor.);
+		// grid.addBaseActor(P(1,1), BaseActor.);
+		// grid.addMainActor(P(1,1), new Actor() );
+		// grid.removeActorAt(P(1,1));
+
+
+		
 		/*
+		// -------- benchmarks -------------
 		var t = haxe.Timer.stamp();
 		var i:Int = 0;
 		while (i < 1000000) {
@@ -138,6 +142,17 @@ class TestAutomat extends Application {
 ****************************************************************
 *..............................................................*
 *..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
+*..............................................................*
 *..EEEE....EEEEEE..............................................*
 *.......................1...22....333..........................*
 *.................RR........22....333..........................*
@@ -145,17 +160,6 @@ class TestAutomat extends Application {
 *...................R..........................................*
 *...................RRR........................................*
 *...................RRRRREEEEEEEEEEEEEEEEE.....................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
-*..............................................................*
 *..............................................................*
 *..............................................................*
 *..............................................................*
