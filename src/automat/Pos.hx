@@ -207,7 +207,11 @@ class PosMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [],
+				#if (haxe_ver >= "4.2.5")
 				expr: macro return 'x:$x, y:$y',
+				#else
+				expr: macro return 'x:$$x, y:$$y',
+				#end
 				params: [],
 				ret: macro:String
 			})

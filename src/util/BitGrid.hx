@@ -8,7 +8,11 @@ abstract BitGrid(Vector<Int>) {
 	inline public function new(width:Int, height:Int) 
 	{
 		this = new Vector<Int>(1 + Math.ceil(width * height / 32));
+		#if (haxe_ver >= "4.3.7")
 		this.fill(0);
+		#else
+		for (i in 1...this.length) this.set(i, 0);
+		#end
 		this.set(0, width<<16 | height);
 	}
 

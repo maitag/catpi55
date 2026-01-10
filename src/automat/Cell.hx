@@ -62,25 +62,13 @@ abstract CellActor(Int) from Int to Int {
 	public static inline var bits:Int = 12;
 	public static inline var mask:Int = ((1 << bits)-1) << (CellType.bits + CellParam.bits);
 
-	public static inline var ATOM_MAX:Int = 10;
-	public static inline var BASE_MAX:Int = ((Grid.WIDTH * Grid.HEIGHT)>>2) + (Grid.WIDTH>>1) + (Grid.HEIGHT>>1) - 1; // 1087
-	public static inline var MAIN_MAX:Int = BASE_MAX;
-
-	public static inline var ATOM_START_INDEX:Int = 1;
-	public static inline var BASE_START_INDEX:Int = ATOM_START_INDEX + ATOM_MAX;
-	public static inline var MAIN_START_INDEX:Int = BASE_START_INDEX + BASE_MAX;
+	public static inline var MAX_ACTORS:Int = ((Grid.WIDTH * Grid.HEIGHT)>>2) + (Grid.WIDTH>>1) + (Grid.HEIGHT>>1) - 1; // 1087
 
 	public var isEmpty(get, never):Bool;
 	inline function get_isEmpty():Bool return (this == 0 );
 
 	public var isAtomActor(get, never):Bool;
-	inline function get_isAtomActor():Bool return (this >= ATOM_START_INDEX && this < BASE_START_INDEX);
-
-	public var isBaseActor(get, never):Bool;
-	inline function get_isBaseActor():Bool return (this >= BASE_START_INDEX && this < MAIN_START_INDEX);
-
-	public var isMainActor(get, never):Bool;
-	inline function get_isMainActor():Bool return (this >= MAIN_START_INDEX);
+	inline function get_isAtomActor():Bool return (this >= MAX_ACTORS);
 
 }
 

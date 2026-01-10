@@ -50,7 +50,7 @@ class TestAutomat extends Application {
 		*/
 
 		// -------- test BitGrid ----------
-
+		
 		var bitGrid:BitGrid = [
 			"#  #   ##   #   #  ####",
 			"#  #  #  #   # #   #   ",
@@ -63,6 +63,12 @@ class TestAutomat extends Application {
 		// bitGrid.set(0,0, false);
 		// bitGrid.set(1,0);
 		trace("\n"+bitGrid);
+		
+
+		// -------- test Shape ----------
+		
+
+
 
 		/*
 		// -------- grid testdata ----------
@@ -84,9 +90,8 @@ class TestAutomat extends Application {
 
 		var grid = createTestGrid(TESTGRID);
 		
-		// grid.addAtomActor(P(5,5), AtomActor.);
-		// grid.addBaseActor(P(1,1), BaseActor.);
-		// grid.addMainActor(P(1,1), new Actor() );
+		// grid.addActor(P(1,1), 1);
+		// grid.addActor(P(1,1), new Actor() );
 		// grid.removeActorAt(P(1,1));
 
 

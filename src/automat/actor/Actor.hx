@@ -1,4 +1,4 @@
-package automat;
+package automat.actor;
 
 class Actor {
     public var pos:Pos;

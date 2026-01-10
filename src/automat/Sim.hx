@@ -14,8 +14,14 @@ class Sim {
 
 			case CELL_MOVE: trace(action);
 
-			case CELL_EMPTY: trace(action);
+			case CELL_EMPTY: {
+				trace(action);
 
+				// trigger the above Actor and give position:
+				// grid.getActor(above!!!).simEmptyBelow(position)
+				// if (is not null-actor) 
+
+			}
 
 			// TODO
 
