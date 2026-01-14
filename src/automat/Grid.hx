@@ -2,6 +2,7 @@ package automat;
 
 import automat.Cell.CellActor;
 import automat.actor.Actor;
+
 import haxe.ds.Vector;
 
 class Grid {

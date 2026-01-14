@@ -52,11 +52,11 @@ abstract BitGrid(Vector<Int>) {
 				}
 			}
 		}
-		return (hasLeft && hasRight && hasTop && hasBottom);
+		return !(hasLeft && hasRight && hasTop && hasBottom);
 	}
 
 	@:from
-	static inline function fromArrayString(shape:Array<String>) {
+	public static inline function fromArrayString(shape:Array<String>):BitGrid {
 		if (shape == null || shape.length==0) return new BitGrid(0, 0);
 		
 		var width = shape[0].length;
@@ -75,9 +75,33 @@ abstract BitGrid(Vector<Int>) {
 
 		return bitGrid;
 	}
+
+	static var parseStringRegExp = ~/\|([^|]+)\|/;
+	@:from
+	public static inline function fromString(shape:String):BitGrid {
+		var a = new Array<String>();
+		while (parseStringRegExp.match(shape)) {
+			a.push(parseStringRegExp.matched(1));
+			shape = parseStringRegExp.matchedRight();
+		}
+		return fromArrayString(a);
+	}
     
 	@:to
-	inline function toString():String {
+	public inline function toArrayString():Array<String> {
+		var a = new Array<String>();
+		for (y in 0...height) {
+			var s = "";
+			for (x in 0...width) {
+				s += get(x,y) ? "#" : " ";
+			}
+			a.push(s);
+		}
+		return a;
+	}
+
+	@:to
+	public inline function toString():String {
 		var s = "";
 		for (y in 0...height) {
 			for (x in 0...width) {

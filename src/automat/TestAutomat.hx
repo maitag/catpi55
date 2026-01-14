@@ -3,6 +3,11 @@ package automat;
 import lime.app.Application;
 
 import util.BitGrid;
+
+import automat.actor.Actor;
+import automat.actor.Shape;
+
+
 import automat.Pos.xy as P;
 
 class TestAutomat extends Application {
@@ -11,7 +16,7 @@ class TestAutomat extends Application {
 	public function new() {
 		super();
 		
-		/*
+		
 		// -------- test Pos ----------
 		trace(Pos.xMax, Pos.yMax);
 		var p = new Pos(36,4);
@@ -20,7 +25,7 @@ class TestAutomat extends Application {
 		trace("pos:",p.x,p.y);
 		
 		trace("pos:", P(23, 42) );
-		*/
+		
 
 		// -------- test cell ----------
 		/*
@@ -52,21 +57,31 @@ class TestAutomat extends Application {
 		// -------- test BitGrid ----------
 		
 		var bitGrid:BitGrid = [
-			"#  #   ##   #   #  ####",
-			"#  #  #  #   # #   #   ",
-			"####  ####    #    ####",
-			"#  #  #  #   # #   #   ",
-			"#  #  #  #  #   #  ####",
-		];
-
-		trace(bitGrid.width, bitGrid.height);
+			"#  #  #   #",
+			"#  #   # # ",
+			"####    #  ",
+			"#  #   # # ",
+			"#  #  #   #",
+		];		
 		// bitGrid.set(0,0, false);
 		// bitGrid.set(1,0);
-		trace("\n"+bitGrid);
+		trace("\n"+bitGrid, bitGrid.width, bitGrid.height, bitGrid.hasGap());
+
+		var bitGrid:BitGrid = "
+			|                             |
+			|   #  #   ##   #   #  ####   |
+			|   #  #  #  #   # #   #      |
+			|   ####  ####    #    ####   |
+			|   #  #  #  #   # #   #      |
+			|   #  #  #  #  #   #  ####   |
+			|                             |
+		";
+		trace("\n"+bitGrid, bitGrid.width, bitGrid.height, bitGrid.hasGap());
 		
 
-		// -------- test Shape ----------
+		// -------- test Actor ----------
 		
+		var actor = new Actor("Klaus");
 
 
 
@@ -88,7 +103,7 @@ class TestAutomat extends Application {
 
 		// -------- add/remove Actors ----------
 
-		var grid = createTestGrid(TESTGRID);
+		// var grid = createTestGrid(TESTGRID);
 		
 		// grid.addActor(P(1,1), 1);
 		// grid.addActor(P(1,1), new Actor() );
