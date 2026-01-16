@@ -17,7 +17,7 @@ import util.BitGrid;
 		"###",
 		" #",
 	];
-	public function isFreeLeft():Bool return Shape.isFreeLeft(this, shapeBitGrid);
+	public function isFreeLeft():Bool return Shape.isFreeLeft(grid, pos, shapeBitGrid);
 	public function moveLeft() Shape.moveLeft(this, shapeBitGrid);
 	//...
 	*/

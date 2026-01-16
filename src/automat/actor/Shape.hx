@@ -2,8 +2,10 @@ package automat.actor;
 
 #if !macro
 
-import automat.Cell.CellActor;
+// import automat.Cell.CellActor;
 import util.BitGrid;
+import automat.Pos.xy as P;
+
 
 interface IActorShape {
 	public var pos:Pos;
@@ -17,17 +19,17 @@ class Shape1x1 {
 }
 
 class Shape {
-	public static function isFreeLeft(actor:IActorShape, shapeBitGrid:BitGrid):Bool {
 
-		var grid = actor.grid;
-		var pos = actor.pos;
+	// A N Y -< now lets "add"
 
-		for (y in 0...shapeBitGrid.height) {
-			var x:Int = 0;
-			while (x < shapeBitGrid.width && !shapeBitGrid.get(x,y)) x++;
-			if (x < shapeBitGrid.width) {
-				// grid.getActorAt should also traverse the neighbour-grids
-				// if (grid.getActor( P(pos.x + x-1, pos.y + y) ) > 0) return false;
+	public static function add(actorID:Int, p:Pos, shape:BitGrid) {
+		
+	}
+
+	public static function isFreeLeft(grid:Grid, pos:Int, shape:BitGrid):Bool {
+		for (y in 0...shape.height) {
+			for (x in 0...shape.width) {
+				if ( shape.get(x,y) && !grid.getActorAtOffset( pos, x-1, y ).isEmpty) return false;
 			}
 		}
 		return true;
@@ -62,7 +64,8 @@ class ShapeMacro {
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro return true, // TODO: unroll it same as into Shapes functions !!!
+					// TODO: unroll it same as into equivalent static Shapes functions !!!
+					expr: macro return true,
 					ret: macro:Bool
 				})
 			});
@@ -84,7 +87,7 @@ class ShapeMacro {
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro return automat.actor.Shape.isFreeLeft(this, shapeBitGrid),
+					expr: macro return automat.actor.Shape.isFreeLeft(grid, pos, shapeBitGrid),
 					ret: macro:Bool
 				})
 			});

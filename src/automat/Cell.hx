@@ -15,6 +15,7 @@ enum abstract CellType(Int) from Int to Int {
 	inline function get_isFluid():Bool return (this >= (WATER:Int) && this <= (PLASMA:Int));
 	var WATER;
 	var MILK;
+	var PISS;
 	var ACID;
 	var MAGMA;
 	var PLASMA;
