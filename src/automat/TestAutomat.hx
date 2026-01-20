@@ -1,5 +1,7 @@
 package automat;
 
+import automat.Cell.CellActor;
+import util.BitUtil;
 import lime.app.Application;
 
 import util.BitGrid;
@@ -18,6 +20,7 @@ class TestAutomat extends Application {
 		
 		
 		// -------- test Pos ----------
+		/*
 		trace(Pos.xMax, Pos.yMax);
 		var p = new Pos(36,4);
 		trace("pos:",p.x,p.y);
@@ -25,7 +28,7 @@ class TestAutomat extends Application {
 		trace("pos:",p.x,p.y);
 		
 		trace("pos:", P(23, 42) );
-		
+		*/
 
 		// -------- test cell ----------
 		/*
@@ -100,16 +103,31 @@ class TestAutomat extends Application {
 
 		var grid = createTestGrid(TESTGRID);
 		
-		var actor = new Actor("Klaus");
+		var actor = new Actor("Alice");
+		trace("is free:", actor.isFitIntoGrid(grid, P(1,1) ) );
 
-		traceGrid(grid);
+		actor.addToGrid(grid, P(1,1));
+		trace("isFreeLeft",actor.isFreeLeft());
 		
-		// grid.addActor(P(1,1), 1);
-		// grid.addActor(P(1,1), new Actor() );
-		// grid.removeActorAt(P(1,1));
 
+		var actor = new Actor("Bob");
+		trace("is free:", actor.isFitIntoGrid(grid, P(3,2) ) );
+
+		actor.addToGrid(grid, P(3,2));
+		trace("isFreeLeft",actor.isFreeLeft());
+		// traceGrid(grid);
+
+
+
+		// TODO:
+		// actor.removeFromGrid();
+
+		trace("Grid.WIDTH " + Grid.WIDTH,"Grid.HEIGHT " + Grid.HEIGHT);
+		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
 
 		
+
+
 		/*
 		// -------- benchmarks -------------
 		var t = haxe.Timer.stamp();
@@ -134,15 +152,19 @@ class TestAutomat extends Application {
 		var s = "\n";
 		for (y in 0...Grid.HEIGHT) {
 			for (x in 0...Grid.WIDTH) {
-				s += switch(grid.get(P(x,y)).type) {
-					case AIR: ".";
-					case METAL: "#";
-					case EARTH: "E";
-					case ROCK: "R";
-					case WATER: "^";
-					case MILK: "m";
-					case PISS: "p";
-					default: " ";
+				var cell = grid.get(P(x,y));
+				if (cell.hasActor) s += cell.actor;
+				else {
+					s += switch(cell.type) {
+						case AIR: ".";
+						case METAL: "#";
+						case EARTH: "E";
+						case ROCK: "R";
+						case WATER: "^";
+						case MILK: "m";
+						case PISS: "p";
+						default: " ";
+					}
 				}
 			}
 			s += "\n";

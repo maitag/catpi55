@@ -23,6 +23,7 @@ abstract BitGrid(Vector<Int>) {
 	inline function get_height():Int return this.get(0) & 65535;
 
 	public function set(x:Int, y:Int, value:Bool = true) {
+		if (x >= width || y >= height || x < 0 || y < 0 ) throw("BitGrid coors out of bounds.");
 		var p:Int = y*width + x;
 		var i:Int = 1 + (p>>5);
 		var b:Int = p & 31;
@@ -31,6 +32,7 @@ abstract BitGrid(Vector<Int>) {
 	}
 
 	public function get(x:Int, y:Int):Bool {
+		if (x >= width || y >= height || x < 0 || y < 0 ) throw("BitGrid coors out of bounds.");
 		var p:Int = y*width + x;
 		var i:Int = 1 + (p>>5);
 		var b:Int = p & 31;

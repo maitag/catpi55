@@ -3,6 +3,7 @@ package automat;
 import haxe.ds.Vector;
 
 import automat.Cell.CellActor;
+import automat.actor.IActor;
 import automat.actor.Actor;
 import automat.Pos.xy as P;
 
@@ -41,12 +42,12 @@ class Grid {
 	public var bottom:Grid = null;
 
 	public var leftTop(get, never):Grid;
-	inline function get_leftTop():Grid return ( (left != null && left.top != null) ? left.top : (top != null && top.left != null) ? top.left : null );
 	public var leftBottom(get, never):Grid;
-	inline function get_leftBottom():Grid return ( (left != null && left.bottom != null) ? left.bottom : (bottom != null && bottom.left != null) ? bottom.left : null );
 	public var rightTop(get, never):Grid;
-	inline function get_rightTop():Grid return ( (right != null && right.top != null) ? right.top : (top != null && top.right != null) ? top.right : null );
 	public var rightBottom(get, never):Grid;
+	inline function get_leftTop():Grid return ( (left != null && left.top != null) ? left.top : (top != null && top.left != null) ? top.left : null );
+	inline function get_leftBottom():Grid return ( (left != null && left.bottom != null) ? left.bottom : (bottom != null && bottom.left != null) ? bottom.left : null );
+	inline function get_rightTop():Grid return ( (right != null && right.top != null) ? right.top : (top != null && top.right != null) ? top.right : null );
 	inline function get_rightBottom():Grid return ( (right != null && right.bottom != null) ? right.bottom : (bottom != null && bottom.right != null) ? bottom.right : null );
 
 	// -------------------------------------------------
@@ -57,65 +58,80 @@ class Grid {
 	// -------------------------------------------------
 	// ------------------- ACTOR -----------------------
 	// -------------------------------------------------
-	public var actors = new Viktor<Actor>(CellActor.MAX_ACTORS);
+	public var actors = new Viktor<IActor>(CellActor.MAX_ACTORS);
 
-	public inline function getActor(p:Pos):Int return get(p).actor;
-	
-	// TODO: better make this to fetch the whole Cell and then get the Actor afterwards from!
-	public function getActorAtOffset(p:Pos, x:Int, y:Int):CellActor {
-		x += p.x;
-		y += p.y;
-		if (x < 0) {
-			return _getActorAtOffsetLeftY(x + WIDTH, y);
-		}
-		else if (x >= WIDTH) {
-			return _getActorAtOffsetRightY(x - WIDTH, y);
-		}
-		else if (y < 0) {
-			if (top != null) return top.getActor( P(x, y + HEIGHT) );
-			else return -1;
-		}
-		else if (y >= HEIGHT) {
-			if (bottom != null) return bottom.getActor( P(x, y - HEIGHT) );
-			else return -1;
-		}
-		else return getActor( P(x, y) );
+	public inline function getActorAt(pos:Pos):IActor {
+		var actorID:Int = get(pos).actor;
+		return (actorID == CellActor.EMPTY) ? null : actors.get( actorID );
 	}
 
-	inline function _getActorAtOffsetLeftY(x:Int, y:Int):CellActor {
-		if (y < 0) {
-			if (leftTop != null) return leftTop.getActor( P(x, y + HEIGHT) );
-			else return -1;
-		}
-		else if (y >= HEIGHT) {
-			if (leftBottom != null) return leftBottom.getActor( P(x, y - HEIGHT) );
-			else return -1;
-		}
-		else if (left != null) return left.getActor( P(x, y) );		
-		else return -1;
-	}
-
-	inline function _getActorAtOffsetRightY(x:Int, y:Int):CellActor {
-		if (y < 0) {
-			if (rightTop != null) return rightTop.getActor( P(x, y + HEIGHT) );
-			else return -1;
-		}
-		else if (y >= HEIGHT) {
-			if (rightBottom != null) return rightBottom.getActor( P(x, y - HEIGHT) );
-			else return -1;
-		}
-		else if (right != null) return right.getActor( P(x, y) );
-		else return -1;
-	}
-	
-	public inline function setActor(pos:Pos, actor:CellActor) {
-
-		// T O D O
-
+	public inline function setCellActorAt(pos:Pos, cellActor:CellActor) {
 		var cell = get(pos);
-		cell.actor = actor;
+		cell.actor = cellActor;
 		set(pos, cell);
 	}
+	
+	public inline function setCellActorAtOffset(x:Int, y:Int,
+		gR:Grid, gB:Grid, gRB:Grid,
+		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor,
+		)
+	{
+		if (x < WIDTH) {
+			if (y < HEIGHT) setCellActorAt(P(x,y), a);
+			else gB.setCellActorAt(P(x, y - HEIGHT), aB);
+		}
+		else {
+			if (y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR);
+			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB);
+		}
+	}
+	
+		
+	public function getCellAtOffset(pos:Pos, x:Int, y:Int):Cell {
+		x += pos.x;
+		y += pos.y;
+		if (x < 0) return _atOffsetLeftY(x + WIDTH, y);
+		else if (x >= WIDTH) return _atOffsetRightY(x - WIDTH, y);
+		else if (y < 0) {
+			if (top != null) return top.get( P(x, y + HEIGHT) );
+			else return 0;
+		}
+		else if (y >= HEIGHT) {
+			if (bottom != null) return bottom.get( P(x, y - HEIGHT) );
+			else return 0;
+		}
+		else return get( P(x, y) );
+	}
+
+	inline function _atOffsetLeftY(x:Int, y:Int):Cell {
+		if (y < 0) {
+			if (leftTop != null) return leftTop.get( P(x, y + HEIGHT) );
+			else return 0;
+		}
+		else if (y >= HEIGHT) {
+			if (leftBottom != null) return leftBottom.get( P(x, y - HEIGHT) );
+			else return 0;
+		}
+		else if (left != null) return left.get( P(x, y) );		
+		else return 0;
+	}
+
+	inline function _atOffsetRightY(x:Int, y:Int):Cell {
+		if (y < 0) {
+			if (rightTop != null) return rightTop.get( P(x, y + HEIGHT) );
+			else return 0;
+		}
+		else if (y >= HEIGHT) {
+			if (rightBottom != null) return rightBottom.get( P(x, y - HEIGHT) );
+			else return 0;
+		}
+		else if (right != null) return right.get( P(x, y) );
+		else return 0;
+	}
+	
+
+
+
 
 	// -------------------------------------------------
 	// ---------------- SIMMULATION --------------------

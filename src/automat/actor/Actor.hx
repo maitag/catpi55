@@ -6,7 +6,7 @@ import util.BitGrid;
 | # |
 |###|
 | # |
-")) class Actor implements Shape.IActorShape {
+")) class Actor implements IActor {
 
 	// manually shaping (same what macro generates into "delegate" mode)
 	/*
@@ -17,16 +17,19 @@ import util.BitGrid;
 		"###",
 		" #",
 	];
-	public function isFreeLeft():Bool return Shape.isFreeLeft(grid, pos, shapeBitGrid);
+	public function addToGrid(grid:Grid, pos:Int) return Shape.addToGrid(this, grid, pos, shapeBitGrid);
+	public function isFitIntoGrid(grid:Grid, pos:Int):Bool return Shape.isFitIntoGrid(this, grid, pos, shapeBitGrid);
+	public function isFreeLeft():Bool return Shape.isFreeLeft(this, grid, pos, shapeBitGrid);
+	//...
 	public function moveLeft() Shape.moveLeft(this, shapeBitGrid);
 	//...
 	*/
 
+	public var name:String;
 
 	public var pos:Pos;
 	// public var type:ActorType;
 
-	public var name:String;
 
 	public var grid:Grid = null; // not inside any grid at instantiation
 	

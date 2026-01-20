@@ -2,9 +2,11 @@ package automat;
 
 enum abstract CellType(Int) from Int to Int {
 
+	var TABU; // to mark a cell as forbidden into grid 
+
 	// solid
 	public var isSolid(get, never):Bool;
-	inline function get_isSolid():Bool return this <= (METAL:Int);
+	inline function get_isSolid():Bool return (this > 0 && this <= (METAL:Int));
 	var EARTH;
 	var WOOD;
 	var ROCK;
@@ -60,20 +62,27 @@ abstract GasParam(Int) from CellParam to CellParam {
 
 // ----------------------------------------------------
 abstract CellActor(Int) from Int to Int {
-	public static inline var bits:Int = 12;
+	// amount for full filled by 1x1-shape actors 
+	public static inline var MAX_ACTORS:Int = Grid.WIDTH * Grid.HEIGHT;
+	// amount for full filled by min 2x1-shape actors:
+	// public static inline var MAX_ACTORS:Int = ((Grid.WIDTH * Grid.HEIGHT)>>1) + Grid.WIDTH + Grid.HEIGHT - 2;
+	// amount for full filled by min 2x2-shape actors: 
+	// public static inline var MAX_ACTORS:Int = ((Grid.WIDTH + 2) * (Grid.HEIGHT+2)) >> 2;
+
+	// public static inline var bits:Int = 13; // for 64x64+1
+	public static inline var bits:Int = util.BitUtil.bitsize(MAX_ACTORS);
 	public static inline var mask:Int = ((1 << bits)-1) << (CellType.bits + CellParam.bits);
 
-	public static inline var MAX_ACTORS:Int = ((Grid.WIDTH * Grid.HEIGHT)>>2) + (Grid.WIDTH>>1) + (Grid.HEIGHT>>1) - 1; // 1087
+	public static inline var EMPTY:Int = MAX_ACTORS;
 
 	public var isEmpty(get, never):Bool;
-	inline function get_isEmpty():Bool return (this == 0 );
-
-	public var isAtomActor(get, never):Bool;
-	inline function get_isAtomActor():Bool return (this >= MAX_ACTORS);
-
+	inline function get_isEmpty():Bool return (this == EMPTY);
 }
 
-// ----------------------------------------------------
+
+// ---------------------------------------------------------------------
+// |                |         actor 13       |     param 8    | type 4 |
+// ---------------------------------------------------------------------
 abstract Cell(Int) from Int to Int {
 	public inline function new(type:CellType, ?param:CellParam) {
 		if (param == null) {
@@ -82,8 +91,12 @@ abstract Cell(Int) from Int to Int {
 			else if (type.isFluid) {trace("todo: SET FLUID DEFAULTS");param = 2;}
 			else {trace("todo: SET GAS DEFAULTS");param = 3;}*/
 		}
-		this = (param << CellType.bits) | type;
+		this = (CellActor.MAX_ACTORS << (CellType.bits + CellParam.bits)) |  (param << CellType.bits) | type;
 	}
+
+	// if a cell is fetched from outside of grid-space or to forbid cells into a grid:
+	public var isTabu(get, never):Bool;
+	inline function get_isTabu():Bool return this == TABU;
 
 	// --------- TYPE ----------
 
@@ -111,10 +124,14 @@ abstract Cell(Int) from Int to Int {
 	// --------- ACTOR index -------------
 
 	public var actor(get, set):CellActor;
-	inline function get_actor():CellActor return (this & CellActor.mask) >> CellActor.bits;
-	inline function set_actor(actor:CellActor):CellActor return this = (this & ~CellActor.mask) | (actor << CellActor.bits);
+	inline function get_actor():CellActor return (this & CellActor.mask) >> (CellType.bits + CellParam.bits);
+	inline function set_actor(actor:CellActor):CellActor return this = (this & ~CellActor.mask) | (actor << (CellType.bits + CellParam.bits));
 	// TODO: problem on neko with the bitops
 
+	inline function removeActor() this = (this & ~CellActor.mask) | (CellActor.EMPTY << (CellType.bits + CellParam.bits));
+
+	public var hasActor(get, never):Bool;
+	inline function get_hasActor():Bool return !actor.isEmpty;
 
 
 	// ------------ Debug ----------------
