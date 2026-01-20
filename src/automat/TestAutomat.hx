@@ -101,29 +101,56 @@ class TestAutomat extends Application {
 
 		// -------- add/remove Actors ----------
 
-		var grid = createTestGrid(TESTGRID);
+		var grid = createTestGrid("
+##############
+#            #
+E            #
+#            #
+#            #
+#            #
+##############
+");
+		trace("Grid.WIDTH " + Grid.WIDTH,"Grid.HEIGHT " + Grid.HEIGHT);
+		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
 		
-		var actor = new Actor("Alice");
-		trace("is free:", actor.isFitIntoGrid(grid, P(1,1) ) );
+		trace("---adding Alice---");
+		var alice = new Actor("Alice");
+		var p = P(1,1);
+		if (alice.isFitIntoGrid(grid, p)) {
+			alice.addToGrid(grid, p);
+			trace("isFreeLeft Alice", alice.isFreeLeft());
+			trace("isFreeRight Alice", alice.isFreeRight());
+			trace("isFreeTop Alice", alice.isFreeTop());
+			trace("isFreeBottom Alice", alice.isFreeBottom());
+		}
 
-		actor.addToGrid(grid, P(1,1));
-		trace("isFreeLeft",actor.isFreeLeft());
+		trace("---adding Bob---");
+		var bob = new Actor("Bob");
+		var p = P(2,3);
+		if (bob.isFitIntoGrid(grid, p)) {
+			bob.addToGrid(grid, p);
+			trace("isFreeLeft Bob", bob.isFreeLeft());
+			trace("isFreeRight Bob", bob.isFreeRight());
+			trace("isFreeTop Bob", bob.isFreeTop());
+			trace("isFreeBottom Bob", bob.isFreeBottom());
+		}
+
+		trace("isFreeRight Alice", alice.isFreeRight());
+		trace("isFreeBottom Alice", alice.isFreeBottom());
+
+		trace("isFreeXY( 1,-1) Bob", bob.isFreeXY( 1,-1));
+		trace("isFreeXY( 1, 1) Bob", bob.isFreeXY( 1, 1));
+		trace("isFreeXY(-1, 1) Bob", bob.isFreeXY(-1, 1));
+		trace("isFreeXY(-1,-1) Bob", bob.isFreeXY(-1,-1));
+
 		
-
-		var actor = new Actor("Bob");
-		trace("is free:", actor.isFitIntoGrid(grid, P(3,2) ) );
-
-		actor.addToGrid(grid, P(3,2));
-		trace("isFreeLeft",actor.isFreeLeft());
-		// traceGrid(grid);
+		traceGrid(grid, 16, 8);
 
 
 
 		// TODO:
 		// actor.removeFromGrid();
 
-		trace("Grid.WIDTH " + Grid.WIDTH,"Grid.HEIGHT " + Grid.HEIGHT);
-		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
 
 		
 
@@ -148,15 +175,17 @@ class TestAutomat extends Application {
 	// ----------------------------------------------------------------
 	// ----------------------------------------------------------------
 
-	public static function traceGrid(grid:Grid) {
+	public static function traceGrid(grid:Grid, w:Int=Grid.WIDTH, h:Int=Grid.HEIGHT) {
 		var s = "\n";
-		for (y in 0...Grid.HEIGHT) {
-			for (x in 0...Grid.WIDTH) {
+		for (y in 0...h) {
+			for (x in 0...w) {
 				var cell = grid.get(P(x,y));
 				if (cell.hasActor) s += cell.actor;
 				else {
 					s += switch(cell.type) {
-						case AIR: ".";
+						case TABU: "X";
+						case AIR: " ";
+						case WOOD: ".";
 						case METAL: "#";
 						case EARTH: "E";
 						case ROCK: "R";
@@ -175,30 +204,39 @@ class TestAutomat extends Application {
 	public static function createTestGrid(testGrid:String):Grid {
 		var grid = new Grid();
 
-		testGrid = ~/\n+/g.replace(testGrid, "");
-
-		for (i in 0...testGrid.length) {
-			var c = testGrid.charAt(i);
-			switch (c) {
-				case ".": grid.set( i, new Cell(AIR) );
-				case "#": grid.set( i, new Cell(METAL) );
-				case "E": grid.set( i, new Cell(EARTH) );
-				case "R": grid.set( i, new Cell(ROCK) );
-				case "^": grid.set( i, new Cell(WATER)  );
-				case "m": grid.set( i, new Cell(MILK)  );
-				case "p": grid.set( i, new Cell(PISS)  );
-				// TODO:
-				// case "P": // grid.set( i, new Cell(AIR, new Actor(PLAYER) ));
-
-				default: throw('unknown "$c" in TESTGRID');
+		testGrid = ~/^\n+/g.replace(~/\n+$/g.replace(testGrid, ""), "");
+		var a = ~/\n/g.split(testGrid);
+		var longestLine:Int = 0;
+		for (s in a) if (s.length>longestLine) longestLine = s.length;
+		
+		for (y in 0...a.length) {
+			for (x in 0...a[y].length) {
+				var c = a[y].charAt(x);
+				switch (c) {
+					case "X": grid.set( P(x,y), new Cell(TABU) );
+					case " ": grid.set( P(x,y), new Cell(AIR) );
+					case ".": grid.set( P(x,y), new Cell(WOOD) );
+					case "#": grid.set( P(x,y), new Cell(METAL) );
+					case "E": grid.set( P(x,y), new Cell(EARTH) );
+					case "R": grid.set( P(x,y), new Cell(ROCK) );
+					case "^": grid.set( P(x,y), new Cell(WATER)  );
+					case "m": grid.set( P(x,y), new Cell(MILK)  );
+					case "p": grid.set( P(x,y), new Cell(PISS)  );
+					
+					default: throw('unknown "$c" in TESTGRID');
+				}
 			}
+			for (x in a[y].length...longestLine) grid.set( P(x,y), new Cell(AIR) );
+			for (x in longestLine...Grid.WIDTH) grid.set( P(x,y), new Cell(TABU) );
 		}
+		for (y in a.length...Grid.HEIGHT)
+			for (x in 0...Grid.WIDTH) grid.set( P(x,y), new Cell(TABU) );
 
 		return grid;
 	}
 
-	public static inline var TESTGRID:String =
-"
+
+	public static inline var TESTGRID64x64:String = "
 ################################################################
 #..............................................................#
 #..............................................................#

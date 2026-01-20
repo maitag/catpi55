@@ -4,6 +4,7 @@ interface IActor {
 	public var name:String;
 	public var pos:Pos;
 	public var grid:Grid;
+	public function addToGrid(grid:Grid, pos:Int):Void;
 	public function isFitIntoGrid(grid:Grid, pos:Int):Bool;
 	public function isFreeLeft():Bool;
 	// public function moveLeft():Bool;

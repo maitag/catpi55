@@ -2,6 +2,7 @@ package automat.actor;
 
 #if !macro
 
+import automat.Cell;
 import automat.Cell.CellActor;
 import util.BitGrid;
 import automat.Pos.xy as P;
@@ -61,9 +62,7 @@ class Shape {
 				_addToGrid(pos, grid, grid.right, grid.bottom, grid.rightBottom,
 					grid.actors.add(actor), grid.right.actors.add(actor),
 					grid.bottom.actors.add(actor), grid.rightBottom.actors.add(actor), shape);
-		}
-
-			
+		}			
 		/*
 		// TODO: finish optimization for non-macro
 		var y_max:Int = Grid.HEIGHT - pos.y;
@@ -93,33 +92,63 @@ class Shape {
 		*/
 	}
 
-	public static function isFitIntoGrid(actor:IActor, grid:Grid, pos:Int, shape:BitGrid):Bool {
+	public static function isFitIntoGrid(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+		for (y in 0...shape.height)
+			for (x in 0...shape.width)
+				if ( shape.get(x,y) && _blocked(grid.getCellAtOffset( pos, x, y ), blockedCellType) ) return false;
+		return true;
+	}
+
+	static inline function _blocked(cell:Cell, blockedCellType:Int):Bool {
+		return (1<<cell.type & blockedCellType > 0 || cell.hasActor || cell.isTabu); // to store one more CellType: return (1<<(cell.type-1) & blockedCellType > 0 || cell.isTabu || cell.hasActor);
+	}
+	static inline function _notFree(x:Int, y:Int, dx:Int, dy:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+		if ( dx==-1 && dy== 0 && (x==0             || !shape.get(x-1,y)) && _blocked(grid.getCellAtOffset(pos,x-1,y), blockedCellType)) return false;
+		if ( dx== 1 && dy== 0 && (x==shape.width-1 || !shape.get(x+1,y)) && _blocked(grid.getCellAtOffset(pos,x+1,y), blockedCellType)) return false;
+		if ( dx== 0 && dy==-1 && (y==0             || !shape.get(x,y-1)) && _blocked(grid.getCellAtOffset(pos,x,y-1), blockedCellType)) return false;
+		if ( dx== 0 && dy== 1 && (y==shape.height-1|| !shape.get(x,y+1)) && _blocked(grid.getCellAtOffset(pos,x,y+1), blockedCellType)) return false;
+		if ( dx==-1 && dy==-1 && (x==0 || y==0     || !shape.get(x-1,y-1)) && _blocked(grid.getCellAtOffset(pos,x-1,y-1), blockedCellType)) return false;
+		if ( dx== 1 && dy==-1 && (x==shape.width-1 || y==0             || !shape.get(x+1,y-1)) && _blocked(grid.getCellAtOffset(pos,x+1,y-1), blockedCellType)) return false;
+		if ( dx==-1 && dy== 1 && (x==0             || y==shape.height-1|| !shape.get(x-1,y+1)) && _blocked(grid.getCellAtOffset(pos,x-1,y+1), blockedCellType)) return false;
+		if ( dx== 1 && dy== 1 && (x==shape.width-1 || y==shape.height-1|| !shape.get(x+1,y+1)) && _blocked(grid.getCellAtOffset(pos,x+1,y+1), blockedCellType)) return false;
+		return true;
+	}
+	public static function isFreeXY(dx:Int, dy:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		for (y in 0...shape.height) {
 			for (x in 0...shape.width) {
 				if ( shape.get(x,y) ) {
-					var cell:Cell = grid.getCellAtOffset( pos, x, y );
-					// TODO: more parameters to check what cell-TYPE should block the actor
-					if (cell.isTabu || cell.type == METAL || cell.hasActor) return false;
-					// if (cell.isTabu || cell.hasActor) return false;
-				}
+					if (_notFree(x, y, dx, dy, grid, pos, blockedCellType, shape)) return false;
+				}		
 			}
 		}
 		return true;
 	}
+	
+	public static function isFreeLeft(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+		for (y in 0...shape.height)
+			for (x in 0...shape.width)
+				if ( shape.get(x,y) && ( x == 0 || !shape.get(x-1,y) ) && _blocked(grid.getCellAtOffset( pos, x-1, y ), blockedCellType)) return false;
+		return true;
+	}
 
-	public static function isFreeLeft(actor:IActor, grid:Grid, pos:Int, shape:BitGrid):Bool {
-		for (y in 0...shape.height) {
-			for (x in 0...shape.width) {
-				if ( shape.get(x,y) ) {
-					if ( x == 0 || !shape.get(x-1,y) ) {
-						var cell:Cell = grid.getCellAtOffset( pos, x-1, y );
-						// TODO: more parameters to check what cell-TYPE should block the actor
-						// if (cell.isTabu || cell.type == METAL || cell.hasActor) return false;
-						if (cell.isTabu || cell.hasActor) return false;
-					}
-				}
-			}
-		}
+	public static function isFreeRight(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+		for (y in 0...shape.height)
+			for (x in 0...shape.width)
+				if ( shape.get(x,y) && ( x == shape.width-1 || !shape.get(x+1,y) ) && _blocked(grid.getCellAtOffset( pos, x+1, y ), blockedCellType)) return false;
+		return true;
+	}
+
+	public static function isFreeTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+		for (y in 0...shape.height)
+			for (x in 0...shape.width)
+				if ( shape.get(x,y) && ( y == 0 || !shape.get(x,y-1) ) && _blocked(grid.getCellAtOffset( pos, x, y-1 ), blockedCellType)) return false;
+		return true;
+	}
+
+	public static function isFreeBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+		for (y in 0...shape.height)
+			for (x in 0...shape.width)
+				if ( shape.get(x,y) && ( y == shape.height-1 || !shape.get(x,y+1) ) && _blocked(grid.getCellAtOffset( pos, x, y+1 ), blockedCellType)) return false;
 		return true;
 	}
 
@@ -137,23 +166,214 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class ShapeMacro {
-	static public function build(shape:String, unroll = false):Array<Field>
+	static public function build(shape:String, unroll = true):Array<Field>
 	{
 		trace("ShapeMacro");
 
 		var bitGrid:util.BitGrid = shape;
 		var fields = Context.getBuildFields();
 
-		if (unroll) { // --------- unrolled ---------------------
-	
+		if (unroll) {
+			// -----------------------------------------------
+			// ---------------- unrolled ---------------------
+			// -----------------------------------------------
+			var e:Array<Expr> = [];
+
+			// ---------- _addToGrid --------------
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) ) {
+						e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB));
+					}
+			
+			fields.push({
+				name: "_addToGrid",
+				access: [APrivate, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [
+						{name:"gR", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"gB", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"gRB", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"a", opt:false, meta:[], type: macro:automat.Cell.CellActor},
+						{name:"aR", opt:false, meta:[], type: macro:automat.Cell.CellActor},
+						{name:"aB", opt:false, meta:[], type: macro:automat.Cell.CellActor},
+						{name:"aRB", opt:false, meta:[], type: macro:automat.Cell.CellActor},
+					],
+					expr: macro $b{e},
+					ret: null
+				})
+			});
+			
+			// ---------- addToGrid --------------
+			e = [];
+			e.push(macro this.grid = grid);	
+			e.push(macro this.pos = pos);	
+			e.push(macro
+				if ( pos.x + $v{bitGrid.width} < automat.Grid.WIDTH ) {					
+					if ( pos.y + $v{bitGrid.height} < automat.Grid.HEIGHT)
+						_addToGrid(null, null, null, grid.actors.add(this), 0, 0, 0);
+					else
+						_addToGrid(null, grid.bottom, null, grid.actors.add(this), 0, grid.bottom.actors.add(this), 0);
+				}
+				else {
+					if ( pos.y + $v{bitGrid.height} < Grid.HEIGHT )
+						_addToGrid(grid.right, null, null, grid.actors.add(this), grid.right.actors.add(this), 0, 0);
+					else
+						_addToGrid(grid.right, grid.bottom, grid.rightBottom,
+							grid.actors.add(this), grid.right.actors.add(this), grid.bottom.actors.add(this), grid.rightBottom.actors.add(this));
+				}
+			);
+
+			fields.push({
+				name: "addToGrid",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [
+						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
+					],
+					expr: macro $b{e},
+					ret: null
+				})
+			});
+
+			// ---------- isFitIntoGrid --------------
+			e = [];
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) ) e.push(macro if ( _blocked( grid.getCellAtOffset(pos, $v{x}, $v{y}) ) ) return false);
+			e.push(macro return true);
+
+			fields.push({
+				name: "isFitIntoGrid",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [
+						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
+					],
+					expr: macro $b{e},
+					ret: macro:Bool
+				})
+			});
+
+			// ---------- _blocked ---------------
+			fields.push({
+				name: "_blocked",
+				access: [APrivate, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [{name:"cell", opt:false, meta:[], type: macro:automat.Cell}],
+					expr: macro return (1<<cell.type & blockedCellType > 0 || cell.hasActor || cell.isTabu),
+					ret: macro:Bool
+				})
+			});
+
+			// ---------- isFreeXY ---------------
+			e = [];
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) ) {
+						if (x==0               || !bitGrid.get(x-1,y  )) e.push(macro if (dx==-1 && dy== 0 && _blocked(grid.getCellAtOffset(pos,$v{x}-1,$v{y}  ))) return false);
+						if (x==bitGrid.width-1 || !bitGrid.get(x+1,y  )) e.push(macro if (dx== 1 && dy== 0 && _blocked(grid.getCellAtOffset(pos,$v{x}+1,$v{y}  ))) return false);
+						if (y==0               || !bitGrid.get(x  ,y-1)) e.push(macro if (dx== 0 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}  ,$v{y}-1))) return false);
+						if (y==bitGrid.height-1|| !bitGrid.get(x  ,y+1)) e.push(macro if (dx== 0 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}  ,$v{y}+1))) return false);
+						if (x==0 || y==0       || !bitGrid.get(x-1,y-1)) e.push(macro if (dx==-1 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}-1,$v{y}-1))) return false);
+						if (x==bitGrid.width-1 || y==0               || !bitGrid.get(x+1,y-1)) e.push(macro if (dx== 1 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}+1,$v{y}-1))) return false);
+						if (x==0               || y==bitGrid.height-1|| !bitGrid.get(x-1,y+1)) e.push(macro if (dx==-1 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}-1,$v{y}+1))) return false);
+						if (x==bitGrid.width-1 || y==bitGrid.height-1|| !bitGrid.get(x+1,y+1)) e.push(macro if (dx== 1 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}+1,$v{y}+1))) return false);
+					}
+			e.push(macro return true);
+
+			fields.push({
+				name: "isFreeXY",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [
+						{name:"dx", opt:false, meta:[], type: macro:Int},
+						{name:"dy", opt:false, meta:[], type: macro:Int}
+					],
+					expr: macro $b{e},
+					ret: macro:Bool
+				})
+			});
+
+			// ---------- isFreeLeft ---------------
+			e = [];
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) && ( x == 0 || !bitGrid.get(x-1,y) ) )
+						e.push(macro if ( _blocked( grid.getCellAtOffset(pos, $v{x-1}, $v{y}) ) ) return false);
+			e.push(macro return true);
+
 			fields.push({
 				name: "isFreeLeft",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					// TODO: unroll it same as into equivalent static Shapes functions !!!
-					expr: macro return true,
+					expr: macro $b{e},
+					ret: macro:Bool
+				})
+			});
+
+			// ---------- isFreeRight ---------------
+			e = [];
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) && ( x == bitGrid.width-1 || !bitGrid.get(x+1,y) ) )
+						e.push(macro if ( _blocked( grid.getCellAtOffset(pos, $v{x+1}, $v{y}) ) ) return false);
+			e.push(macro return true);
+
+			fields.push({
+				name: "isFreeRight",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro $b{e},
+					ret: macro:Bool
+				})
+			});
+
+			// ---------- isFreeTop ---------------
+			e = [];
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) && ( y == 0 || !bitGrid.get(x,y-1) ) )
+						e.push(macro if ( _blocked( grid.getCellAtOffset(pos, $v{x}, $v{y-1}) ) ) return false);
+			e.push(macro return true);
+
+			fields.push({
+				name: "isFreeTop",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro $b{e},
+					ret: macro:Bool
+				})
+			});
+
+			// ---------- isFreeBottom ---------------
+			e = [];
+			for (y in 0...bitGrid.height)
+				for (x in 0...bitGrid.width)
+					if ( bitGrid.get(x,y) && ( y == bitGrid.height-1 || !bitGrid.get(x,y+1) ) )
+						e.push(macro if ( _blocked( grid.getCellAtOffset(pos, $v{x}, $v{y+1}) ) ) return false);
+			e.push(macro return true);
+
+			fields.push({
+				name: "isFreeBottom",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro $b{e},
 					ret: macro:Bool
 				})
 			});
@@ -161,7 +381,10 @@ class ShapeMacro {
 			// TODO: more function unrolling !
 
 		}
-		else { // --------------- delegated ---------------------
+		else { 
+			// -----------------------------------------------
+			// --------------- delegated ---------------------
+			// -----------------------------------------------
 			fields.push({
 				name: "shapeBitGrid",
 				access: [APublic],
@@ -169,7 +392,6 @@ class ShapeMacro {
 				kind: FVar(macro:Array<String>, macro $v{bitGrid.toArrayString()})
 			});
 
-			// functions with args
 			for (fname in ["addToGrid"])
 				fields.push({
 					name: fname,
@@ -195,20 +417,34 @@ class ShapeMacro {
 							{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
 							{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
 						],
-						expr: macro return automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
+						expr: macro return automat.actor.Shape.$fname(grid, pos, blockedCellType, shapeBitGrid),
 						ret: macro:Bool
 					})
 				});
 
-			// functions without args:
-			for (fname in ["isFreeLeft"])
+			for (fname in ["isFreeXY"])
+				fields.push({
+					name: fname,
+					access: [APublic, AInline],
+					pos: Context.currentPos(),
+					kind: FFun({
+						args: [
+							{name:"dx", opt:false, meta:[], type: macro:Int},
+							{name:"dy", opt:false, meta:[], type: macro:Int}
+						],
+						expr: macro return automat.actor.Shape.$fname(dx, dy, grid, pos, blockedCellType, shapeBitGrid),
+						ret: macro:Bool
+					})
+				});
+
+			for (fname in ["isFreeLeft","isFreeRight","isFreeTop","isFreeBottom"])
 				fields.push({
 					name: fname,
 					access: [APublic, AInline],
 					pos: Context.currentPos(),
 					kind: FFun({
 						args: [],
-						expr: macro return automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
+						expr: macro return automat.actor.Shape.$fname(grid, pos, blockedCellType, shapeBitGrid),
 						ret: macro:Bool
 					})
 				});

@@ -96,7 +96,7 @@ abstract Cell(Int) from Int to Int {
 
 	// if a cell is fetched from outside of grid-space or to forbid cells into a grid:
 	public var isTabu(get, never):Bool;
-	inline function get_isTabu():Bool return this == TABU;
+	inline function get_isTabu():Bool return type == TABU;
 
 	// --------- TYPE ----------
 
