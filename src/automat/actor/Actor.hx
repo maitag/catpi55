@@ -9,23 +9,6 @@ import util.BitGrid;
 | # |
 ")) class Actor implements IActor {
 
-	// manually shaping (same what macro generates into "delegate" mode)
-	/*
-	public var width:Int = 3;
-	public var height:Int = 3;
-	public var shapeBitGrid:BitGrid = [
-		" # ",
-		"###",
-		" #",
-	];
-	public function addToGrid(grid:Grid, pos:Int) return Shape.addToGrid(this, grid, pos, shapeBitGrid);
-	public function isFitIntoGrid(grid:Grid, pos:Int):Bool return Shape.isFitIntoGrid(this, grid, pos, blockedCellType, shapeBitGrid);
-	public function isFreeLeft():Bool return Shape.isFreeLeft(this, grid, pos, blockedCellType, shapeBitGrid);
-	//...
-	public function moveLeft() Shape.moveLeft(this, shapeBitGrid);
-	//...
-	*/
-
 	public var name:String;
 
 	public var pos:Pos;

@@ -46,7 +46,7 @@ class Shape {
 		actor.grid = grid;
 		actor.pos = pos;
 		if ( pos.x + shape.width < Grid.WIDTH )
-		{					
+		{
 			if ( pos.y + shape.height < Grid.HEIGHT)
 				_addToGrid(pos, grid, null, null, null, grid.actors.add(actor), 0, 0, 0, shape);
 			else
@@ -62,34 +62,7 @@ class Shape {
 				_addToGrid(pos, grid, grid.right, grid.bottom, grid.rightBottom,
 					grid.actors.add(actor), grid.right.actors.add(actor),
 					grid.bottom.actors.add(actor), grid.rightBottom.actors.add(actor), shape);
-		}			
-		/*
-		// TODO: finish optimization for non-macro
-		var y_max:Int = Grid.HEIGHT - pos.y;
-		var x_max:Int = Grid.WIDTH - pos.x;		
-		if (y_max > shape.height) y_max = shape.height;
-		if (x_max > shape.width) x_max = shape.width;
-		var a:Int = grid.actors.add(actor);
-		for (y in 0...y_max) {
-			for (x in 0...x_max) {
-				if ( shape.get(x,y) ) grid.setCellActorAt(pos, x, y, a);
-			}
 		}
-		var g:Grid;
-		// rightBottom
-		if (y_max < shape.height && x_max < shape.width && grid.rightBottom != null) {
-			g = grid.rightBottom;
-			a = g.actors.add(actor);
-			for (y in y_max...shape.height) {
-				for (x in x_max...shape.width) {
-					if ( shape.get(x,y) ) g.setCellActorAt(pos, x - x_max, y - y_max, a);
-				}
-			}	
-		}
-		// at right out of bounds
-		// ...
-		// at bottom out of bounds
-		*/
 	}
 
 	public static function isFitIntoGrid(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
@@ -102,7 +75,7 @@ class Shape {
 	static inline function _blocked(cell:Cell, blockedCellType:Int):Bool {
 		return (1<<cell.type & blockedCellType > 0 || cell.hasActor || cell.isTabu); // to store one more CellType: return (1<<(cell.type-1) & blockedCellType > 0 || cell.isTabu || cell.hasActor);
 	}
-	static inline function _notFree(x:Int, y:Int, dx:Int, dy:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	static inline function _isFree(x:Int, y:Int, dx:Int, dy:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		if ( dx==-1 && dy== 0 && (x==0             || !shape.get(x-1,y)) && _blocked(grid.getCellAtOffset(pos,x-1,y), blockedCellType)) return false;
 		if ( dx== 1 && dy== 0 && (x==shape.width-1 || !shape.get(x+1,y)) && _blocked(grid.getCellAtOffset(pos,x+1,y), blockedCellType)) return false;
 		if ( dx== 0 && dy==-1 && (y==0             || !shape.get(x,y-1)) && _blocked(grid.getCellAtOffset(pos,x,y-1), blockedCellType)) return false;
@@ -114,41 +87,32 @@ class Shape {
 		return true;
 	}
 	public static function isFreeXY(dx:Int, dy:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		for (y in 0...shape.height) {
-			for (x in 0...shape.width) {
-				if ( shape.get(x,y) ) {
-					if (_notFree(x, y, dx, dy, grid, pos, blockedCellType, shape)) return false;
-				}		
-			}
-		}
+		for (y in 0...shape.height) for (x in 0...shape.width)
+			if ( shape.get(x,y) && !_isFree(x, y, dx, dy, grid, pos, blockedCellType, shape)) return false;
 		return true;
 	}
 	
 	public static function isFreeLeft(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		for (y in 0...shape.height)
-			for (x in 0...shape.width)
-				if ( shape.get(x,y) && ( x == 0 || !shape.get(x-1,y) ) && _blocked(grid.getCellAtOffset( pos, x-1, y ), blockedCellType)) return false;
+		for (y in 0...shape.height) for (x in 0...shape.width)
+			if ( shape.get(x,y) && ( x == 0 || !shape.get(x-1,y) ) && _blocked(grid.getCellAtOffset( pos, x-1, y ), blockedCellType)) return false;
 		return true;
 	}
 
 	public static function isFreeRight(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		for (y in 0...shape.height)
-			for (x in 0...shape.width)
-				if ( shape.get(x,y) && ( x == shape.width-1 || !shape.get(x+1,y) ) && _blocked(grid.getCellAtOffset( pos, x+1, y ), blockedCellType)) return false;
+		for (y in 0...shape.height) for (x in 0...shape.width)
+			if ( shape.get(x,y) && ( x == shape.width-1 || !shape.get(x+1,y) ) && _blocked(grid.getCellAtOffset( pos, x+1, y ), blockedCellType)) return false;
 		return true;
 	}
 
 	public static function isFreeTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		for (y in 0...shape.height)
-			for (x in 0...shape.width)
-				if ( shape.get(x,y) && ( y == 0 || !shape.get(x,y-1) ) && _blocked(grid.getCellAtOffset( pos, x, y-1 ), blockedCellType)) return false;
+		for (y in 0...shape.height) for (x in 0...shape.width)
+			if ( shape.get(x,y) && ( y == 0 || !shape.get(x,y-1) ) && _blocked(grid.getCellAtOffset( pos, x, y-1 ), blockedCellType)) return false;
 		return true;
 	}
 
 	public static function isFreeBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		for (y in 0...shape.height)
-			for (x in 0...shape.width)
-				if ( shape.get(x,y) && ( y == shape.height-1 || !shape.get(x,y+1) ) && _blocked(grid.getCellAtOffset( pos, x, y+1 ), blockedCellType)) return false;
+		for (y in 0...shape.height) for (x in 0...shape.width)
+			if ( shape.get(x,y) && ( y == shape.height-1 || !shape.get(x,y+1) ) && _blocked(grid.getCellAtOffset( pos, x, y+1 ), blockedCellType)) return false;
 		return true;
 	}
 
@@ -166,7 +130,7 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class ShapeMacro {
-	static public function build(shape:String, unroll = true):Array<Field>
+	static public function build(shape:String, unroll = false):Array<Field>
 	{
 		trace("ShapeMacro");
 
@@ -277,14 +241,14 @@ class ShapeMacro {
 			for (y in 0...bitGrid.height)
 				for (x in 0...bitGrid.width)
 					if ( bitGrid.get(x,y) ) {
-						if (x==0               || !bitGrid.get(x-1,y  )) e.push(macro if (dx==-1 && dy== 0 && _blocked(grid.getCellAtOffset(pos,$v{x}-1,$v{y}  ))) return false);
-						if (x==bitGrid.width-1 || !bitGrid.get(x+1,y  )) e.push(macro if (dx== 1 && dy== 0 && _blocked(grid.getCellAtOffset(pos,$v{x}+1,$v{y}  ))) return false);
-						if (y==0               || !bitGrid.get(x  ,y-1)) e.push(macro if (dx== 0 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}  ,$v{y}-1))) return false);
-						if (y==bitGrid.height-1|| !bitGrid.get(x  ,y+1)) e.push(macro if (dx== 0 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}  ,$v{y}+1))) return false);
-						if (x==0 || y==0       || !bitGrid.get(x-1,y-1)) e.push(macro if (dx==-1 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}-1,$v{y}-1))) return false);
-						if (x==bitGrid.width-1 || y==0               || !bitGrid.get(x+1,y-1)) e.push(macro if (dx== 1 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}+1,$v{y}-1))) return false);
-						if (x==0               || y==bitGrid.height-1|| !bitGrid.get(x-1,y+1)) e.push(macro if (dx==-1 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}-1,$v{y}+1))) return false);
-						if (x==bitGrid.width-1 || y==bitGrid.height-1|| !bitGrid.get(x+1,y+1)) e.push(macro if (dx== 1 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}+1,$v{y}+1))) return false);
+						if (x==0               || !bitGrid.get(x-1,y  )) e.push(macro if (dx==-1 && dy== 0 && _blocked(grid.getCellAtOffset(pos,$v{x-1},$v{y}  ))) return false);
+						if (x==bitGrid.width-1 || !bitGrid.get(x+1,y  )) e.push(macro if (dx== 1 && dy== 0 && _blocked(grid.getCellAtOffset(pos,$v{x+1},$v{y}  ))) return false);
+						if (y==0               || !bitGrid.get(x  ,y-1)) e.push(macro if (dx== 0 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x}  ,$v{y-1}))) return false);
+						if (y==bitGrid.height-1|| !bitGrid.get(x  ,y+1)) e.push(macro if (dx== 0 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x}  ,$v{y+1}))) return false);
+						if (x==0 || y==0       || !bitGrid.get(x-1,y-1)) e.push(macro if (dx==-1 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x-1},$v{y-1}))) return false);
+						if (x==bitGrid.width-1 || y==0               || !bitGrid.get(x+1,y-1)) e.push(macro if (dx== 1 && dy==-1 && _blocked(grid.getCellAtOffset(pos,$v{x+1},$v{y-1}))) return false);
+						if (x==0               || y==bitGrid.height-1|| !bitGrid.get(x-1,y+1)) e.push(macro if (dx==-1 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x-1},$v{y+1}))) return false);
+						if (x==bitGrid.width-1 || y==bitGrid.height-1|| !bitGrid.get(x+1,y+1)) e.push(macro if (dx== 1 && dy== 1 && _blocked(grid.getCellAtOffset(pos,$v{x+1},$v{y+1}))) return false);
 					}
 			e.push(macro return true);
 

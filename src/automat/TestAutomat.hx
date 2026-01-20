@@ -175,7 +175,7 @@ E            #
 	// ----------------------------------------------------------------
 	// ----------------------------------------------------------------
 
-	public static function traceGrid(grid:Grid, w:Int=Grid.WIDTH, h:Int=Grid.HEIGHT) {
+	public static function traceGrid(grid:Grid, w:Int=Grid.WIDTH, h:Int=Grid.HEIGHT, clear=false) {
 		var s = "\n";
 		for (y in 0...h) {
 			for (x in 0...w) {
@@ -198,6 +198,7 @@ E            #
 			}
 			s += "\n";
 		}
+		if (clear) Sys.command("clear");
 		trace(s);
 	}
 	
