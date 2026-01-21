@@ -7,6 +7,7 @@ import automat.actor.IActor;
 import automat.actor.Actor;
 import automat.Pos.xy as P;
 
+@:allow(automat.actor)
 class Grid {
 	// -------------------------------------------------
 	// -------------------- DATA -----------------------
@@ -65,13 +66,14 @@ class Grid {
 		return (actorID == CellActor.EMPTY) ? null : actors.get( actorID );
 	}
 
-	public inline function setCellActorAt(pos:Pos, cellActor:CellActor) {
+	inline function setCellActorAt(pos:Pos, cellActor:CellActor) {
 		var cell = get(pos);
 		cell.actor = cellActor;
 		set(pos, cell);
 	}
 	
-	public inline function setCellActorAtOffset(x:Int, y:Int,
+	// TODO: only used by macro-unroll-mode at now -> better put it inside there then!
+	inline function setCellActorAtOffset(x:Int, y:Int,
 		gR:Grid, gB:Grid, gRB:Grid,
 		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor,
 		)
@@ -86,8 +88,25 @@ class Grid {
 		}
 	}
 	
+	inline function delCellActorAt(pos:Pos) {
+		var cell = get(pos);
+		cell.actor = CellActor.EMPTY;
+		set(pos, cell);
+	}
+	/*
+	inline function delCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid) {
+		if (x < WIDTH) {
+			if (y < HEIGHT) delCellActorAt(P(x,y));
+			else gB.delCellActorAt(P(x, y - HEIGHT));
+		}
+		else {
+			if (y < HEIGHT) gR.delCellActorAt(P(x - WIDTH, y));
+			else gRB.delCellActorAt(P(x - WIDTH, y - HEIGHT));
+		}
+	}
+	*/
 		
-	public function getCellAtOffset(pos:Pos, x:Int, y:Int):Cell {
+	inline function getCellAtOffset(pos:Pos, x:Int, y:Int):Cell {
 		x += pos.x;
 		y += pos.y;
 		if (x < 0) return _atOffsetLeftY(x + WIDTH, y);

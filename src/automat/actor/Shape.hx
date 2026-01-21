@@ -7,15 +7,6 @@ import automat.Cell.CellActor;
 import util.BitGrid;
 import automat.Pos.xy as P;
 
-/*
-interface IActorShape {
-	public var pos:Pos;
-	public var grid:Grid;
-	public function isFitIntoGrid(grid:Grid, pos:Int):Bool;
-	public function isFreeLeft():Bool;
-	// public function moveLeft():Bool;
-}
-*/
 
 // 1x1 shape without macro:
 class Shape1x1 {
@@ -24,19 +15,17 @@ class Shape1x1 {
 
 class Shape {
 
-	// A N Y -< now lets "add"
-
-	// only this is needs macrofication!!!
-	public static inline function _addToGrid(pos:Pos,
-		g:Grid, gR:Grid, gB:Grid, gRB:Grid,
-		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor,
-		shape:BitGrid
-		) 
-	{
-		for (y in 0...shape.height) {
-			for (x in 0...shape.width) {
+	public static inline function _addToGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, actor:IActor, shape:BitGrid)	{
+		var cellActor:CellActor=0;
+		var first = true;
+		for (y in yFrom...yTo) {
+			for (x in xFrom...xTo) {
 				if ( shape.get(x,y) ) {
-					g.setCellActorAtOffset(pos.x + x, pos.y + y, gR, gB, gRB, a, aR, aB, aRB);
+					if (first) { // add the actor to the grid on the first match!
+						cellActor = grid.actors.add(actor);
+						first = false;
+					}
+					grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), cellActor);
 				}
 			}
 		}
@@ -45,26 +34,57 @@ class Shape {
 	public static inline function addToGrid(actor:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
 		actor.grid = grid;
 		actor.pos = pos;
+		if ( pos.x + shape.width < Grid.WIDTH ) {
+			if ( pos.y + shape.height < Grid.HEIGHT) {
+				_addToGrid(pos, 0, 0, 0, shape.width, 0, shape.height, grid, actor, shape); // root grid
+			}
+			else {
+				_addToGrid(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid, actor, shape); // root grid
+				_addToGrid(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, actor, shape); // bottom
+			}
+		}
+		else {
+			if ( pos.y + shape.height < Grid.HEIGHT ) {
+				_addToGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, grid, actor, shape); // root grid
+				_addToGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, grid.right, actor, shape); // right
+			}
+			else {
+				_addToGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, grid, actor, shape); // root grid
+				_addToGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid.right, actor, shape); // right
+				_addToGrid(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, actor, shape); // bottom
+				_addToGrid(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.rightBottom, actor, shape); // rightBottom
+			}
+		}
+	}
+/*
+	public static inline function _removeFromGrid(pos:Pos, g:Grid, gR:Grid, gB:Grid, gRB:Grid, shape:BitGrid) {
+		for (y in 0...shape.height) {
+			for (x in 0...shape.width) {
+				if ( shape.get(x,y) ) {
+					g.delCellActorAtOffset(pos.x + x, pos.y + y, gR, gB, gRB);
+				}
+			}
+		}
+	}
+
+	public static inline function removeFromGrid(actor:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
+		actor.grid = null;
 		if ( pos.x + shape.width < Grid.WIDTH )
 		{
 			if ( pos.y + shape.height < Grid.HEIGHT)
-				_addToGrid(pos, grid, null, null, null, grid.actors.add(actor), 0, 0, 0, shape);
+				_removeFromGrid(pos, grid, null, null, null, shape);
 			else
-				_addToGrid(pos, grid, null, grid.bottom, null,
-					grid.actors.add(actor), 0, grid.bottom.actors.add(actor), 0, shape);
+				_removeFromGrid(pos, grid, null, grid.bottom, null, shape);
 		}
 		else
 		{
 			if ( pos.y + shape.height < Grid.HEIGHT )
-				_addToGrid(pos, grid, grid.right, null, null,
-					grid.actors.add(actor), grid.right.actors.add(actor), 0, 0, shape);
+				_removeFromGrid(pos, grid, grid.right, null, null, shape);
 			else
-				_addToGrid(pos, grid, grid.right, grid.bottom, grid.rightBottom,
-					grid.actors.add(actor), grid.right.actors.add(actor),
-					grid.bottom.actors.add(actor), grid.rightBottom.actors.add(actor), shape);
+				_removeFromGrid(pos, grid, grid.right, grid.bottom, grid.rightBottom, shape);
 		}
 	}
-
+*/
 	public static function isFitIntoGrid(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		for (y in 0...shape.height)
 			for (x in 0...shape.width)
@@ -144,6 +164,8 @@ class ShapeMacro {
 			var e:Array<Expr> = [];
 
 			// ---------- _addToGrid --------------
+
+			// TODO: here i am need also something like Nanjis Morton-traversing (from outer edged to inner!)
 			for (y in 0...bitGrid.height)
 				for (x in 0...bitGrid.width)
 					if ( bitGrid.get(x,y) ) {
@@ -176,8 +198,9 @@ class ShapeMacro {
 			e.push(macro
 				if ( pos.x + $v{bitGrid.width} < automat.Grid.WIDTH ) {					
 					if ( pos.y + $v{bitGrid.height} < automat.Grid.HEIGHT)
+						// TODO: here no extra checks is need!
 						_addToGrid(null, null, null, grid.actors.add(this), 0, 0, 0);
-					else
+					else // TODO: another way to add the actor to grid-actors -> on demand ! (really hard to unroll)
 						_addToGrid(null, grid.bottom, null, grid.actors.add(this), 0, grid.bottom.actors.add(this), 0);
 				}
 				else {
