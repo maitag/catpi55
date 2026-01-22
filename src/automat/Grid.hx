@@ -93,6 +93,14 @@ class Grid {
 		cell.actor = CellActor.EMPTY;
 		set(pos, cell);
 	}
+
+	inline function getAndDelCellActorAt(pos:Pos):CellActor {
+		var cell = get(pos);
+		var cellActor:CellActor = cell.actor;
+		cell.actor = CellActor.EMPTY;
+		set(pos, cell);
+		return cellActor;
+	}
 	/*
 	inline function delCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid) {
 		if (x < WIDTH) {

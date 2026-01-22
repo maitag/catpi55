@@ -56,12 +56,17 @@ class Shape {
 			}
 		}
 	}
-/*
-	public static inline function _removeFromGrid(pos:Pos, g:Grid, gR:Grid, gB:Grid, gRB:Grid, shape:BitGrid) {
-		for (y in 0...shape.height) {
-			for (x in 0...shape.width) {
+
+	public static inline function _removeFromGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, shape:BitGrid) {
+		var first = true;
+		for (y in yFrom...yTo) {
+			for (x in xFrom...xTo) {
 				if ( shape.get(x,y) ) {
-					g.delCellActorAtOffset(pos.x + x, pos.y + y, gR, gB, gRB);
+					if (first) { // add the actor to the grid on the first match!
+						grid.actors.del(grid.getAndDelCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff)));
+						first = false;
+					}
+					grid.delCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff));
 				}
 			}
 		}
@@ -69,22 +74,29 @@ class Shape {
 
 	public static inline function removeFromGrid(actor:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
 		actor.grid = null;
-		if ( pos.x + shape.width < Grid.WIDTH )
-		{
-			if ( pos.y + shape.height < Grid.HEIGHT)
-				_removeFromGrid(pos, grid, null, null, null, shape);
-			else
-				_removeFromGrid(pos, grid, null, grid.bottom, null, shape);
+		if ( pos.x + shape.width < Grid.WIDTH ) {
+			if ( pos.y + shape.height < Grid.HEIGHT) {
+				_removeFromGrid(pos, 0, 0, 0, shape.width, 0, shape.height, grid, shape); // root grid
+			}
+			else {
+				_removeFromGrid(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid, shape); // root grid
+				_removeFromGrid(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, shape); // bottom
+			}
 		}
-		else
-		{
-			if ( pos.y + shape.height < Grid.HEIGHT )
-				_removeFromGrid(pos, grid, grid.right, null, null, shape);
-			else
-				_removeFromGrid(pos, grid, grid.right, grid.bottom, grid.rightBottom, shape);
+		else {
+			if ( pos.y + shape.height < Grid.HEIGHT ) {
+				_removeFromGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, grid, shape); // root grid
+				_removeFromGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, grid.right, shape); // right
+			}
+			else {
+				_removeFromGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, grid, shape); // root grid
+				_removeFromGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid.right, shape); // right
+				_removeFromGrid(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, shape); // bottom
+				_removeFromGrid(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.rightBottom, shape); // rightBottom
+			}
 		}
 	}
-*/
+
 	public static function isFitIntoGrid(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		for (y in 0...shape.height)
 			for (x in 0...shape.width)
@@ -389,6 +401,18 @@ class ShapeMacro {
 							{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
 							{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
 						],
+						expr: macro automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
+						ret: null
+					})
+				});
+
+			for (fname in ["removeFromGrid"])
+				fields.push({
+					name: fname,
+					access: [APublic, AInline],
+					pos: Context.currentPos(),
+					kind: FFun({
+						args: [],
 						expr: macro automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
 						ret: null
 					})

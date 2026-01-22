@@ -1,5 +1,6 @@
 package automat;
 
+import haxe.Timer;
 import automat.Cell.CellActor;
 import util.BitUtil;
 import lime.app.Application;
@@ -146,11 +147,21 @@ E            #
 		
 		traceGrid(grid, 16, 8);
 
+		bob.removeFromGrid();
+		bob.addToGrid(grid, P(11,2));
 
-
-		// TODO:
-		// actor.removeFromGrid();
-
+		var f;
+		f = ()-> {
+			var p = bob.pos;
+			bob.removeFromGrid();
+			p.x -= 1;
+			if (bob.isFitIntoGrid(grid, p)) {
+				bob.addToGrid(grid, p);
+				traceGrid(grid, 16, 8, true);
+				Timer.delay(f, 1000);
+			}
+		}		
+		f();
 
 		
 
