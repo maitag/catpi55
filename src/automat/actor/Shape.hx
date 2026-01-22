@@ -15,86 +15,86 @@ class Shape1x1 {
 
 class Shape {
 
-	public static inline function _addToGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, actor:IActor, shape:BitGrid)	{
-		var cellActor:CellActor=0;
-		var first = true;
+	public static inline function _addToGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, actorKey:CellActor, shape:BitGrid)	{
 		for (y in yFrom...yTo) {
 			for (x in xFrom...xTo) {
 				if ( shape.get(x,y) ) {
-					if (first) { // add the actor to the grid on the first match!
-						cellActor = grid.actors.add(actor);
-						first = false;
-					}
-					grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), cellActor);
+					grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), actorKey);
 				}
 			}
 		}
 	}
 
-	public static inline function addToGrid(actor:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
-		actor.grid = grid;
-		actor.pos = pos;
+	public static inline function addToGrid(a:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
+		a.grid = grid;
+		a.pos = pos;
+		a.gridKey = grid.actors.add(a);
 		if ( pos.x + shape.width < Grid.WIDTH ) {
 			if ( pos.y + shape.height < Grid.HEIGHT) {
-				_addToGrid(pos, 0, 0, 0, shape.width, 0, shape.height, grid, actor, shape); // root grid
+				_addToGrid(pos, 0, 0, 0, shape.width, 0, shape.height, a.grid, a.gridKey, shape); // root grid
 			}
 			else {
-				_addToGrid(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid, actor, shape); // root grid
-				_addToGrid(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, actor, shape); // bottom
+				_addToGrid(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, a.grid, a.gridKey, shape); // root grid
+				a.gridKeyB = a.grid.bottom.actors.add(a);
+				_addToGrid(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
 			}
 		}
 		else {
+			a.gridKeyR = a.grid.right.actors.add(a);
 			if ( pos.y + shape.height < Grid.HEIGHT ) {
-				_addToGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, grid, actor, shape); // root grid
-				_addToGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, grid.right, actor, shape); // right
+				_addToGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, a.grid, a.gridKey, shape); // root grid
+				_addToGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, a.grid.right, a.gridKeyR, shape); // right
 			}
 			else {
-				_addToGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, grid, actor, shape); // root grid
-				_addToGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid.right, actor, shape); // right
-				_addToGrid(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, actor, shape); // bottom
-				_addToGrid(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.rightBottom, actor, shape); // rightBottom
+				_addToGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, a.grid, a.gridKey, shape); // root grid
+				_addToGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, a.grid.right, a.gridKeyR, shape); // right
+				a.gridKeyB = a.grid.bottom.actors.add(a);
+				_addToGrid(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
+				a.gridKeyRB = a.grid.rightBottom.actors.add(a);
+				_addToGrid(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.rightBottom, a.gridKeyRB, shape); // rightBottom
 			}
 		}
 	}
 
 	public static inline function _removeFromGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, shape:BitGrid) {
-		var first = true;
 		for (y in yFrom...yTo) {
 			for (x in xFrom...xTo) {
 				if ( shape.get(x,y) ) {
-					if (first) { // add the actor to the grid on the first match!
-						grid.actors.del(grid.getAndDelCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff)));
-						first = false;
-					}
 					grid.delCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff));
 				}
 			}
 		}
 	}
 
-	public static inline function removeFromGrid(actor:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
-		actor.grid = null;
-		if ( pos.x + shape.width < Grid.WIDTH ) {
-			if ( pos.y + shape.height < Grid.HEIGHT) {
-				_removeFromGrid(pos, 0, 0, 0, shape.width, 0, shape.height, grid, shape); // root grid
+	public static inline function removeFromGrid(a:IActor, shape:BitGrid) {
+		if ( a.pos.x + shape.width < Grid.WIDTH ) {
+			if ( a.pos.y + shape.height < Grid.HEIGHT) {
+				_removeFromGrid(a.pos, 0, 0, 0, shape.width, 0, shape.height, a.grid, shape); // root grid
 			}
 			else {
-				_removeFromGrid(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid, shape); // root grid
-				_removeFromGrid(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, shape); // bottom
+				_removeFromGrid(a.pos, 0, 0, 0, shape.width, 0, a.pos.y + shape.height - Grid.HEIGHT, a.grid, shape); // root grid
+				_removeFromGrid(a.pos, 0, Grid.HEIGHT, 0, shape.width, a.pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, shape); // bottom
+				a.grid.bottom.actors.del(a.gridKeyB); a.gridKeyB = -1;
 			}
 		}
 		else {
-			if ( pos.y + shape.height < Grid.HEIGHT ) {
-				_removeFromGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, grid, shape); // root grid
-				_removeFromGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, grid.right, shape); // right
+			if ( a.pos.y + shape.height < Grid.HEIGHT ) {
+				_removeFromGrid(a.pos, 0, 0, 0, a.pos.x + shape.width - Grid.WIDTH, 0, shape.height, a.grid, shape); // root grid
+				_removeFromGrid(a.pos, Grid.WIDTH, 0, a.pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, a.grid.right, shape); // right
+				a.grid.right.actors.del(a.gridKeyR); a.gridKeyR = -1;
 			}
 			else {
-				_removeFromGrid(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, grid, shape); // root grid
-				_removeFromGrid(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, grid.right, shape); // right
-				_removeFromGrid(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.bottom, shape); // bottom
-				_removeFromGrid(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, grid.rightBottom, shape); // rightBottom
+				_removeFromGrid(a.pos, 0, 0, 0, a.pos.x + shape.width - Grid.WIDTH, 0, a.pos.y + shape.height - Grid.HEIGHT, a.grid, shape); // root grid
+				_removeFromGrid(a.pos, Grid.WIDTH, 0, a.pos.x + shape.width - Grid.WIDTH, shape.width, 0, a.pos.y + shape.height - Grid.HEIGHT, a.grid.right, shape); // right
+				_removeFromGrid(a.pos, 0, Grid.HEIGHT, 0, a.pos.x + shape.width - Grid.WIDTH, a.pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, shape); // bottom
+				_removeFromGrid(a.pos, Grid.WIDTH, Grid.HEIGHT, a.pos.x + shape.width - Grid.WIDTH, shape.width, a.pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.rightBottom, shape); // rightBottom
+				a.grid.right.actors.del(a.gridKeyR); a.gridKeyR = -1;
+				a.grid.bottom.actors.del(a.gridKeyB); a.gridKeyB = -1;
+				a.grid.rightBottom.actors.del(a.gridKeyRB); a.gridKeyRB = -1;
 			}
 		}
+		a.grid.actors.del(a.gridKey); a.gridKey = -1;
+		a.grid = null;
 	}
 
 	public static function isFitIntoGrid(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
@@ -413,7 +413,7 @@ class ShapeMacro {
 					pos: Context.currentPos(),
 					kind: FFun({
 						args: [],
-						expr: macro automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
+						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid),
 						ret: null
 					})
 				});

@@ -16,6 +16,8 @@ import util.BitGrid;
 
 
 	public var grid:Grid = null; // not inside any grid at instantiation
+
+	// viktor keys (-1 if not have into grid or neighbours)
 	public var gridKey:Int = -1;
 	public var gridKeyR:Int = -1;
 	public var gridKeyB:Int = -1;
