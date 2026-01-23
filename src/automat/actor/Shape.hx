@@ -134,9 +134,9 @@ class Shape {
 
 
 
-	public static function moveLeft(actor:IActor, shapeBitGrid:BitGrid) {
-		// TODO
-		return true;
+	public static function moveLeft(a:IActor, shape:BitGrid) {
+		var grid = a.grid;
+		removeFromGrid(a, shape); addToGrid(a, grid, P(a.pos.x-1, a.pos.y), shape);
 	}
 
 }
@@ -326,127 +326,163 @@ class ShapeMacro {
 			// ----------------------------------
 			// ---------- isFree  ---------------
 			// ----------------------------------
-			var f = function(sideFunc:Int->Int->Bool, xOff:Int, yOff:Int, checkLeft=true, checkRight=true, checkTop=true, checkBottom=true):Array<Expr> {
-				var ee:Array<Expr> = [];
+			var f = function(xOff:Int, yOff:Int, checkLeft=true, checkRight=true, checkTop=true, checkBottom=true):Array<Expr> {
+				var e:Array<Expr> = [];
 				for (y in 0...bitGrid.height)
 					for (x in 0...bitGrid.width)
-						if ( bitGrid.get(x,y) && ( sideFunc(x, y) || !bitGrid.get(x+xOff,y+yOff) ) )
-							ee.push(macro if ( _blocked( grid.getCellAtOffset(pos, $v{x+xOff}, $v{y+yOff}, $v{checkLeft}, $v{checkRight}, $v{checkTop}, $v{checkBottom}) ) ) return false);
-				ee.push(macro return true);
-				return ee;
+						if (bitGrid.get(x,y) && ((x+xOff)<0 || (x+xOff)>=bitGrid.width || (y+yOff)<0 || (y+yOff)>=bitGrid.height || !bitGrid.get(x+xOff,y+yOff)))
+							e.push(macro if (_blocked(grid.getCellAtOffset(pos, $v{x+xOff}, $v{y+yOff}, $v{checkLeft}, $v{checkRight}, $v{checkTop}, $v{checkBottom}))) return false);
+				e.push(macro return true);
+				return e;
 			}
 
-			// ---------- isFreeLeft ---------------
 			fields.push({
 				name: "isFreeLeft",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return x == 0;}, -1, 0 )},
+					expr: macro $b{f(-1, 0)},
 					// more optimized:
 					/*expr: macro 
 						if (pos.x == 0) {
-							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f((x,y)->{return x==0;},-1,0,true,false,false,false)}; // left
-							else $b{f((x,y)->{return x==0;},-1,0,true,false,false,true)}; // left, bottom
+							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0,true,false,false,false)}; // left
+							else $b{f(-1,0,true,false,false,true)}; // left, bottom
 						}
 						else if (pos.x + $v{bitGrid.width} > Grid.WIDTH) {
-							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f((x,y)->{return x==0;},-1,0,false,true,false,false)}; // right
-							else $b{f((x,y)->{return x==0;},-1,0,false,true,false,true)};  // right, bottom
+							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0,false,true,false,false)}; // right
+							else $b{f(-1,0,false,true,false,true)};  // right, bottom
 						}
-						else if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f((x,y)->{return x==0;},-1,0,false,false,false,false)}; // fully inside
+						else if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0,false,false,false,false)}; // fully inside
 						else $b{f(-1,0,false,false,false,true)} // bottom
 					,*/
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeRight ---------------
 			fields.push({
 				name: "isFreeRight",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return x == bitGrid.width-1;}, 1, 0 )},
+					expr: macro $b{f(1, 0)},
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeTop ---------------
 			fields.push({
 				name: "isFreeTop",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return y == 0;}, 0, -1 )},
+					expr: macro $b{f(0, -1)},
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeBottom ---------------
 			fields.push({
 				name: "isFreeBottom",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return y == bitGrid.height-1;}, 0, 1 )},
+					expr: macro $b{f(0, 1)},
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeLeftTop ---------------
 			fields.push({
 				name: "isFreeLeftTop",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return x==0 || y==0;}, -1, -1 )},
+					expr: macro $b{f(-1, -1)},
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeLeftBottom ---------------
 			fields.push({
 				name: "isFreeLeftBottom",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return x==0 || y == bitGrid.height-1;}, -1, 1 )},
+					expr: macro $b{f(-1, 1)},
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeRightTop ---------------
 			fields.push({
 				name: "isFreeRightTop",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return x == bitGrid.width-1 || y==0;}, 1, -1 )},
+					expr: macro $b{f(1, -1)},
 					ret: macro:Bool
 				})
 			});
 
-			// ---------- isFreeRightBottom ---------------
 			fields.push({
 				name: "isFreeRightBottom",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					expr: macro $b{f( (x,y)->{return x == bitGrid.width-1 || y == bitGrid.height-1;}, 1, 1 )},
+					expr: macro $b{f(1, 1)},
 					ret: macro:Bool
 				})
 			});
 
 
-			// TODO: move
+			// ----------------------------------
+			// ------------ MOVE ----------------
+			// ----------------------------------
+			var f = function(xOff:Int, yOff:Int):Array<Expr> {
+				var e:Array<Expr> = [];
+				for (y in 0...bitGrid.height) for (x in 0...bitGrid.width) {
+					if ( bitGrid.get(x,y) ) {
+						if ((xOff == -1 && x == 0) || (xOff == 1 && x == bitGrid.width-1) || (yOff == -1 && y == 0) || (yOff == 1 && y == bitGrid.height-1))
+							e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey) );
+						if ((xOff == -1 && x == bitGrid.width-1) || (xOff == 1 && x == 0) || (yOff == -1 && y == bitGrid.height-1) || (yOff == 1 && y == 0)) 
+							e.push( macro grid.delCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
+						else if ( !bitGrid.get(x-xOff,y-yOff) )
+							e.push( macro grid.delCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
+					}
+					else if ( ( (x-xOff)>=0 && (x-xOff)<bitGrid.width && (y-yOff)>=0 && (y-yOff)<bitGrid.height ) && bitGrid.get(x-xOff,y-yOff) )
+						e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey) );
+				}
+				e.push( macro pos = automat.Pos.xy(pos.x + $v{xOff}, pos.y + $v{yOff}) ); // change position
+				return e;
+			}
+
+			// ---------- moveLeft ---------------
+			fields.push({
+				name: "moveLeft",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					// expr: macro $b{f(-1,0)},
+					// TODO: more optimized and grid-neigbour-change:
+					expr: macro 
+						if (pos.x == 0) {
+							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0)}; // left
+							else $b{f(-1,0)}; // left, bottom
+						}
+						else if (pos.x + $v{bitGrid.width} > Grid.WIDTH) {
+							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0)}; // right
+							else $b{f(-1,0)};  // right, bottom
+						}
+						else if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0)}; // fully inside
+						else $b{f(-1,0)} // bottom
+					,
+					ret: null
+				})
+			});
 
 
 		}
@@ -515,8 +551,25 @@ class ShapeMacro {
 					})
 				});
 
-			// TODO: move
+			for (fname in ["moveLeft"
+				// ,"moveRight","moveTop","moveBottom","moveLeftTop","moveLeftBottom","moveRightTop","moveRightBottom"
+				])
+				fields.push({
+					name: fname,
+					access: [APublic, AInline],
+					pos: Context.currentPos(),
+					kind: FFun({
+						args: [],
+						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid),
+						ret: null
+					})
+				});
+
 		}
+
+		// ------------------------------------------------
+		// ------------------------------------------------
+		// ------------------------------------------------
 
 		fields.push({
 			name: "width",

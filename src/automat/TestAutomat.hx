@@ -146,35 +146,39 @@ E            #
 		
 		
 		traceGrid(grid, 16, 8);
-
-		bob.removeFromGrid();
-		bob.addToGrid(grid, P(10,2));
 		
-		/*
+		bob.removeFromGrid();
+		bob.addToGrid(grid, P(10,3));
+		
+
+		traceGrid(grid, 16, 8);
+		if (bob.isFreeLeft()) bob.moveLeft();
+		traceGrid(grid, 16, 8);
+		
 		var f;
 		f = ()-> {
 			var p = bob.pos;
-			bob.removeFromGrid();
 			p.x -= 1;
-			if (bob.isFitIntoGrid(grid, p)) {
-				bob.addToGrid(grid, p);
+			if ( bob.isFreeLeft() ) {
+				bob.moveLeft();
 				traceGrid(grid, 16, 8, true);
 				Timer.delay(f, 1000);
 			}
 		}		
 		f();
-		*/	
+		
 		
 		// -------- benchmarks -------------
-		var t = haxe.Timer.stamp();
+		/*var t = haxe.Timer.stamp();
 		var i:Int = 0;
 		while (i++ < 1000000) {
 			bob.removeFromGrid();
-			bob.addToGrid(grid, P(10,2));
+			bob.addToGrid(grid, P(9,2));
 		}
-		trace( (haxe.Timer.stamp() - t) );
+		trace( (haxe.Timer.stamp() - t) );*/
+
 		
-		traceGrid(grid, 16, 8);
+		
 		
 
 	}
