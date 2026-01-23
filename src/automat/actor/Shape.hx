@@ -99,44 +99,90 @@ class Shape {
 		return (1<<cell.type & blockedCellType > 0 || cell.hasActor || cell.isTabu); // to store one more CellType: return (1<<(cell.type-1) & blockedCellType > 0 || cell.isTabu || cell.hasActor);
 	}
 	
-	public static function _isFreeSide(sideFunc:Int->Int->Bool, xOff:Int, yOff:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid) {
+	public static function _isFreeSide(xOff:Int, yOff:Int, grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid) {
 		for (y in 0...shape.height)
 			for (x in 0...shape.width)
-				if ( shape.get(x,y) && (sideFunc(x,y) || !shape.get(x+xOff,y+yOff)) && _blocked(grid.getCellAtOffset( pos, x+xOff, y+yOff), blockedCellType)) return false;
+				if ( shape.get(x,y) && ((x+xOff)<0 || (x+xOff)>=shape.width || (y+yOff)<0 || (y+yOff)>=shape.height || !shape.get(x+xOff,y+yOff)) && _blocked(grid.getCellAtOffset( pos, x+xOff, y+yOff), blockedCellType)) return false;
 		return true;
 	}
 
 	public static function isFreeLeft(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return x==0;}, -1, 0, grid, pos, blockedCellType, shape );
+		return _isFreeSide(-1, 0, grid, pos, blockedCellType, shape );
 	}
 	public static function isFreeRight(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return x == shape.width-1;}, 1, 0, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 1, 0, grid, pos, blockedCellType, shape );
 	}
 	public static function isFreeTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return y==0;}, 0, -1, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 0,-1, grid, pos, blockedCellType, shape );
 	}
 	public static function isFreeBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return y == shape.height-1;}, 0, 1, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 0, 1, grid, pos, blockedCellType, shape );
 	}
-
 	public static function isFreeLeftTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return x==0 || y==0;}, -1, -1, grid, pos, blockedCellType, shape );
+		return _isFreeSide(-1,-1, grid, pos, blockedCellType, shape );
 	}
 	public static function isFreeLeftBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return x==0 || y == shape.height-1;}, -1, 1, grid, pos, blockedCellType, shape );
+		return _isFreeSide(-1, 1, grid, pos, blockedCellType, shape );
 	}
 	public static function isFreeRightTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return x == shape.width-1 || y==0;}, 1, -1, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 1,-1, grid, pos, blockedCellType, shape );
 	}
 	public static function isFreeRightBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( (x,y)->{return x == shape.width-1 || y == shape.height-1;}, 1, 1, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 1, 1, grid, pos, blockedCellType, shape );
 	}
-
 
 
 	public static function moveLeft(a:IActor, shape:BitGrid) {
-		var grid = a.grid;
-		removeFromGrid(a, shape); addToGrid(a, grid, P(a.pos.x-1, a.pos.y), shape);
+		var g = a.grid; removeFromGrid(a, shape);
+		if (a.pos.x == 0) addToGrid(a, g.left, P(shape.width - 1, a.pos.y), shape);
+		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape);
+	}
+	public static function moveRight(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		if (a.pos.x == shape.width - 1) addToGrid(a, g.right, P(0, a.pos.y), shape);
+		else addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape);
+	}
+	public static function moveTop(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x, shape.height - 1), shape);
+		else addToGrid(a, g, P(a.pos.x, a.pos.y-1), shape);
+	}
+	public static function moveBottom(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		if (a.pos.y == shape.height - 1) addToGrid(a, g.bottom, P(a.pos.x, 0), shape);
+		else addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape);
+	}
+	public static function moveLeftTop(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		var x:Int = a.pos.x-1; var y:Int = a.pos.y-1;
+		if (x < 0 && y < 0) { x = shape.width - 1; y = shape.height - 1; g = g.leftTop; }
+		else if (x < 0) { x = shape.width - 1; g = g.left; }
+		else if (y < 0) { y = shape.height - 1; g = g.top; }
+		else addToGrid(a, g, P(x, y), shape);
+	}
+	public static function moveLeftBottom(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		var x:Int = a.pos.x-1; var y:Int = a.pos.y+1;
+		if (x < 0 && y >= shape.height) { x = shape.width - 1; y = 0; g = g.leftBottom; }
+		else if (x < 0) { x = shape.width - 1; g = g.left; }
+		else if (y >= shape.height) { y = 0; g = g.bottom; }
+		else addToGrid(a, g, P(x, y), shape);
+	}
+	public static function moveRightTop(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		var x:Int = a.pos.x+1; var y:Int = a.pos.y-1;
+		if (x >= shape.width && y < 0) { x = 0; y = shape.height - 1; g = g.rightTop; }
+		else if (x >= shape.width) { x = 0; g = g.right; }
+		else if (y < 0) { y = shape.height - 1; g = g.top; }
+		else addToGrid(a, g, P(x, y), shape);
+	}
+	public static function moveRightBottom(a:IActor, shape:BitGrid) {
+		var g = a.grid; removeFromGrid(a, shape);
+		var x:Int = a.pos.x+1; var y:Int = a.pos.y+1;
+		if (x >= shape.width && y >= shape.height) { x = 0; y = 0; g = g.rightBottom; }
+		else if (x >= shape.width) { x = 0; g = g.right; }
+		else if (y >= shape.height) { y = 0; g = g.bottom; }
+		else addToGrid(a, g, P(x, y), shape);
 	}
 
 }
@@ -459,27 +505,199 @@ class ShapeMacro {
 				return e;
 			}
 
-			// ---------- moveLeft ---------------
 			fields.push({
 				name: "moveLeft",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [],
-					// expr: macro $b{f(-1,0)},
-					// TODO: more optimized and grid-neigbour-change:
 					expr: macro 
-						if (pos.x == 0) {
-							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0)}; // left
-							else $b{f(-1,0)}; // left, bottom
+						if (pos.x > 0 && pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
+							$b{f(-1,0)};
+						else {
+							var g = grid; removeFromGrid();
+							if (pos.x == 0) addToGrid(g.left, automat.Pos.xy($v{bitGrid.width - 1},pos.y));
+							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y));
 						}
-						else if (pos.x + $v{bitGrid.width} > Grid.WIDTH) {
-							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0)}; // right
-							else $b{f(-1,0)};  // right, bottom
+						// TODO: more optimized and grid-neigbour-change:
+						/*
+						if (pos.x > 0)
+						{
+							if (pos.x + $v{bitGrid.width} < Grid.WIDTH) { // fully keep inside
+								$b{f(-1,0)};
+							}
+							else if (pos.x + $v{bitGrid.width} == Grid.WIDTH) {
+								if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) {
+									$b{f(-1,0)};
+									grid.right.actors.del(gridKeyR); gridKeyR = -1;  // leave right grid
+								}
+								else {
+									$b{f(-1,0)};
+									grid.right.actors.del(gridKeyR); gridKeyR = -1;  // leave right grid
+									grid.rightBottom.actors.del(gridKeyRB); gridKeyRB = -1;  // leave rightBottom grid
+								}
+							}
+							else {
+								if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) {
+									$b{f(-1,0)};
+								}
+								else {
+									$b{f(-1,0)};
+								}
+							}
 						}
-						else if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) $b{f(-1,0)}; // fully inside
-						else $b{f(-1,0)} // bottom
+						else { // pos.x == 0
+							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) {
+								$b{f(-1,0)}; // TODO
+								grid.right = grid; gridKeyR = gridKey; grid = grid.left; gridKey = grid.actors.add();// enter left grid
+							}
+							else {
+								$b{f(-1,0)};
+								grid.rightBottom = grid; grid = grid.left; gridKey = grid.actors.add(); // enter left grid
+								grid.right = grid; grid = grid.left; gridKey = grid.actors.add(); // enter left grid
+							}
+					}
+					*/
 					,
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveRight",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
+							$b{f(1,0)};
+						else {
+							var g = grid;
+							removeFromGrid();
+							if (pos.x == $v{bitGrid.width - 1}) addToGrid(g.right, automat.Pos.xy(0, pos.y));
+							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y));
+						},
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveTop",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT && pos.x + $v{bitGrid.width} < Grid.WIDTH) // fully keep inside
+							$b{f(0,-1)};
+						else {
+							var g = grid; removeFromGrid();
+							if (pos.y == 0) addToGrid(g.top, automat.Pos.xy(pos.x, $v{bitGrid.height - 1}));
+							else addToGrid(g, automat.Pos.xy(pos.x, pos.y-1));
+						},
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveBottom",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.y + $v{bitGrid.height} < Grid.HEIGHT-1 && pos.x + $v{bitGrid.width} < Grid.WIDTH) // fully keep inside
+							$b{f(0,1)};
+						else {
+							var g = grid; removeFromGrid();
+							if (pos.y == $v{bitGrid.height - 1}) addToGrid(g.bottom, automat.Pos.xy(pos.x, 0));
+							else addToGrid(g, automat.Pos.xy(pos.x, pos.y+1));
+						},
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveLeftTop",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.x > 0 && pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
+							$b{f(-1,-1)};
+						else {
+							var g = grid; removeFromGrid();
+							var x:Int = pos.x-1; var y:Int = pos.y-1;
+							if (x < 0 && y < 0) { x = $v{bitGrid.width-1}; y = $v{bitGrid.height-1}; g = g.leftTop; }
+							else if (x < 0) { x = $v{bitGrid.width-1}; g = g.left; }
+							else if (y < 0) { y = $v{bitGrid.height-1}; g = g.top; }
+							else addToGrid(g, automat.Pos.xy(x, y));
+						},
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveLeftBottom",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.x > 0 && pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y + $v{bitGrid.height} < Grid.HEIGHT-1) // fully keep inside
+							$b{f(-1,1)};
+						else {
+							var g = grid; removeFromGrid();
+							var x:Int = pos.x-1; var y:Int = pos.y+1;
+							if (x < 0 && y >= $v{bitGrid.height}) { x = $v{bitGrid.width-1}; y = 0; g = g.leftBottom; }
+							else if (x < 0) { x = $v{bitGrid.width-1}; g = g.left; }
+							else if (y >= $v{bitGrid.height}) { y = 0; g = g.bottom; }
+							else addToGrid(g, automat.Pos.xy(x, y));
+						},
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveRightTop",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
+							$b{f(-1,-1)};
+						else {
+							var g = grid; removeFromGrid();
+							var x:Int = pos.x+1; var y:Int = pos.y-1;
+							if (x >= $v{bitGrid.width} && y < 0) { x = 0; y = $v{bitGrid.height-1}; g = g.rightTop; }
+							else if (x >= $v{bitGrid.width}) { x = 0; g = g.right; }
+							else if (y < 0) { y = $v{bitGrid.height-1}; g = g.top; }
+							else addToGrid(g, automat.Pos.xy(x, y));
+						},
+					ret: null
+				})
+			});
+
+			fields.push({
+				name: "moveRightBottom",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro 
+						if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y + $v{bitGrid.height} < Grid.HEIGHT-1) // fully keep inside
+							$b{f(-1,1)};
+						else {
+							var g = grid; removeFromGrid();
+							var x:Int = pos.x+1; var y:Int = pos.y+1;
+							if (x >= $v{bitGrid.width} && y >= $v{bitGrid.height}) { x = 0; y = 0; g = g.rightBottom; }
+							else if (x >= $v{bitGrid.width}) { x = 0; g = g.right; }
+							else if (y >= $v{bitGrid.height}) { y = 0; g = g.bottom; }
+							else addToGrid(g, automat.Pos.xy(x, y));
+						},
 					ret: null
 				})
 			});
@@ -487,9 +705,9 @@ class ShapeMacro {
 
 		}
 		else { 
-			// -----------------------------------------------
-			// --------------- delegated ---------------------
-			// -----------------------------------------------
+			// -------------------------------------------------------------------------------
+			// ----------------------------- delegated ---------------------------------------
+			// -------------------------------------------------------------------------------
 			fields.push({
 				name: "shapeBitGrid",
 				access: [APublic],
@@ -551,8 +769,7 @@ class ShapeMacro {
 					})
 				});
 
-			for (fname in ["moveLeft"
-				// ,"moveRight","moveTop","moveBottom","moveLeftTop","moveLeftBottom","moveRightTop","moveRightBottom"
+			for (fname in ["moveLeft","moveRight","moveTop","moveBottom","moveLeftTop","moveLeftBottom","moveRightTop","moveRightBottom"
 				])
 				fields.push({
 					name: fname,

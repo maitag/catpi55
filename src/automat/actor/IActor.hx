@@ -24,5 +24,14 @@ interface IActor {
 	public function isFreeRightTop():Bool;
 	public function isFreeRightBottom():Bool;
 
-	// public function moveLeft():Bool;
+	public function moveLeft():Void;
+	public function moveRight():Void;
+	public function moveTop():Void;
+	public function moveBottom():Void;
+
+	public function moveLeftTop():Void;
+	public function moveLeftBottom():Void;
+	public function moveRightTop():Void;
+	public function moveRightBottom():Void;
+
 }

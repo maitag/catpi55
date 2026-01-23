@@ -148,7 +148,7 @@ E            #
 		traceGrid(grid, 16, 8);
 		
 		bob.removeFromGrid();
-		bob.addToGrid(grid, P(10,3));
+		bob.addToGrid(grid, P(5,3));
 		
 
 		traceGrid(grid, 16, 8);
@@ -159,8 +159,8 @@ E            #
 		f = ()-> {
 			var p = bob.pos;
 			p.x -= 1;
-			if ( bob.isFreeLeft() ) {
-				bob.moveLeft();
+			if ( bob.isFreeRight() ) {
+				bob.moveRight();
 				traceGrid(grid, 16, 8, true);
 				Timer.delay(f, 1000);
 			}
