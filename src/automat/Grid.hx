@@ -72,28 +72,28 @@ class Grid {
 		set(pos, cell);
 	}
 	
-	// TODO: only used by macro-unroll-mode at now -> better put it inside there then!
-	inline function setCellActorAtOffset(x:Int, y:Int,
-		gR:Grid, gB:Grid, gRB:Grid,
+	// only used by macro-unroll-mode
+	inline function setCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid,
 		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor,
 		)
 	{
-		if (x < WIDTH) {
-			if (y < HEIGHT) setCellActorAt(P(x,y), a);
+		if (gR==null || gRB==null || x < WIDTH) {
+			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a);
 			else gB.setCellActorAt(P(x, y - HEIGHT), aB);
 		}
 		else {
-			if (y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR);
+			if (gRB==null || y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR);
 			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB);
 		}
 	}
 	
+	// only used by macro-unroll-mode at now!
 	inline function delCellActorAt(pos:Pos) {
 		var cell = get(pos);
 		cell.actor = CellActor.EMPTY;
 		set(pos, cell);
 	}
-
+/*
 	inline function getAndDelCellActorAt(pos:Pos):CellActor {
 		var cell = get(pos);
 		var cellActor:CellActor = cell.actor;
@@ -101,41 +101,43 @@ class Grid {
 		set(pos, cell);
 		return cellActor;
 	}
-	/*
+*/	
+
+	// only used by macro-unroll-mode
 	inline function delCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid) {
-		if (x < WIDTH) {
-			if (y < HEIGHT) delCellActorAt(P(x,y));
+		if (gR==null || gRB==null || x < WIDTH) {
+			if (gB==null || y < HEIGHT) delCellActorAt(P(x,y));
 			else gB.delCellActorAt(P(x, y - HEIGHT));
 		}
 		else {
-			if (y < HEIGHT) gR.delCellActorAt(P(x - WIDTH, y));
+			if (gRB==null || y < HEIGHT) gR.delCellActorAt(P(x - WIDTH, y));
 			else gRB.delCellActorAt(P(x - WIDTH, y - HEIGHT));
 		}
 	}
-	*/
-		
-	inline function getCellAtOffset(pos:Pos, x:Int, y:Int):Cell {
+	
+	// the optional checks here can be used to optimize macro-unroll-mode!
+	inline function getCellAtOffset(pos:Pos, x:Int, y:Int, checkLeft=true, checkRight=true, checkTop=true, checkBottom=true ):Cell {
 		x += pos.x;
 		y += pos.y;
-		if (x < 0) return _atOffsetLeftY(x + WIDTH, y);
-		else if (x >= WIDTH) return _atOffsetRightY(x - WIDTH, y);
-		else if (y < 0) {
+		if (checkLeft && x < 0) return _atOffsetLeftY(x + WIDTH, y, checkTop, checkBottom);
+		else if (checkRight && x >= WIDTH) return _atOffsetRightY(x - WIDTH, y, checkTop, checkBottom);
+		else if (checkTop && y < 0) {
 			if (top != null) return top.get( P(x, y + HEIGHT) );
 			else return 0;
 		}
-		else if (y >= HEIGHT) {
+		else if (checkBottom && y >= HEIGHT) {
 			if (bottom != null) return bottom.get( P(x, y - HEIGHT) );
 			else return 0;
 		}
 		else return get( P(x, y) );
 	}
 
-	inline function _atOffsetLeftY(x:Int, y:Int):Cell {
-		if (y < 0) {
+	inline function _atOffsetLeftY(x:Int, y:Int, checkTop, checkBottom):Cell {
+		if (checkTop && y < 0) {
 			if (leftTop != null) return leftTop.get( P(x, y + HEIGHT) );
 			else return 0;
 		}
-		else if (y >= HEIGHT) {
+		else if (checkBottom && y >= HEIGHT) {
 			if (leftBottom != null) return leftBottom.get( P(x, y - HEIGHT) );
 			else return 0;
 		}
@@ -143,12 +145,12 @@ class Grid {
 		else return 0;
 	}
 
-	inline function _atOffsetRightY(x:Int, y:Int):Cell {
-		if (y < 0) {
+	inline function _atOffsetRightY(x:Int, y:Int, checkTop, checkBottom):Cell {
+		if (checkTop && y < 0) {
 			if (rightTop != null) return rightTop.get( P(x, y + HEIGHT) );
 			else return 0;
 		}
-		else if (y >= HEIGHT) {
+		else if (checkBottom && y >= HEIGHT) {
 			if (rightBottom != null) return rightBottom.get( P(x, y - HEIGHT) );
 			else return 0;
 		}

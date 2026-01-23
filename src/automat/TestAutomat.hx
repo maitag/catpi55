@@ -138,18 +138,19 @@ E            #
 
 		trace("isFreeRight Alice", alice.isFreeRight());
 		trace("isFreeBottom Alice", alice.isFreeBottom());
-
-		trace("isFreeXY( 1,-1) Bob", bob.isFreeXY( 1,-1));
-		trace("isFreeXY( 1, 1) Bob", bob.isFreeXY( 1, 1));
-		trace("isFreeXY(-1, 1) Bob", bob.isFreeXY(-1, 1));
-		trace("isFreeXY(-1,-1) Bob", bob.isFreeXY(-1,-1));
-
+		
+		trace("isFreeLeftTop Bob", bob.isFreeLeftTop());
+		trace("isFreeLeftBottom Bob", bob.isFreeLeftBottom());
+		trace("isFreeRightTop Bob", bob.isFreeRightTop());
+		trace("isFreeRightBottom Bob", bob.isFreeRightBottom());
+		
 		
 		traceGrid(grid, 16, 8);
 
 		bob.removeFromGrid();
-		bob.addToGrid(grid, P(11,2));
-
+		bob.addToGrid(grid, P(10,2));
+		
+		/*
 		var f;
 		f = ()-> {
 			var p = bob.pos;
@@ -162,22 +163,19 @@ E            #
 			}
 		}		
 		f();
-
+		*/	
 		
-
-
-		/*
 		// -------- benchmarks -------------
 		var t = haxe.Timer.stamp();
 		var i:Int = 0;
-		while (i < 1000000) {
-			var actor = grid.getActor( new Pos(Std.random(64),Std.random(64)) );
-			if ((actor:Int) < 132) actor++;
-			grid.setActor( new Pos(Std.random(64),Std.random(64)) , actor );
-			i+=1;
+		while (i++ < 1000000) {
+			bob.removeFromGrid();
+			bob.addToGrid(grid, P(10,2));
 		}
 		trace( (haxe.Timer.stamp() - t) );
-		*/
+		
+		traceGrid(grid, 16, 8);
+		
 
 	}
 
