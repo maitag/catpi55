@@ -74,8 +74,7 @@ class Grid {
 	
 	// only used by macro-unroll-mode
 	inline function setCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid,
-		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor,
-		)
+		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor)
 	{
 		if (gR==null || gRB==null || x < WIDTH) {
 			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a);
