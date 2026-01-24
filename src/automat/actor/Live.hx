@@ -4,14 +4,10 @@ import automat.Cell.CellType;
 import util.BitGrid;
 
 @:build(automat.actor.Shape.ShapeMacro.build("
-|                       |
-|#  #   ##   #   #  ####|
-|#  #  #  #   # #   #   |
-|####  ####    #    ####|
-|#  #  #  #   # #   #   |
-|#  #  #  #  #   #  ####|
-|                       |
-")) class Haxe implements IActor {
+|#   # #   # ###|
+|#   #  # #  ## |
+|### #   #   ###|
+")) class Live implements IActor {
 
 	public var name:String;
 

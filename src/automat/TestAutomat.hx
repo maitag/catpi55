@@ -11,6 +11,7 @@ import automat.actor.Actor;
 import automat.actor.Shape;
 
 import automat.actor.Haxe;
+import automat.actor.Live;//<-
 
 import automat.Pos.xy as P;
 
@@ -117,13 +118,13 @@ E                              #
 #                              #
 #                              #
 #                              #
-#                              #
-#                              #
+#    E                         #
+#            EE              E #
 ################################
 ");
 		trace("Grid.WIDTH " + Grid.WIDTH,"Grid.HEIGHT " + Grid.HEIGHT);
 		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
-		
+		/*
 		trace("---adding Alice---");
 		var alice = new Actor("Alice");
 		var p = P(1,1);
@@ -171,13 +172,25 @@ E                              #
 			}
 		}		
 		f();
-
+		*/
 		
+		var live = new Live("on shitball around The S u n STAR;)");
+		live.addToGrid(grid, P(7,1));
+		traceGrid(grid, 32, 16);
+		var f;
+		f = ()-> {
+			if ( live.freeDown() ) {
+				live.goDown();
+				traceGrid(grid, 32, 16, true);
+				Timer.delay(f, 1001); // night ,) 
+			}
+		}		
+		f();
 
-		// haxe:
-		var haxe = new Haxe("haxe forever!");
-		var p = P(3,5);
-		haxe.addToGrid(grid, p);
+
+		// TIME for haxe now:
+		var haxe = new Haxe("forever! \\o/");
+		haxe.addToGrid(grid, P(3,5));
 		traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
