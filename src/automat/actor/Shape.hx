@@ -668,7 +668,7 @@ class ShapeMacro {
 					args: [],
 					expr: macro 
 						if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
-							$b{f(-1,-1)};
+							$b{f(1,-1)};
 						else {
 							var g = grid; removeFromGrid();
 							var x:Int = pos.x+1; var y:Int = pos.y-1;
@@ -689,7 +689,7 @@ class ShapeMacro {
 					args: [],
 					expr: macro 
 						if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y + $v{bitGrid.height} < Grid.HEIGHT-1) // fully keep inside
-							$b{f(-1,1)};
+							$b{f(1,1)};
 						else {
 							var g = grid; removeFromGrid();
 							var x:Int = pos.x+1; var y:Int = pos.y+1;

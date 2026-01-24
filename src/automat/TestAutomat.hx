@@ -103,13 +103,16 @@ class TestAutomat extends Application {
 		// -------- add/remove Actors ----------
 
 		var grid = createTestGrid("
-##############
-#            #
-E            #
-#            #
-#            #
-#            #
-##############
+##################
+#                #
+E                #
+#                #
+#                #
+#                #
+#                #
+#                #
+#                #
+##################
 ");
 		trace("Grid.WIDTH " + Grid.WIDTH,"Grid.HEIGHT " + Grid.HEIGHT);
 		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
@@ -148,20 +151,16 @@ E            #
 		traceGrid(grid, 16, 8);
 		
 		bob.removeFromGrid();
-		bob.addToGrid(grid, P(5,3));
-		
-
-		traceGrid(grid, 16, 8);
-		if (bob.isFreeLeft()) bob.moveLeft();
-		traceGrid(grid, 16, 8);
+		bob.addToGrid(grid, P(12,6));
+		traceGrid(grid, 20, 10);		
 		
 		var f;
 		f = ()-> {
 			var p = bob.pos;
 			p.x -= 1;
-			if ( bob.isFreeRight() ) {
-				bob.moveRight();
-				traceGrid(grid, 16, 8, true);
+			if ( bob.isFreeLeftTop() ) {
+				bob.moveLeftTop();
+				traceGrid(grid, 20, 10, true);
 				Timer.delay(f, 1000);
 			}
 		}		

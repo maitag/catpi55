@@ -4,7 +4,6 @@ import haxe.ds.Vector;
 
 import automat.Cell.CellActor;
 import automat.actor.IActor;
-import automat.actor.Actor;
 import automat.Pos.xy as P;
 
 @:allow(automat.actor)
