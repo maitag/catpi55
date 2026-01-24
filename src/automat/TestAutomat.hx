@@ -10,6 +10,7 @@ import util.BitGrid;
 import automat.actor.Actor;
 import automat.actor.Shape;
 
+import automat.actor.Haxe;
 
 import automat.Pos.xy as P;
 
@@ -103,16 +104,22 @@ class TestAutomat extends Application {
 		// -------- add/remove Actors ----------
 
 		var grid = createTestGrid("
-##################
-#                #
-E                #
-#                #
-#                #
-#                #
-#                #
-#                #
-#                #
-##################
+################################
+#                              #
+#                              #
+#                              #
+E                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+################################
 ");
 		trace("Grid.WIDTH " + Grid.WIDTH,"Grid.HEIGHT " + Grid.HEIGHT);
 		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
@@ -151,22 +158,41 @@ E                #
 		traceGrid(grid, 16, 8);
 		
 		bob.removeFromGrid();
-		bob.addToGrid(grid, P(12,6));
-		traceGrid(grid, 20, 10);		
-		
+		bob.addToGrid(grid, P(12,0));
+		traceGrid(grid, 32, 16);				
 		var f;
 		f = ()-> {
 			var p = bob.pos;
 			p.x -= 1;
-			if ( bob.isFreeLeftTop() ) {
-				bob.moveLeftTop();
-				traceGrid(grid, 20, 10, true);
+			if ( bob.isFreeBottom() ) {
+				bob.moveBottom();
+				traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 1000);
 			}
 		}		
 		f();
 		
-		
+		// haxe:
+		var haxe = new Haxe("haxe forever!");
+		var p = P(3,5);
+		haxe.addToGrid(grid, p);
+		traceGrid(grid, 32, 16);
+		var f;
+		f = ()-> {
+			var p = bob.pos;
+			p.x -= 1;
+			if ( haxe.isFreeBottom() ) {
+				haxe.moveBottom();
+				traceGrid(grid, 32, 16, true);
+				Timer.delay(f, 900);
+			}
+		}		
+		f();
+
+
+
+
+
 		// -------- benchmarks -------------
 		/*var t = haxe.Timer.stamp();
 		var i:Int = 0;
