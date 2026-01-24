@@ -129,10 +129,10 @@ E                              #
 		var p = P(1,1);
 		if (alice.isFitIntoGrid(grid, p)) {
 			alice.addToGrid(grid, p);
-			trace("isFreeLeft Alice", alice.isFreeLeft());
-			trace("isFreeRight Alice", alice.isFreeRight());
-			trace("isFreeTop Alice", alice.isFreeTop());
-			trace("isFreeBottom Alice", alice.isFreeBottom());
+			trace("freeLeft Alice", alice.freeLeft());
+			trace("freeRight Alice", alice.freeRight());
+			trace("freeUp Alice", alice.freeUp());
+			trace("freeDown Alice", alice.freeDown());
 		}
 
 		trace("---adding Bob---");
@@ -140,19 +140,19 @@ E                              #
 		var p = P(2,3);
 		if (bob.isFitIntoGrid(grid, p)) {
 			bob.addToGrid(grid, p);
-			trace("isFreeLeft Bob", bob.isFreeLeft());
-			trace("isFreeRight Bob", bob.isFreeRight());
-			trace("isFreeTop Bob", bob.isFreeTop());
-			trace("isFreeBottom Bob", bob.isFreeBottom());
+			trace("freeLeft Bob", bob.freeLeft());
+			trace("freeRight Bob", bob.freeRight());
+			trace("freeUp Bob", bob.freeUp());
+			trace("freeDown Bob", bob.freeDown());
 		}
 
-		trace("isFreeRight Alice", alice.isFreeRight());
-		trace("isFreeBottom Alice", alice.isFreeBottom());
+		trace("freeRight Alice", alice.freeRight());
+		trace("freeDown Alice", alice.freeDown());
 		
-		trace("isFreeLeftTop Bob", bob.isFreeLeftTop());
-		trace("isFreeLeftBottom Bob", bob.isFreeLeftBottom());
-		trace("isFreeRightTop Bob", bob.isFreeRightTop());
-		trace("isFreeRightBottom Bob", bob.isFreeRightBottom());
+		trace("freeLeftUp Bob", bob.freeLeftUp());
+		trace("freeLeftDown Bob", bob.freeLeftDown());
+		trace("freeRightUp Bob", bob.freeRightUp());
+		trace("freeRightDown Bob", bob.freeRightDown());
 		
 		
 		traceGrid(grid, 16, 8);
@@ -161,11 +161,11 @@ E                              #
 		bob.removeFromGrid();
 		bob.addToGrid(grid, P(12,0));
 		traceGrid(grid, 32, 16);	
-					
+
 		var f;
 		f = ()-> {
-			if ( bob.isFreeBottom() ) {
-				bob.moveBottom();
+			if ( bob.freeDown() ) {
+				bob.goDown();
 				traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 1000);
 			}
@@ -181,8 +181,8 @@ E                              #
 		traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
-			if ( haxe.isFreeBottom() ) {
-				haxe.moveBottom();
+			if ( haxe.freeDown() ) {
+				haxe.goDown();
 				traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 900);
 			}

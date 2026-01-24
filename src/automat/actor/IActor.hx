@@ -14,24 +14,24 @@ interface IActor {
 
 	public function isFitIntoGrid(grid:Grid, pos:Int):Bool;
 
-	public function isFreeLeft():Bool;
-	public function isFreeRight():Bool;
-	public function isFreeTop():Bool;
-	public function isFreeBottom():Bool;
+	public function freeLeft():Bool;
+	public function freeRight():Bool;
+	public function freeUp():Bool;
+	public function freeDown():Bool;
 
-	public function isFreeLeftTop():Bool;
-	public function isFreeLeftBottom():Bool;
-	public function isFreeRightTop():Bool;
-	public function isFreeRightBottom():Bool;
+	public function freeLeftUp():Bool;
+	public function freeLeftDown():Bool;
+	public function freeRightUp():Bool;
+	public function freeRightDown():Bool;
 
-	public function moveLeft():Void;
-	public function moveRight():Void;
-	public function moveTop():Void;
-	public function moveBottom():Void;
+	public function goLeft():Void;
+	public function goRight():Void;
+	public function goUp():Void;
+	public function goDown():Void;
 
-	public function moveLeftTop():Void;
-	public function moveLeftBottom():Void;
-	public function moveRightTop():Void;
-	public function moveRightBottom():Void;
+	public function goLeftUp():Void;
+	public function goLeftDown():Void;
+	public function goRightUp():Void;
+	public function goRightDown():Void;
 
 }

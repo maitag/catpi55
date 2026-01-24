@@ -106,53 +106,53 @@ class Shape {
 		return true;
 	}
 
-	public static function isFreeLeft(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeLeft(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide(-1, 0, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeRight(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeRight(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide( 1, 0, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide( 0,-1, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide( 0, 1, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeLeftTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeLeftUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide(-1,-1, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeLeftBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeLeftDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide(-1, 1, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeRightTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeRightTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide( 1,-1, grid, pos, blockedCellType, shape );
 	}
-	public static function isFreeRightBottom(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeRightDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide( 1, 1, grid, pos, blockedCellType, shape );
 	}
 
 
-	public static function moveLeft(a:IActor, shape:BitGrid) {
+	public static function goLeft(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		if (a.pos.x == 0) addToGrid(a, g.left, P(shape.width - 1, a.pos.y), shape);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape);
 	}
-	public static function moveRight(a:IActor, shape:BitGrid) {
+	public static function goRight(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		if (a.pos.x == shape.width - 1) addToGrid(a, g.right, P(0, a.pos.y), shape);
 		else addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape);
 	}
-	public static function moveTop(a:IActor, shape:BitGrid) {
+	public static function goUp(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x, shape.height - 1), shape);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y-1), shape);
 	}
-	public static function moveBottom(a:IActor, shape:BitGrid) {
+	public static function goDown(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		if (a.pos.y == shape.height - 1) addToGrid(a, g.bottom, P(a.pos.x, 0), shape);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape);
 	}
-	public static function moveLeftTop(a:IActor, shape:BitGrid) {
+	public static function goLeftUp(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		var x:Int = a.pos.x-1; var y:Int = a.pos.y-1;
 		if (x < 0 && y < 0) { x = shape.width - 1; y = shape.height - 1; g = g.leftTop; }
@@ -160,7 +160,7 @@ class Shape {
 		else if (y < 0) { y = shape.height - 1; g = g.top; }
 		else addToGrid(a, g, P(x, y), shape);
 	}
-	public static function moveLeftBottom(a:IActor, shape:BitGrid) {
+	public static function goLeftDown(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		var x:Int = a.pos.x-1; var y:Int = a.pos.y+1;
 		if (x < 0 && y >= shape.height) { x = shape.width - 1; y = 0; g = g.leftBottom; }
@@ -168,7 +168,7 @@ class Shape {
 		else if (y >= shape.height) { y = 0; g = g.bottom; }
 		else addToGrid(a, g, P(x, y), shape);
 	}
-	public static function moveRightTop(a:IActor, shape:BitGrid) {
+	public static function goRightUp(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		var x:Int = a.pos.x+1; var y:Int = a.pos.y-1;
 		if (x >= shape.width && y < 0) { x = 0; y = shape.height - 1; g = g.rightTop; }
@@ -176,7 +176,7 @@ class Shape {
 		else if (y < 0) { y = shape.height - 1; g = g.top; }
 		else addToGrid(a, g, P(x, y), shape);
 	}
-	public static function moveRightBottom(a:IActor, shape:BitGrid) {
+	public static function goRightDown(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
 		var x:Int = a.pos.x+1; var y:Int = a.pos.y+1;
 		if (x >= shape.width && y >= shape.height) { x = 0; y = 0; g = g.rightBottom; }
@@ -383,7 +383,7 @@ class ShapeMacro {
 			}
 
 			fields.push({
-				name: "isFreeLeft",
+				name: "freeLeft",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -407,7 +407,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeRight",
+				name: "freeRight",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -418,7 +418,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeTop",
+				name: "freeUp",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -429,7 +429,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeBottom",
+				name: "freeDown",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -440,7 +440,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeLeftTop",
+				name: "freeLeftUp",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -451,7 +451,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeLeftBottom",
+				name: "freeLeftDown",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -462,7 +462,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeRightTop",
+				name: "freeRightUp",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -473,7 +473,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "isFreeRightBottom",
+				name: "freeRightDown",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -506,7 +506,7 @@ class ShapeMacro {
 			}
 
 			fields.push({
-				name: "moveLeft",
+				name: "goLeft",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -564,7 +564,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveRight",
+				name: "goRight",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -583,7 +583,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveTop",
+				name: "goUp",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -601,7 +601,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveBottom",
+				name: "goDown",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -619,7 +619,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveLeftTop",
+				name: "goLeftUp",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -640,7 +640,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveLeftBottom",
+				name: "goLeftDown",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -661,7 +661,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveRightTop",
+				name: "goRightUp",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -682,7 +682,7 @@ class ShapeMacro {
 			});
 
 			fields.push({
-				name: "moveRightBottom",
+				name: "goRightDown",
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -757,7 +757,7 @@ class ShapeMacro {
 					})
 				});
 
-			for (fname in ["isFreeLeft","isFreeRight","isFreeTop","isFreeBottom","isFreeLeftTop","isFreeLeftBottom","isFreeRightTop","isFreeRightBottom"])
+			for (fname in ["freeLeft","freeRight","freeUp","freeDown","freeLeftUp","freeLeftDown","freeRightTop","freeRightDown"])
 				fields.push({
 					name: fname,
 					access: [APublic, AInline],
@@ -769,7 +769,7 @@ class ShapeMacro {
 					})
 				});
 
-			for (fname in ["moveLeft","moveRight","moveTop","moveBottom","moveLeftTop","moveLeftBottom","moveRightTop","moveRightBottom"
+			for (fname in ["goLeft","goRight","goUp","goDown","goLeftUp","goLeftDown","goRightUp","goRightDown"
 				])
 				fields.push({
 					name: fname,
