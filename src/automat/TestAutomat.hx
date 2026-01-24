@@ -156,14 +156,14 @@ E                              #
 		
 		
 		traceGrid(grid, 16, 8);
+
 		
 		bob.removeFromGrid();
 		bob.addToGrid(grid, P(12,0));
-		traceGrid(grid, 32, 16);				
+		traceGrid(grid, 32, 16);	
+					
 		var f;
 		f = ()-> {
-			var p = bob.pos;
-			p.x -= 1;
 			if ( bob.isFreeBottom() ) {
 				bob.moveBottom();
 				traceGrid(grid, 32, 16, true);
@@ -171,7 +171,9 @@ E                              #
 			}
 		}		
 		f();
+
 		
+
 		// haxe:
 		var haxe = new Haxe("haxe forever!");
 		var p = P(3,5);
@@ -179,8 +181,6 @@ E                              #
 		traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
-			var p = bob.pos;
-			p.x -= 1;
 			if ( haxe.isFreeBottom() ) {
 				haxe.moveBottom();
 				traceGrid(grid, 32, 16, true);
