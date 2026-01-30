@@ -3,6 +3,9 @@ package automat.actor;
 interface IActor {
 	public var name:String;
 	public var pos:Pos;
+	public var width(get, never):Int;
+	public var height(get, never):Int;
+	
 	public var grid:Grid;
 	public var gridKey:Int;
 	public var gridKeyR:Int;

@@ -29,8 +29,10 @@ class TestAutomat extends Application {
 		trace("pos:",p.x,p.y);
 		p = Pos.xy(4,5);
 		trace("pos:",p.x,p.y);
-		
-		trace("pos:", P(23, 42) );
+		var p = new Pos(3,4);
+		p.x-=1;
+		p.y+=1;
+		trace(p);
 		*/
 
 		// -------- test cell ----------
@@ -256,8 +258,8 @@ E                              #
 	public static function createTestGrid(testGrid:String):Grid {
 		var grid = new Grid();
 
-		testGrid = ~/^\n+/g.replace(~/\n+$/g.replace(testGrid, ""), "");
-		var a = ~/\n/g.split(testGrid);
+		testGrid = ~/^\r?\n+/g.replace(~/\r?\n+$/g.replace(testGrid, ""), "");
+		var a = ~/\r?\n/g.split(testGrid);
 		var longestLine:Int = 0;
 		for (s in a) if (s.length>longestLine) longestLine = s.length;
 		

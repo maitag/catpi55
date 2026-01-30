@@ -1,5 +1,8 @@
 package;
 
+import automat.TestAutomat;
+import automat.GridView;
+import automat.Grid;
 import view.View;
 import haxe.CallStack;
 
@@ -34,7 +37,33 @@ class Main extends Application
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
+
 		var view = new View(peoteView);
+
+		var grid:Grid = TestAutomat.createTestGrid("
+################################
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+################################
+");
+
+		var gridView = new GridView(grid, 2, 23, 3, 17);
+		grid.views.push(gridView);
+
+		gridView.init(view);
+
 	}
 	
 	// ------------------------------------------------------------

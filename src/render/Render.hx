@@ -50,12 +50,9 @@ class Render {
 				
 			}
 		);
-
-
 		
 		//----------------------------------------------------
 		
-
 		display = new Display(0, 0, 512, 512, Color.BLUE1);
 		peoteView.addDisplay(display);
 	

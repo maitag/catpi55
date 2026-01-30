@@ -51,9 +51,9 @@ class Grid {
 	inline function get_rightBottom():Grid return ( (right != null && right.bottom != null) ? right.bottom : (bottom != null && bottom.right != null) ? bottom.right : null );
 
 	// -------------------------------------------------
-	// ------------------- VIEWER ----------------------
+	// ------------------- VIEWS -----------------------
 	// -------------------------------------------------
-	public var viewers = new Array<Viewer>();
+	public var views = new Array<GridView>(); // optimize later by holeless vector!
 
 	// -------------------------------------------------
 	// ------------------- ACTOR -----------------------
