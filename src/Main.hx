@@ -15,6 +15,9 @@ import peote.view.Display;
 import peote.view.Program;
 import peote.view.Color;
 
+import automat.actor.*;
+import automat.Pos.xy as P;
+
 
 class Main extends Application
 {
@@ -58,6 +61,12 @@ class Main extends Application
 #                              #
 ################################
 ");
+		var hx = new Haxe("haxe");
+		
+		hx.addToGrid(grid, P(3,1)); 
+		trace(hx.pos);
+		
+		TestAutomat.traceGrid(grid, 32, 8);
 
 		var gridView = new GridView(grid, 2, 23, 3, 17);
 		grid.views.push(gridView);

@@ -44,38 +44,46 @@ class GridView {
 	// -------- Sync Cells to View --------------
 	// ------------------------------------------
 	inline function syncInit() {
-		// send all to the view, row by row
+		// send all to the view
+		// TODO: start values
+		xFrom = xTo = 0;
+		yFrom = 0;
+		yTo = Grid.HEIGHT;
+		extendRight(true);
+		for (x in 1...Grid.WIDTH) {
+			extendRight();
+		}
 		
 	}
 
 	// ------- add ----------
 
 	inline function syncAddCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
-		trace("syncAddCells", posFrom, posTo);
+		view.addCells(posFrom, posTo, cells);
 	}
 
 	inline function syncAddActor(pos:Pos, actorKey:CellActor, actor:IActor) {
-		trace("syncAddActor", pos, actorKey, actor.name);
+		view.addActor(pos, actorKey, actor.name);
 	}
 
 	// ------ remove ---------
 
 	inline function syncRemoveCells(posFrom:Pos, posTo:Pos) {
-		trace("syncViewRemove", posFrom, posTo);
+		view.removeCells(posFrom, posTo);
 	}
 
 	inline function syncRemoveActor(actorKey:CellActor) {
-		trace("syncRemoveActor", actorKey);
+		view.removeActor(actorKey);
 	}
 
 	// ------- update --------
 
 	inline function syncUpdateCell(pos:Pos, cell:CellType) { // CellParam!
-		trace("syncViewUpdate", pos, cell);
+		view.updateCell(pos, cell);
 	}
 
 	inline function syncUpdateActor(actorKey:CellActor, action:Int) { // TODO: action!
-		trace("syncUpdateActor", actorKey, action);
+		view.updateActor(actorKey, action);
 	}
 
 
@@ -83,25 +91,21 @@ class GridView {
 	// ------------------------------------------
 	// ------------------------------------------
 	
-	public function extendLeft() {
+	public function extendLeft(first = false) {
 		if (xFrom == 0) return;
 		xFrom--;
 		var cells = new Array<Int>();
 		var actorKey:CellActor = CellActor.EMPTY;
 		var alreadyAdded = new Array<CellActor>();
-		for (y in yFrom...yTo)
-		{
+		for (y in yFrom...yTo) {
 			var cell:Cell = grid.get(P(xFrom, y));
 			cells.push(cell); // TODO: CellType + CellParam!
-			if (cell.actor != actorKey)
-			{ 
-				if(cell.actor != CellActor.EMPTY && alreadyAdded.indexOf(cell.actor) == -1 )
-				{
+			if (cell.actor != actorKey) { 
+				if(cell.actor != CellActor.EMPTY && alreadyAdded.indexOf(cell.actor) == -1 ) {
 					actorKey = cell.actor;
 					var actor:IActor = grid.actors.get(actorKey);
-					if (actor.grid == grid && // only if inside the SAME grid
-						actor.pos.x + actor.width - 1 == xFrom) // and left actor-side comes in
-					{
+					// only if inside the SAME grid and left actor-side comes in
+					if (actor.grid == grid && (actor.pos.x + actor.width - 1 == xFrom || first)) {
 						syncAddActor( P(xFrom, y), actorKey, actor); // actor enters the view
 						alreadyAdded.push(actorKey); // to not add it again
 					}
@@ -111,26 +115,72 @@ class GridView {
 		syncAddCells( P(xFrom, yFrom), P(xFrom, yTo), cells );
 	}
 
-	public function extendRight() {
+	public function extendRight(first = false) {
 		if (xTo == Grid.WIDTH) return;
-		xTo++;
-		
-	}
-
-	public function shrinkLeft() {
-		var actorKey:CellActor = 0;
-
+		var cells = new Array<Int>();
+		var actorKey:CellActor = CellActor.EMPTY;
+		var alreadyAdded = new Array<CellActor>();
 		for (y in yFrom...yTo) {
-			var actorKey = grid.get(P(xFrom, y)).actor;
-			// TODO: only if actor goes out of view:
-			// syncRemoveActor( 0 );
-		}		
-		xFrom++;
-		syncRemoveCells( P(xFrom, yFrom), P(xFrom, yTo) );
+			var cell:Cell = grid.get(P(xTo, y));
+			cells.push(cell); // TODO: CellType + CellParam!
+			if (cell.actor != actorKey) { 
+				if(cell.actor != CellActor.EMPTY && alreadyAdded.indexOf(cell.actor) == -1 ) {
+					actorKey = cell.actor;
+					var actor:IActor = grid.actors.get(actorKey);
+					// only if inside the SAME grid and left actor-side comes in
+					if (actor.grid == grid && (actor.pos.x == xTo || first)) {
+						syncAddActor( P(xTo, y), actorKey, actor); // actor enters the view
+						alreadyAdded.push(actorKey); // to not add it again
+					}
+				}
+			}
+		}
+		syncAddCells( P(xTo, yFrom), P(xTo, yTo), cells );
+		xTo++;
 	}
 
-	public function shrinkRight() {
-		
+	public function shrinkLeft(last = false) {
+		if (xFrom == xTo) return;
+		var actorKey:CellActor = CellActor.EMPTY;
+		var alreadyRemoved = new Array<CellActor>();
+		for (y in yFrom...yTo) {
+			var cell:Cell = grid.get(P(xFrom, y));
+			if (cell.actor != actorKey) { 
+				if(cell.actor != CellActor.EMPTY && alreadyRemoved.indexOf(cell.actor) == -1 ) {
+					actorKey = cell.actor;
+					var actor:IActor = grid.actors.get(actorKey);
+					// only if inside the SAME grid and left actor-side goes out
+					if (actor.grid == grid && (actor.pos.x + actor.width - 1 == xFrom || last)) {
+						syncRemoveActor( actorKey); // actor leaves the view
+						alreadyRemoved.push(actorKey); // to not remove it again
+					}
+				}
+			}
+		}
+		syncRemoveCells( P(xFrom, yFrom), P(xFrom, yTo) );
+		xFrom++;
+	}
+
+	public function shrinkRight(last = false) {
+		if (xFrom == xTo) return;
+		xTo--;
+		var actorKey:CellActor = CellActor.EMPTY;
+		var alreadyRemoved = new Array<CellActor>();
+		for (y in yFrom...yTo) {
+			var cell:Cell = grid.get(P(xTo, y));
+			if (cell.actor != actorKey) { 
+				if(cell.actor != CellActor.EMPTY && alreadyRemoved.indexOf(cell.actor) == -1 ) {
+					actorKey = cell.actor;
+					var actor:IActor = grid.actors.get(actorKey);
+					// only if inside the SAME grid and left actor-side goes out
+					if (actor.grid == grid && (actor.pos.x == xTo || last)) {
+						syncRemoveActor( actorKey); // actor leaves the view
+						alreadyRemoved.push(actorKey); // to not remove it again
+					}
+				}
+			}
+		}
+		syncRemoveCells( P(xTo, yFrom), P(xTo, yTo) );
 	}
 
 	public function goLeft() { extendLeft(); shrinkRight(); }

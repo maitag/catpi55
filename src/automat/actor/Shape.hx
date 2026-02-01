@@ -124,7 +124,7 @@ class Shape {
 	public static function freeLeftDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide(-1, 1, grid, pos, blockedCellType, shape );
 	}
-	public static function freeRightTop(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
+	public static function freeRightUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
 		return _isFreeSide( 1,-1, grid, pos, blockedCellType, shape );
 	}
 	public static function freeRightDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
@@ -757,7 +757,7 @@ class ShapeMacro {
 					})
 				});
 
-			for (fname in ["freeLeft","freeRight","freeUp","freeDown","freeLeftUp","freeLeftDown","freeRightTop","freeRightDown"])
+			for (fname in ["freeLeft","freeRight","freeUp","freeDown","freeLeftUp","freeLeftDown","freeRightUp","freeRightDown"])
 				fields.push({
 					name: fname,
 					access: [APublic, AInline],
