@@ -12,10 +12,9 @@
 	
 	
 	<!-- <app main="Main" path="bin" file="Main" /> -->
-
-	<!-- <app main="TestAssets" path="bin" file="testAssets" /> -->
-	<app main="automat.TestAutomat" path="bin" file="testAutomat" />
-	<!-- <app main="util.pool.TestPool" path="bin" file="testPool" /> -->
+	<app main="TestAssets" path="bin" file="TestAssets" />
+	<!-- <app main="automat.TestAutomat" path="bin" file="TestAutomat" /> -->
+	<!-- <app main="util.pool.TestPool" path="bin" file="TestPool" /> -->
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->
 

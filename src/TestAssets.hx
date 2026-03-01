@@ -7,11 +7,67 @@ import lime.ui.Window;
 
 import peote.view.PeoteView;
 import peote.view.Buffer;
+import peote.view.Element;
 import peote.view.Display;
 import peote.view.Program;
 import peote.view.Color;
 
-import render.Render;
+
+import assets.Pipeline;
+import assets.PipelineTools;
+
+class ElemAnim implements Element
+{
+	// position in pixel
+	@posX public var x:Int=0;
+	@posY public var y:Int=0;
+	
+	// size in pixel
+	@sizeX public var w:Int=100;
+	@sizeY public var h:Int=100;
+	
+	// rotation around pivot point
+	@rotation public var r:Float;
+	
+	// pivot x (rotation offset)
+	@pivotX public var px:Int = 0;
+
+	// pivot y (rotation offset)
+	@pivotY public var py:Int = 0;
+	
+	// color (RGBA)
+	@color public var c:Color = 0xffffffff;
+	
+	// z-index
+	@zIndex public var z:Int = 0;
+
+	// texture unit (sheet index!)
+	@texUnit public var sheetIndex:Int=0;
+
+	// @texSlot public var slot:Int = 0;
+
+	// animatable tile-number into sheet
+	@anim("Tile") @texTile public var tileIndex:Int = 0;
+
+	public static var buffer:Buffer<ElemAnim>;
+	
+
+	public function new(x:Int, y:Int, tileName:String) {
+		this.x = x;
+		this.y = y;
+		// tile = tiles.get(tileName);
+		// w = tile.width;
+		// h = tile.height;
+		// sheetIndex = tile.sheetIndex;
+	}
+
+	public function play(animName:String, startTime:Float, duration:Float) {
+		// var anim = tile.anim.get(animName);
+		// animTile(anim.start, anim.end);
+		timeTileStart = startTime;
+		timeTileDuration = duration;
+	}
+}
 
 class TestAssets extends Application
 {
@@ -30,11 +86,44 @@ class TestAssets extends Application
 	// --------------- SAMPLE STARTS HERE -------------------------
 	// ------------------------------------------------------------	
 	var peoteView:PeoteView;
+	var buffer:Buffer<ElemAnim>;
+	var display:Display;
+	var program:Program;
 
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
-		var render = new Render(peoteView);
+		display   = new Display(0,0, window.width, window.height, Color.RED1);
+		peoteView.addDisplay(display);
+		
+		buffer  = new Buffer<ElemAnim>(100);
+		program = new Program(buffer);
+		program.blendEnabled = true;
+
+		display.addProgram(program);
+		
+		program.setMultiTexture(PipelineTools.loadTextures(Pipeline.sheets), "custom");
+
+		// trace(Pipeline.tile(haxeLogo).anim(cubicRotate).start);		
+		// var logo = Pipeline.tile(haxeLogo);
+		// trace( logo.anim(sphereRotate).end );
+		// trace( Pipeline.tile(haxeLogo).anim("sphereToCubic").end );
+
+
+		for (tileID in TileID)
+		{
+			trace(TileID.names[tileID]);
+
+			var tile = Pipeline.tile(tileID);
+
+			for (animID in tile.animID)
+			{
+				// trace(animID);
+				trace("  "+ AnimID.names[animID], tile.anim(animID).start, tile.anim(animID).end);
+			}
+		}
+		
+
 	}
 	
 	// ------------------------------------------------------------

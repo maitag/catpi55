@@ -62,8 +62,8 @@ class GridView {
 		view.addCells(posFrom, posTo, cells);
 	}
 
-	inline function syncAddActor(pos:Pos, actorKey:CellActor, actor:IActor) {
-		view.addActor(pos, actorKey, actor.name);
+	inline function syncAddActor(actor:IActor, actorKey:CellActor) {
+		view.addActor(actor.pos, actorKey, actor.name);
 	}
 
 	// ------ remove ---------
@@ -106,7 +106,7 @@ class GridView {
 					var actor:IActor = grid.actors.get(actorKey);
 					// only if inside the SAME grid and left actor-side comes in
 					if (actor.grid == grid && (actor.pos.x + actor.width - 1 == xFrom || first)) {
-						syncAddActor( P(xFrom, y), actorKey, actor); // actor enters the view
+						syncAddActor( actor, actorKey); // actor enters the view
 						alreadyAdded.push(actorKey); // to not add it again
 					}
 				}
@@ -129,7 +129,7 @@ class GridView {
 					var actor:IActor = grid.actors.get(actorKey);
 					// only if inside the SAME grid and left actor-side comes in
 					if (actor.grid == grid && (actor.pos.x == xTo || first)) {
-						syncAddActor( P(xTo, y), actorKey, actor); // actor enters the view
+						syncAddActor( actor, actorKey); // actor enters the view
 						alreadyAdded.push(actorKey); // to not add it again
 					}
 				}
