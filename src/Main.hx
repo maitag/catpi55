@@ -62,7 +62,7 @@ class Main extends Application
 		hx.addToGrid(grid, P(3,1)); 
 		trace(hx.pos);
 		
-		TestAutomat.traceGrid(grid, 32, 8);
+		TestAutomat.traceGrid(grid, 32, 16);
 
 		var gridView = new GridView(grid, 2, 23, 3, 17);
 		grid.views.push(gridView);

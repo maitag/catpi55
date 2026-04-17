@@ -1,13 +1,11 @@
-package assets;
+package asset;
 
 import lime.graphics.Image;
 import peote.view.Load;
 import peote.view.Texture;
 import peote.view.TextureConfig;
 
-// https://try.haxe.org/#A7D4f6Ec
-
-class PipelineTools {
+class Util {
 	public static function loadTextures(sheets:Array<Sheet>):Array<Texture> {
 		var textures = new Array<Texture>();
 		var texFileNames = new Array<String>();
@@ -36,31 +34,5 @@ class PipelineTools {
 		);
 		
 		return textures;
-	}
-}
-
-@:structInit @:publicFields class Sheet {
-	var name:String;
-	var width:Int;
-	var height:Int;
-	var gap:Int;
-	var tilesX:Int;
-	var tilesY:Int;
-	public function new(n:String, w:Int, h:Int, g:Int, tx:Int, ty:Int) {
-		name = n;
-		width = w;
-		height = h;
-		gap = g;
-		tilesX = tx;
-		tilesY = ty;
-	}
-}
-
-@:structInit @:publicFields class Anim {
-	var start:Int;
-	var end:Int;
-	public inline function new(s:Int, e:Int) {
-		start = s;
-		end = e;
 	}
 }

@@ -1,4 +1,4 @@
-package;
+package asset;
 
 import haxe.CallStack;
 
@@ -12,9 +12,7 @@ import peote.view.Display;
 import peote.view.Program;
 import peote.view.Color;
 
-
-import assets.Pipeline;
-import assets.PipelineTools;
+import asset.generated.Chars;
 
 class ElemAnim implements Element
 {
@@ -42,34 +40,32 @@ class ElemAnim implements Element
 	@zIndex public var z:Int = 0;
 
 	// texture unit (sheet index!)
-	@texUnit public var sheetIndex:Int=0;
+	@texUnit public var sheet:Int=0;
 
 	// @texSlot public var slot:Int = 0;
 
 	// animatable tile-number into sheet
-	@anim("Tile") @texTile public var tileIndex:Int = 0;
+	@anim("Tile", "repeat") @texTile public var tileIndex:Int = 0;
 
 	public static var buffer:Buffer<ElemAnim>;
 	
 
-	public function new(x:Int, y:Int, tileName:String) {
+	public function new(x:Int, y:Int, w:Int, h:Int, gap:Int, sheet:Int) {
 		this.x = x;
 		this.y = y;
-		// tile = tiles.get(tileName);
-		// w = tile.width;
-		// h = tile.height;
-		// sheetIndex = tile.sheetIndex;
+		this.w = w;
+		this.h = h;
+		// TODO: gap
+		this.sheet = sheet;
 	}
 
-	public function play(animName:String, startTime:Float, duration:Float) {
-		// var anim = tile.anim.get(animName);
-		// animTile(anim.start, anim.end);
-		timeTileStart = startTime;
-		timeTileDuration = duration;
+	public function play(startFrame:Int, endFrame:Int, startTime:Float, duration:Float) {
+		animTile(startFrame, endFrame);
+		timeTile(startTime, duration);
 	}
 }
 
-class TestAssets extends Application
+class TestChars extends Application
 {
 	override function onWindowCreate():Void
 	{
@@ -96,34 +92,40 @@ class TestAssets extends Application
 		display   = new Display(0,0, window.width, window.height, Color.RED1);
 		peoteView.addDisplay(display);
 		
-		buffer  = new Buffer<ElemAnim>(100);
+		buffer  = new Buffer<ElemAnim>(1024);
 		program = new Program(buffer);
 		program.blendEnabled = true;
 
 		display.addProgram(program);
 		
-		program.setMultiTexture(PipelineTools.loadTextures(Pipeline.sheets), "custom");
+		program.setMultiTexture(Util.loadTextures(Chars.sheets), "custom");
 
-		// trace(Pipeline.tile(haxeLogo).anim(cubicRotate).start);		
-		// var logo = Pipeline.tile(haxeLogo);
-		// trace( logo.anim(sphereRotate).end );
-		// trace( Pipeline.tile(haxeLogo).anim("sphereToCubic").end );
-
+		var x:Int = 10;
+		var y:Int = 10;
 
 		for (tileID in TileID)
 		{
 			trace(TileID.names[tileID]);
 
-			var tile = Pipeline.tile(tileID);
+			var tile = Chars.tile(tileID);
+			var sheet = Chars.sheets[tile.sheet];
 
 			for (animID in tile.animID)
 			{
-				// trace(animID);
-				trace("  "+ AnimID.names[animID], tile.anim(animID).start, tile.anim(animID).end);
+				trace("  "+ AnimID.names[animID], tile.sheet, tile.anim(animID).start, tile.anim(animID).end);
+
+				var e = new ElemAnim(x, y, sheet.width, sheet.height, sheet.gap, tile.sheet);
+				
+				var anim = tile.anim(animID);
+				e.play(anim.start, anim.end, 0, (anim.end - anim.start + 1)/Chars.FPS);
+				buffer.addElement(e);
+
+				x += sheet.width + 10;
+				if (x > window.width) y += sheet.height + 10;
 			}
 		}
 		
-
+		peoteView.start();
 	}
 	
 	// ------------------------------------------------------------
