@@ -65,30 +65,42 @@ class Grid {
 		return (actorID == CellActor.EMPTY) ? null : actors.get( actorID );
 	}
 
-	inline function setCellActorAt(pos:Pos, cellActor:CellActor) {
+	inline function setCellActorAt(pos:Pos, cellActor:CellActor, isOrigin:Bool) {
 		var cell = get(pos);
-		cell.actor = cellActor;
+		// cell.actor = cellActor;
+		cell.setActor(cellActor, isOrigin);
 		set(pos, cell);
 	}
 	
 	// only used by macro-unroll-mode
 	inline function setCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid,
-		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor)
+		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor, isOrigin:Bool)
 	{
 		if (gR==null || gRB==null || x < WIDTH) {
-			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a);
-			else gB.setCellActorAt(P(x, y - HEIGHT), aB);
+			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a, isOrigin);
+			else gB.setCellActorAt(P(x, y - HEIGHT), aB, isOrigin);
 		}
 		else {
-			if (gRB==null || y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR);
-			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB);
+			if (gRB==null || y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR, isOrigin);
+			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB, isOrigin);
 		}
 	}
+
+	inline function setActorOriginAt(pos:Pos) {
+		var cell = get(pos);
+		cell.setOrigin();
+		set(pos, cell);
+	}
+	inline function delActorOriginAt(pos:Pos) {
+		var cell = get(pos);
+		cell.delOrigin();
+		set(pos, cell);
+	}
 	
-	// only used by macro-unroll-mode at now!
 	inline function delCellActorAt(pos:Pos) {
 		var cell = get(pos);
-		cell.actor = CellActor.EMPTY;
+		// cell.actor = CellActor.EMPTY;
+		cell.removeActor();
 		set(pos, cell);
 	}
 /*
@@ -113,7 +125,7 @@ class Grid {
 		}
 	}
 	
-	// the optional checks here can be used to optimize macro-unroll-mode!
+	// the optional check-parameters here is used in macro-unroll-mode to optimize the "isFree" functions!
 	inline function getCellAtOffset(pos:Pos, x:Int, y:Int, checkLeft=true, checkRight=true, checkTop=true, checkBottom=true ):Cell {
 		x += pos.x;
 		y += pos.y;

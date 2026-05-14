@@ -9,6 +9,8 @@ import util.BitGrid;
 |### #   #   ###|
 ")) class Live implements IActor {
 
+	public var type(get, never):ActorType; inline function get_type() return LIVE;
+	
 	public var name:String;
 
 	public var pos:Pos;
@@ -23,7 +25,6 @@ import util.BitGrid;
 	public var gridKeyR:Int = -1;
 	public var gridKeyB:Int = -1;
 	public var gridKeyRB:Int = -1;
-	
 
 	// TODO: let write this better or also by macrofication!
 	// public var blockedCellType:Int = 1<<CellType.METAL;

@@ -1,6 +1,7 @@
 package automat.actor;
 
 interface IActor {
+	public var type(get, never):ActorType;
 	public var name:String;
 	public var pos:Pos;
 	public var width(get, never):Int;

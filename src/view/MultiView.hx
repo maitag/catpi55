@@ -10,25 +10,17 @@ import automat.GridView;
 import render.Render;
 
 
-class ViewActor {
-	public function new() {
-		
-	}
-	// TODO
-}
-
-
 
  // this will be later handled by Remote-Client in peote-net!
-class View {
+class MultiView {
 
 	public var peoteView:PeoteView;
 	
 	public var width:Int = 0;
 	public var height:Int = 0;
 
-	// TODO
-	public var actors = new Vector<ViewActor>(CellActor.MAX_ACTORS);
+	// viktor keys to identify the used Views
+	public var views:Viktor<View>;
 
 	public function new(peoteView:PeoteView)
 	{
@@ -39,11 +31,14 @@ class View {
 
 	}
 
+	public function init(maxViews:Int) {
+		views = new Viktor<View>(maxViews);
+	}
 
 	// sync functions what called from automat->GridView->to here
 
 	// ------- add ----------
-
+/*
 	public function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
 		trace("addCells", posFrom, posTo);
 		for (cell in cells) trace((cell:Cell));
@@ -77,5 +72,5 @@ class View {
 		trace("updateActor", actorKey, action);
 	}
 	
-
+*/
 }

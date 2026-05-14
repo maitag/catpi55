@@ -4,17 +4,17 @@ import automat.Cell.CellType;
 import util.BitGrid;
 
 @:build(automat.actor.Shape.ShapeMacro.build("
-| # |
-|###|
-| # |
-")) class Actor implements IActor {
+|#|
+")) class Stone1x1 implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ACTOR;
+	public var type(get, never):ActorType; inline function get_type() return STONE1x1;
 
 	public var name:String;
 
-	// left top position inside of grid
 	public var pos:Pos;
+	// public var type:ActorType;
+
+
 	public var grid:Grid = null; // not inside any grid at instantiation
 
 	// viktor keys (-1 if not have into grid or neighbours)

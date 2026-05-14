@@ -233,7 +233,10 @@ E                              #
 		for (y in 0...h) {
 			for (x in 0...w) {
 				var cell = grid.get(P(x,y));
-				if (cell.hasActor) s += cell.actor;
+				if (cell.hasActor) {
+					if (cell.isOrigin) s += "O";
+					else s += cell.actor;
+				}
 				else {
 					s += switch(cell.type) {
 						case TABU: "X";

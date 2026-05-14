@@ -16,9 +16,10 @@ class Shape1x1 {
 class Shape {
 
 	public static inline function _addToGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, actorKey:CellActor, shape:BitGrid)	{
+		var originXOffset:Int = shape.originXOffset;
 		for (y in yFrom...yTo)
 			for (x in xFrom...xTo)
-				if (shape.get(x,y)) grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), actorKey);
+				if (shape.get(x,y)) grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), actorKey, y == 0 && x == originXOffset);
 	}
 
 	public static inline function addToGrid(a:IActor, grid:Grid, pos:Pos, shape:BitGrid) {
@@ -132,57 +133,54 @@ class Shape {
 	}
 
 
+	// Optimization: keep the actor key while remove and adding again
 	public static function goLeft(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		if (a.pos.x == 0) addToGrid(a, g.left, P(shape.width - 1, a.pos.y), shape);
+		if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape);
 	}
 	public static function goRight(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		if (a.pos.x == shape.width - 1) addToGrid(a, g.right, P(0, a.pos.y), shape);
+		if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.right, P(0, a.pos.y), shape);
 		else addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape);
 	}
 	public static function goUp(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x, shape.height - 1), shape);
+		if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x, Grid.HEIGHT - 1), shape);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y-1), shape);
 	}
 	public static function goDown(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		if (a.pos.y == shape.height - 1) addToGrid(a, g.bottom, P(a.pos.x, 0), shape);
+		if (a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.bottom, P(a.pos.x, 0), shape);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape);
 	}
 	public static function goLeftUp(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		var x:Int = a.pos.x-1; var y:Int = a.pos.y-1;
-		if (x < 0 && y < 0) { x = shape.width - 1; y = shape.height - 1; g = g.leftTop; }
-		else if (x < 0) { x = shape.width - 1; g = g.left; }
-		else if (y < 0) { y = shape.height - 1; g = g.top; }
-		else addToGrid(a, g, P(x, y), shape);
+		if (a.pos.x == 0 && a.pos.y == 0) addToGrid(a, g.leftTop, P(Grid.WIDTH - 1, Grid.HEIGHT - 1), shape);
+		else if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y-1), shape);
+		else if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x-1, Grid.HEIGHT - 1), shape);
+		else addToGrid(a, g, P(a.pos.x-1, a.pos.y-1), shape);
 	}
 	public static function goLeftDown(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		var x:Int = a.pos.x-1; var y:Int = a.pos.y+1;
-		if (x < 0 && y >= shape.height) { x = shape.width - 1; y = 0; g = g.leftBottom; }
-		else if (x < 0) { x = shape.width - 1; g = g.left; }
-		else if (y >= shape.height) { y = 0; g = g.bottom; }
-		else addToGrid(a, g, P(x, y), shape);
+		if (a.pos.x == 0 && a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.leftBottom, P(Grid.WIDTH - 1, 0), shape);
+		else if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y+1), shape);
+		else if (a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.bottom, P(a.pos.x-1, 0), shape);
+		else addToGrid(a, g, P(a.pos.x-1, a.pos.y+1), shape);
 	}
 	public static function goRightUp(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		var x:Int = a.pos.x+1; var y:Int = a.pos.y-1;
-		if (x >= shape.width && y < 0) { x = 0; y = shape.height - 1; g = g.rightTop; }
-		else if (x >= shape.width) { x = 0; g = g.right; }
-		else if (y < 0) { y = shape.height - 1; g = g.top; }
-		else addToGrid(a, g, P(x, y), shape);
+		if (a.pos.x == Grid.WIDTH - 1 && a.pos.y == 0) addToGrid(a, g.rightTop, P(0, Grid.HEIGHT - 1), shape);
+		else if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.right, P(0, a.pos.y-1), shape);
+		else if (a.pos.y == 0) addToGrid(a, g.bottom, P(a.pos.x+1, Grid.HEIGHT - 1), shape);
+		else addToGrid(a, g, P(a.pos.x+1, a.pos.y-1), shape);
 	}
 	public static function goRightDown(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape);
-		var x:Int = a.pos.x+1; var y:Int = a.pos.y+1;
-		if (x >= shape.width && y >= shape.height) { x = 0; y = 0; g = g.rightBottom; }
-		else if (x >= shape.width) { x = 0; g = g.right; }
-		else if (y >= shape.height) { y = 0; g = g.bottom; }
-		else addToGrid(a, g, P(x, y), shape);
+		if (a.pos.x == Grid.WIDTH - 1 && a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.rightBottom, P(0, 0), shape);
+		else if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.left, P(0, a.pos.y+1), shape);
+		else if (a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.bottom, P(a.pos.x+1, 0), shape);
+		else addToGrid(a, g, P(a.pos.x+1, a.pos.y+1), shape);
 	}
 
 }
@@ -194,7 +192,7 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class ShapeMacro {
-	static public function build(shape:String, unroll = true):Array<Field>
+	static public function build(shape:String, unroll = false):Array<Field>
 	{
 		trace("ShapeMacro");
 
@@ -208,10 +206,11 @@ class ShapeMacro {
 			var e:Array<Expr> = [];
 
 			// ---------- _addToGrid --------------
+			var originXOffset:Int = bitGrid.originXOffset;
 			for (y in 0...bitGrid.height)
 				for (x in 0...bitGrid.width)
 					if ( bitGrid.get(x,y) ) {
-						e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB));
+						e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB, $v{(y == 0 && x == originXOffset)}));
 					}			
 			fields.push({
 				name: "_addToGrid",
@@ -317,7 +316,7 @@ class ShapeMacro {
 						grid.bottom.actors.del(gridKeyB); gridKeyB = -1;
 						grid.rightBottom.actors.del(gridKeyRB); gridKeyRB = -1;
 					}
-					grid.right.actors.del(gridKeyR); gridKeyR = -1;
+					grid.right.actors.del(gridKeyR); gridKeyR = -1; // Optimize: only if not add again (maybe add/remove extra function!)
 				}
 			);
 			e.push(macro grid.actors.del(gridKey));
@@ -489,19 +488,40 @@ class ShapeMacro {
 			// ----------------------------------
 			var f = function(xOff:Int, yOff:Int):Array<Expr> {
 				var e:Array<Expr> = [];
+				var originWasSet:Bool = false;
+				var originWasDel:Bool = false;
 				for (y in 0...bitGrid.height) for (x in 0...bitGrid.width) {
 					if ( bitGrid.get(x,y) ) {
-						if ((xOff == -1 && x == 0) || (xOff == 1 && x == bitGrid.width-1) || (yOff == -1 && y == 0) || (yOff == 1 && y == bitGrid.height-1))
-							e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey) );
-						if ((xOff == -1 && x == bitGrid.width-1) || (xOff == 1 && x == 0) || (yOff == -1 && y == bitGrid.height-1) || (yOff == 1 && y == 0)) 
+						if ((xOff == -1 && x == 0) || (xOff == 1 && x == bitGrid.width-1) || (yOff == -1 && y == 0) || (yOff == 1 && y == bitGrid.height-1)) {
+							if (!originWasSet && y == 0 && x == originXOffset) { 
+								originWasSet = true;
+								e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey, true) );
+							}
+							else e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey, false) );
+						}
+						if ((xOff == -1 && x == bitGrid.width-1) || (xOff == 1 && x == 0) || (yOff == -1 && y == bitGrid.height-1) || (yOff == 1 && y == 0)) {
+							if (!originWasDel && y == 0 && x == originXOffset) originWasDel = true;
 							e.push( macro grid.delCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
-						else if ( !bitGrid.get(x-xOff,y-yOff) )
+						}
+						else if ( !bitGrid.get(x-xOff,y-yOff) ) {
+							if (!originWasDel && y == 0 && x == originXOffset) originWasDel = true;
 							e.push( macro grid.delCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
+						}
 					}
-					else if ( ( (x-xOff)>=0 && (x-xOff)<bitGrid.width && (y-yOff)>=0 && (y-yOff)<bitGrid.height ) && bitGrid.get(x-xOff,y-yOff) )
-						e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey) );
+					else if ( ( (x-xOff)>=0 && (x-xOff)<bitGrid.width && (y-yOff)>=0 && (y-yOff)<bitGrid.height ) && bitGrid.get(x-xOff,y-yOff) ) {
+						if (!originWasSet && y == 0 && x == originXOffset) { 
+							originWasSet = true;
+							e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey, true) );
+						}
+						else e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey, false) );
+					}
 				}
-				e.push( macro pos = automat.Pos.xy(pos.x + $v{xOff}, pos.y + $v{yOff}) ); // change position
+				// remove old origin
+				if (!originWasDel) e.push( macro grid.delActorOriginAt(automat.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
+				// change position
+				e.push( macro pos = automat.Pos.xy(pos.x + $v{xOff}, pos.y + $v{yOff}) );
+				// set new origin
+				if (!originWasSet) e.push( macro grid.setActorOriginAt(automat.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
 				return e;
 			}
 
@@ -515,8 +535,10 @@ class ShapeMacro {
 						if (pos.x > 0 && pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
 							$b{f(-1,0)};
 						else {
+							// Optimization: keep the actor key while remove and adding again
 							var g = grid; removeFromGrid();
-							if (pos.x == 0) addToGrid(g.left, automat.Pos.xy($v{bitGrid.width - 1},pos.y));
+							// if (pos.x == 0) addToGrid(g.left, automat.Pos.xy($v{bitGrid.width - 1},pos.y));
+							if (pos.x == 0) addToGrid(g.left, automat.Pos.xy(Grid.WIDTH-1,pos.y));
 							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y));
 						}
 						// TODO: more optimized and grid-neigbour-change:
@@ -575,7 +597,8 @@ class ShapeMacro {
 						else {
 							var g = grid;
 							removeFromGrid();
-							if (pos.x == $v{bitGrid.width - 1}) addToGrid(g.right, automat.Pos.xy(0, pos.y));
+							// if (pos.x == $v{bitGrid.width - 1}) addToGrid(g.right, automat.Pos.xy(0, pos.y));
+							if (pos.x == Grid.WIDTH-1) addToGrid(g.right, automat.Pos.xy(0, pos.y));
 							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y));
 						},
 					ret: null
@@ -593,7 +616,7 @@ class ShapeMacro {
 							$b{f(0,-1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.y == 0) addToGrid(g.top, automat.Pos.xy(pos.x, $v{bitGrid.height - 1}));
+							if (pos.y == 0) addToGrid(g.top, automat.Pos.xy(pos.x, Grid.HEIGHT-1));
 							else addToGrid(g, automat.Pos.xy(pos.x, pos.y-1));
 						},
 					ret: null
@@ -611,7 +634,7 @@ class ShapeMacro {
 							$b{f(0,1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.y == $v{bitGrid.height - 1}) addToGrid(g.bottom, automat.Pos.xy(pos.x, 0));
+							if (pos.y == Grid.HEIGHT-1) addToGrid(g.bottom, automat.Pos.xy(pos.x, 0));
 							else addToGrid(g, automat.Pos.xy(pos.x, pos.y+1));
 						},
 					ret: null
@@ -629,11 +652,10 @@ class ShapeMacro {
 							$b{f(-1,-1)};
 						else {
 							var g = grid; removeFromGrid();
-							var x:Int = pos.x-1; var y:Int = pos.y-1;
-							if (x < 0 && y < 0) { x = $v{bitGrid.width-1}; y = $v{bitGrid.height-1}; g = g.leftTop; }
-							else if (x < 0) { x = $v{bitGrid.width-1}; g = g.left; }
-							else if (y < 0) { y = $v{bitGrid.height-1}; g = g.top; }
-							else addToGrid(g, automat.Pos.xy(x, y));
+							if (pos.x == 0 && pos.y == 0) addToGrid(g.leftTop, automat.Pos.xy(Grid.WIDTH - 1, Grid.HEIGHT - 1));
+							else if (pos.x == 0) addToGrid(g.left, automat.Pos.xy(Grid.WIDTH - 1, pos.y-1));
+							else if (pos.y == 0) addToGrid(g.top, automat.Pos.xy(pos.x-1, Grid.HEIGHT - 1));
+							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y-1));
 						},
 					ret: null
 				})
@@ -650,11 +672,10 @@ class ShapeMacro {
 							$b{f(-1,1)};
 						else {
 							var g = grid; removeFromGrid();
-							var x:Int = pos.x-1; var y:Int = pos.y+1;
-							if (x < 0 && y >= $v{bitGrid.height}) { x = $v{bitGrid.width-1}; y = 0; g = g.leftBottom; }
-							else if (x < 0) { x = $v{bitGrid.width-1}; g = g.left; }
-							else if (y >= $v{bitGrid.height}) { y = 0; g = g.bottom; }
-							else addToGrid(g, automat.Pos.xy(x, y));
+							if (pos.x == 0 && pos.y == Grid.HEIGHT - 1) addToGrid(g.leftBottom, automat.Pos.xy(Grid.WIDTH - 1, 0));
+							else if (pos.x == 0) addToGrid(g.left, automat.Pos.xy(Grid.WIDTH - 1, pos.y+1));
+							else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, automat.Pos.xy(pos.x-1, 0));
+							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y+1));					
 						},
 					ret: null
 				})
@@ -671,11 +692,10 @@ class ShapeMacro {
 							$b{f(1,-1)};
 						else {
 							var g = grid; removeFromGrid();
-							var x:Int = pos.x+1; var y:Int = pos.y-1;
-							if (x >= $v{bitGrid.width} && y < 0) { x = 0; y = $v{bitGrid.height-1}; g = g.rightTop; }
-							else if (x >= $v{bitGrid.width}) { x = 0; g = g.right; }
-							else if (y < 0) { y = $v{bitGrid.height-1}; g = g.top; }
-							else addToGrid(g, automat.Pos.xy(x, y));
+							if (pos.x == Grid.WIDTH - 1 && pos.y == 0) addToGrid(g.rightTop, automat.Pos.xy(0, Grid.HEIGHT - 1));
+							else if (pos.x == Grid.WIDTH - 1) addToGrid(g.right, automat.Pos.xy(0, pos.y-1));
+							else if (pos.y == 0) addToGrid(g.bottom, automat.Pos.xy(pos.x+1, Grid.HEIGHT - 1));
+							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y-1));
 						},
 					ret: null
 				})
@@ -692,11 +712,10 @@ class ShapeMacro {
 							$b{f(1,1)};
 						else {
 							var g = grid; removeFromGrid();
-							var x:Int = pos.x+1; var y:Int = pos.y+1;
-							if (x >= $v{bitGrid.width} && y >= $v{bitGrid.height}) { x = 0; y = 0; g = g.rightBottom; }
-							else if (x >= $v{bitGrid.width}) { x = 0; g = g.right; }
-							else if (y >= $v{bitGrid.height}) { y = 0; g = g.bottom; }
-							else addToGrid(g, automat.Pos.xy(x, y));
+							if (pos.x == Grid.WIDTH - 1 && pos.y == Grid.HEIGHT - 1) addToGrid(g.rightBottom, automat.Pos.xy(0, 0));
+							else if (pos.x == Grid.WIDTH - 1) addToGrid(g.left, automat.Pos.xy(0, pos.y+1));
+							else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, automat.Pos.xy(pos.x+1, 0));
+							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y+1));
 						},
 					ret: null
 				})

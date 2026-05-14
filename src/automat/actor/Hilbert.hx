@@ -13,6 +13,8 @@ import util.BitGrid;
 |###   ###|
 ")) class Hilbert implements IActor {
 
+	public var type(get, never):ActorType; inline function get_type() return HILBERT;
+
 	public var name:String;
 
 	public var pos:Pos;
@@ -28,7 +30,6 @@ import util.BitGrid;
 	public var gridKeyB:Int = -1;
 	public var gridKeyRB:Int = -1;
 	
-
 	// TODO: let write this better or also by macrofication!
 	// public var blockedCellType:Int = 1<<CellType.METAL;
 	public var blockedCellType:Int = 1<<CellType.EARTH | 1<<CellType.METAL;

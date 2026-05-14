@@ -1,32 +1,65 @@
 package automat;
 
+import haxe.ds.Vector;
 import automat.actor.IActor;
 import automat.Cell.CellActor;
 import automat.Cell.CellType;
 import view.View;
 import automat.Pos.xy as P;
 
+
+// stores the amount of actor-cells what is inside GridView
+// TODO: can safe Ram by using Bytes here!
+abstract ActorCellAmount(Vector<Int>) {
+	public function new () {
+		this = new Vector<Int>(CellActor.MAX_ACTORS);
+		for (i in 0...CellActor.MAX_ACTORS) this.set(i, 0);
+	}
+
+	public inline function isAddToView(actorKey:Int):Bool {
+		var amount = this.get(actorKey);
+		this.set(actorKey, amount+1);
+		return (amount == 0); // first is added
+	}
+
+	public inline function isRemoveFromView(actorKey:Int):Bool {
+		var amount = this.get(actorKey);
+		this.set(actorKey, amount-1);
+		return (amount == 1); // last is removed
+	}
+}
+
+
+
 // this will be later handled by Remote-Server in peote-net!
 class GridView {
 
 	public var grid:Grid = null;
 
+	// actual range into ONE Grid
 	public var xFrom:Int = 0;
 	public var xTo:Int = 0;
 	public var yFrom:Int = 0;
 	public var yTo:Int = 0;
+
+	public var useActorsFromGridLeft:Bool = false;
+	public var useActorsFromGridTop:Bool = false;
 
 	public var view:View; // this will be the client into network!
 	// TODO: viktor keys to identify the gridView per client!
 
 	// -------------------------------------
 
-	public function new(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
+	public var actorCellAmount = new ActorCellAmount();
+
+	public function new(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, useActorsFromGridLeft:Bool, useActorsFromGridTop:Bool) {
 		this.grid = grid;
 		this.xFrom = xFrom;
 		this.xTo = xTo;
 		this.yFrom = yFrom;
 		this.yTo = yTo;
+		this.useActorsFromGridLeft = useActorsFromGridLeft;
+		this.useActorsFromGridTop = useActorsFromGridTop;
 	}
 
 	public function isInside(pos:Pos):Bool {
@@ -45,14 +78,11 @@ class GridView {
 	// ------------------------------------------
 	inline function syncInit() {
 		// send all to the view
-		// TODO: start values
-		xFrom = xTo = 0;
-		yFrom = 0;
-		yTo = Grid.HEIGHT;
-		extendRight(true);
-		for (x in 1...Grid.WIDTH) {
+		var _xTo = xTo; 
+		xTo = xFrom;
+		for (x in xFrom..._xTo) {
 			extendRight();
-		}
+		} 
 		
 	}
 
@@ -98,8 +128,11 @@ class GridView {
 		var actorKey:CellActor = CellActor.EMPTY;
 		var alreadyAdded = new Array<CellActor>();
 		for (y in yFrom...yTo) {
+			// cell
 			var cell:Cell = grid.get(P(xFrom, y));
 			cells.push(cell); // TODO: CellType + CellParam!
+
+			// actor
 			if (cell.actor != actorKey) { 
 				if(cell.actor != CellActor.EMPTY && alreadyAdded.indexOf(cell.actor) == -1 ) {
 					actorKey = cell.actor;
@@ -115,19 +148,55 @@ class GridView {
 		syncAddCells( P(xFrom, yFrom), P(xFrom, yTo), cells );
 	}
 
-	public function extendRight(first = false) {
+	public function extendRight() {
+		if (xTo == Grid.WIDTH) return;
+		var cells = new Array<Int>();
+		var actorKey:CellActor = CellActor.EMPTY;
+		
+		for (y in yFrom...yTo) {
+			// cell
+			var cell:Cell = grid.get(P(xTo, y));
+			cells.push(cell); // TODO: CellType + CellParam!
+
+			// actor
+			actorKey = cell.actor;
+			if (actorKey != CellActor.EMPTY) {
+				var actor:IActor = grid.actors.get(actorKey);
+				// check if it have to use actors from left, top or leftTop neighbor-grid
+				if ( actor.grid == grid
+				    // || ( useActorsFromGridLeft && grid.left != null && actor.grid == grid.left )
+				    // || ( useActorsFromGridTop  && ((grid.top != null && actor.grid == grid.top) || (useActorsFromGridLeft && grid.leftTop != null && actor.grid == grid.leftTop)) )
+				    || ( grid.left != null && actor.grid == grid.left && (useActorsFromGridLeft || actor.gridKey == -1 )  )
+				    || ( grid.top  != null && actor.grid == grid.top && (useActorsFromGridTop || actor.gridKey == -1 )  )
+				    || ( grid.leftTop != null && actor.grid == grid.leftTop && ( (useActorsFromGridLeft && useActorsFromGridTop) || actor.gridKey == -1 )  )
+				   )
+				{
+					if (actorCellAmount.isAddToView(actorKey)) syncAddActor( actor, actorKey); // actor enters the view
+				}
+			}
+		}
+		syncAddCells( P(xTo, yFrom), P(xTo, yTo), cells );
+		xTo++;
+	}
+/*	public function extendRight(first = false) {
 		if (xTo == Grid.WIDTH) return;
 		var cells = new Array<Int>();
 		var actorKey:CellActor = CellActor.EMPTY;
 		var alreadyAdded = new Array<CellActor>();
+
+		// TODO: also a "getOutsiderActorsTop" flag if the view should or should NOT add the actors wich pos is from grid above
 		for (y in yFrom...yTo) {
+
+			// cell
 			var cell:Cell = grid.get(P(xTo, y));
 			cells.push(cell); // TODO: CellType + CellParam!
+
+			// actor
 			if (cell.actor != actorKey) { 
 				if(cell.actor != CellActor.EMPTY && alreadyAdded.indexOf(cell.actor) == -1 ) {
 					actorKey = cell.actor;
 					var actor:IActor = grid.actors.get(actorKey);
-					// only if inside the SAME grid and left actor-side comes in
+					// only if inside the SAME grid and right actor-side comes in
 					if (actor.grid == grid && (actor.pos.x == xTo || first)) {
 						syncAddActor( actor, actorKey); // actor enters the view
 						alreadyAdded.push(actorKey); // to not add it again
@@ -138,6 +207,7 @@ class GridView {
 		syncAddCells( P(xTo, yFrom), P(xTo, yTo), cells );
 		xTo++;
 	}
+*/
 
 	public function shrinkLeft(last = false) {
 		if (xFrom == xTo) return;

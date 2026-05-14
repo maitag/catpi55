@@ -32,7 +32,7 @@ interface Tile {
     var sheet(get, never):Int; inline function get_sheet() return 0;
     inline function anim(id:AnimID):Anim {
         return switch(id) {
-            case walk: new Anim(0, 17);
+            case walk: new Anim(0, 11);
             default: throw("Error, Charactere don't have this animation"); null;
         }
     }
@@ -41,9 +41,9 @@ interface Tile {
 
 
 class Chars {
-    public static var FPS:Int = 18;
+    public static var FPS:Int = 12;
     public static var sheets:Array<Sheet> = [
-        new Sheet("chars64x64.png", 64, 64, 0, 8, 3),
+        new Sheet("chars64x64.png", 64, 64, 0, 8, 2),
     ];
     public inline static function tile(id:TileID):Tile {
         return switch(id) {

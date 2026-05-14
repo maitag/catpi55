@@ -39,7 +39,7 @@ class Main extends Application
 
 		var view = new View(peoteView);
 
-		var grid:Grid = TestAutomat.createTestGrid("
+/*		var grid:Grid = TestAutomat.createTestGrid("
 ################################
 #                              #
 #                              #
@@ -56,15 +56,21 @@ class Main extends Application
 #                              #
 #                              #
 ################################
+");*/
+var grid:Grid = TestAutomat.createTestGrid("
+###
+# #
+###
 ");
 		var hx = new Haxe("haxe");
 		
-		hx.addToGrid(grid, P(3,1)); 
-		trace(hx.pos);
+		//hx.addToGrid(grid, P(3,1)); trace(hx.pos);
 		
-		TestAutomat.traceGrid(grid, 32, 16);
+		// TestAutomat.traceGrid(grid, 32, 16);
+		TestAutomat.traceGrid(grid, 3, 3);
 
-		var gridView = new GridView(grid, 2, 23, 3, 17);
+		// var gridView = new GridView(grid, 2, 23, 3, 17);
+		var gridView = new GridView(grid, 0, 3, 0, 3, true, true);
 		grid.views.push(gridView);
 
 		gridView.init(view);

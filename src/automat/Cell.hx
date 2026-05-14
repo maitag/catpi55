@@ -16,6 +16,7 @@ enum abstract CellType(Int) from Int to Int {
 	public var isFluid(get, never):Bool;
 	inline function get_isFluid():Bool return (this >= (WATER:Int) && this <= (PLASMA:Int));
 	var WATER;
+	// var SAND; // (0_1)
 	var MILK;
 	var PISS;
 	var ACID;
@@ -71,8 +72,11 @@ abstract CellActor(Int) from Int to Int {
 
 	// public static inline var bits:Int = 13; // for 64x64+1
 	public static inline var bits:Int = util.BitUtil.bitsize(MAX_ACTORS);
-	public static inline var mask:Int = ((1 << bits)-1) << (CellType.bits + CellParam.bits);
+	public static inline var mask:Int = ((1 << bits)-1) << (CellParam.bits + CellType.bits);
 
+	public static inline var maskWithOrigin:Int = ((1 << bits+1)-1) << (CellParam.bits + CellType.bits);
+	public static inline var ORIGIN_BIT:Int = (1 << (CellActor.bits + CellParam.bits + CellType.bits));
+	
 	public static inline var EMPTY:Int = MAX_ACTORS;
 
 	public var isEmpty(get, never):Bool;
@@ -80,9 +84,9 @@ abstract CellActor(Int) from Int to Int {
 }
 
 
-// ---------------------------------------------------------------------
-// |                |         actor 13       |     param 8    | type 4 |
-// ---------------------------------------------------------------------
+// -------------------------------------------------------------------------
+// |   actorOriginBit 1 |         actor 13       |     param 8    | type 4 |
+// -------------------------------------------------------------------------
 abstract Cell(Int) from Int to Int {
 	public inline function new(type:CellType, ?param:CellParam) {
 		if (param == null) {
@@ -91,7 +95,7 @@ abstract Cell(Int) from Int to Int {
 			else if (type.isFluid) {trace("todo: SET FLUID DEFAULTS");param = 2;}
 			else {trace("todo: SET GAS DEFAULTS");param = 3;}*/
 		}
-		this = (CellActor.MAX_ACTORS << (CellType.bits + CellParam.bits)) |  (param << CellType.bits) | type;
+		this = (CellActor.MAX_ACTORS << (CellParam.bits + CellType.bits)) |  (param << CellType.bits) | type;
 	}
 
 	// if a cell is fetched from outside of grid-space or to forbid cells into a grid:
@@ -121,18 +125,32 @@ abstract Cell(Int) from Int to Int {
 	inline function set_param(param:CellParam):CellParam return this = (this & ~CellParam.mask) | (param << CellType.bits);
 
 
-	// --------- ACTOR index -------------
+	// --------- ACTOR key -------------
 
 	public var actor(get, set):CellActor;
-	inline function get_actor():CellActor return (this & CellActor.mask) >> (CellType.bits + CellParam.bits);
-	inline function set_actor(actor:CellActor):CellActor return this = (this & ~CellActor.mask) | (actor << (CellType.bits + CellParam.bits));
+	inline function get_actor():CellActor return (this & CellActor.mask) >> (CellParam.bits + CellType.bits);
+	inline function set_actor(actor:CellActor):CellActor return this = (this & ~CellActor.mask) | (actor << (CellParam.bits + CellType.bits));
 	// TODO: problem on neko with the bitops
 
-	inline function removeActor() this = (this & ~CellActor.mask) | (CellActor.EMPTY << (CellType.bits + CellParam.bits));
+	public inline function setActor(actor:CellActor, isOrigin:Bool = false):CellActor {
+		if (isOrigin)
+			return this = (this & ~CellActor.maskWithOrigin) | CellActor.ORIGIN_BIT | (actor << (CellParam.bits + CellType.bits));
+		else
+			return this = (this & ~CellActor.maskWithOrigin) | (actor << (CellParam.bits + CellType.bits));
+	}
+
+	// inline function removeActor() this = (this & ~CellActor.mask) | (CellActor.EMPTY << (CellParam.bits + CellType.bits));
+	// removes also the "origin" bit
+	public inline function removeActor() this = (this & ~CellActor.maskWithOrigin) | (CellActor.EMPTY << (CellParam.bits + CellType.bits));
 
 	public var hasActor(get, never):Bool;
 	inline function get_hasActor():Bool return !actor.isEmpty;
 
+	public var isOrigin(get, never):Bool;
+	inline function get_isOrigin():Bool return (this & CellActor.ORIGIN_BIT > 0);
+
+	public inline function setOrigin() this = this | CellActor.ORIGIN_BIT;
+	public inline function delOrigin() this = this & ~CellActor.ORIGIN_BIT;
 
 	// ------------ Debug ----------------
 
