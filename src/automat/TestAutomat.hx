@@ -90,7 +90,7 @@ class TestAutomat extends Application {
 
 		/*
 		// -------- grid testdata ----------
-		var grid = createTestGrid(TESTGRID);
+		var grid = GridDebug.createTestGrid(GridDebug.TESTGRID);
 		// trace(grid.get(new Pos(1,1)));
 
 		grid.setAction(new Action(CELL_MOVE, new Pos(1,1)), 0); // immediadly
@@ -106,7 +106,7 @@ class TestAutomat extends Application {
 
 		// -------- add/remove Actors ----------
 
-		var grid = createTestGrid("
+		var grid = GridDebug.createTestGrid("
 ################################
 #                              #
 #                              #
@@ -178,12 +178,12 @@ E                              #
 		
 		var live = new Live("on shitball around The S u n STAR;)");
 		live.addToGrid(grid, P(7,1));
-		traceGrid(grid, 32, 16);
+		GridDebug.traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
 			if ( live.freeDown() ) {
 				live.goDown();
-				traceGrid(grid, 32, 16, true);
+				GridDebug.traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 1001); // night ,) 
 			}
 		}		
@@ -193,12 +193,12 @@ E                              #
 		// TIME for haxe now:
 		var haxe = new Haxe("forever! \\o/");
 		haxe.addToGrid(grid, P(3,5));
-		traceGrid(grid, 32, 16);
+		GridDebug.traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
 			if ( haxe.freeDown() ) {
 				haxe.goDown();
-				traceGrid(grid, 32, 16, true);
+				GridDebug.traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 900);
 			}
 		}		
@@ -222,42 +222,21 @@ E                              #
 		
 
 	}
-
-
-	// ----------------------------------------------------------------
-	// ----------------------------------------------------------------
-	// ----------------------------------------------------------------
-
-	public static function traceGrid(grid:Grid, w:Int=Grid.WIDTH, h:Int=Grid.HEIGHT, clear=false) {
-		var s = "\n";
-		for (y in 0...h) {
-			for (x in 0...w) {
-				var cell = grid.get(P(x,y));
-				if (cell.hasActor) {
-					if (cell.isOrigin) s += "O";
-					else s += cell.actor;
-				}
-				else {
-					s += switch(cell.type) {
-						case TABU: "X";
-						case AIR: " ";
-						case WOOD: ".";
-						case METAL: "#";
-						case EARTH: "E";
-						case ROCK: "R";
-						case WATER: "^";
-						case MILK: "m";
-						case PISS: "p";
-						default: " ";
-					}
-				}
-			}
-			s += "\n";
-		}
-		if (clear) Sys.command("clear");
-		trace(s);
-	}
 	
+}
+
+
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+
+
+class GridDebug 
+{
 	public static function createTestGrid(testGrid:String):Grid {
 		var grid = new Grid();
 
@@ -292,6 +271,42 @@ E                              #
 		return grid;
 	}
 
+	public static function traceGrid(grid:Grid, w:Int=Grid.WIDTH, h:Int=Grid.HEIGHT, clear=false) {
+		var s = "\n";
+		for (y in 0...h) {
+			for (x in 0...w) {
+				var cell = grid.get(P(x,y));
+				if (cell.hasActor) {
+					if (cell.isOrigin) s += "O";
+					else s += cell.actor;
+				}
+				else {
+					s += switch(cell.type) {
+						case TABU: "X";
+						case AIR: " ";
+						case WOOD: ".";
+						case METAL: "#";
+						case EARTH: "E";
+						case ROCK: "R";
+						case WATER: "^";
+						case MILK: "m";
+						case PISS: "p";
+						default: " ";
+					}
+				}
+			}
+			s += "\n";
+		}
+		#if html5
+		//js.html.Console.clear();
+		#else
+		if (clear) Sys.command("clear");
+		#end
+
+
+		trace(s);
+	}
+	
 
 	public static inline var TESTGRID64x64:String = "
 ################################################################
@@ -359,5 +374,4 @@ E                              #
 #..............................................................#
 ################################################################
 ";
-
 }

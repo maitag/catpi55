@@ -8,10 +8,13 @@ import util.BitGrid;
 import automat.Pos.xy as P;
 
 
-// 1x1 shape without macro:
-class Shape1x1 {
+// optimized shapes without macro:
+// class ShapeRect {
 	// TODO
-}
+// }
+// class Shape1x1 {
+	// TODO
+// }
 
 class Shape {
 
@@ -194,7 +197,7 @@ import haxe.macro.Context;
 class ShapeMacro {
 	static public function build(shape:String, unroll = false):Array<Field>
 	{
-		trace("ShapeMacro");
+		// trace("ShapeMacro");
 
 		var bitGrid:util.BitGrid = shape;
 		var fields = Context.getBuildFields();
@@ -847,7 +850,7 @@ class ShapeMacro {
 		});
 		
 	
-		for (field in fields) trace(new haxe.macro.Printer().printField(field));
+		// for (field in fields) trace(new haxe.macro.Printer().printField(field));
 
 		return fields;
 	}

@@ -8,30 +8,6 @@ import view.View;
 import automat.Pos.xy as P;
 
 
-// stores the amount of actor-cells what is inside GridView
-// TODO: can safe Ram by using Bytes here!
-abstract ActorCellAmount(Vector<Int>) {
-	public function new () {
-		this = new Vector<Int>(CellActor.MAX_ACTORS);
-		for (i in 0...CellActor.MAX_ACTORS) this.set(i, 0);
-	}
-
-	public inline function isAddToView(actorKey:Int):Bool {
-		var amount = this.get(actorKey);
-		this.set(actorKey, amount+1);
-		return (amount == 0); // first is added
-	}
-
-	public inline function isRemoveFromView(actorKey:Int):Bool {
-		var amount = this.get(actorKey);
-		this.set(actorKey, amount-1);
-		return (amount == 1); // last is removed
-	}
-}
-
-
-
-// this will be later handled by Remote-Server in peote-net!
 class GridView {
 
 	public var grid:Grid = null;
@@ -42,33 +18,25 @@ class GridView {
 	public var yFrom:Int = 0;
 	public var yTo:Int = 0;
 
-	public var useActorsFromGridLeft:Bool = false;
-	public var useActorsFromGridTop:Bool = false;
-
-	public var view:View; // this will be the client into network!
-	// TODO: viktor keys to identify the gridView per client!
+	public var multiGridView:MultiGridView;
+	public var id:Int = 0;// vikto key to identify
 
 	// -------------------------------------
 
-	public var actorCellAmount = new ActorCellAmount();
-
-	public function new(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, useActorsFromGridLeft:Bool, useActorsFromGridTop:Bool) {
+	public function new(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
 		this.grid = grid;
 		this.xFrom = xFrom;
 		this.xTo = xTo;
 		this.yFrom = yFrom;
 		this.yTo = yTo;
-		this.useActorsFromGridLeft = useActorsFromGridLeft;
-		this.useActorsFromGridTop = useActorsFromGridTop;
 	}
 
 	public function isInside(pos:Pos):Bool {
 		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
 	}
 
-
-	public function init(view:View) {
-		this.view = view;
+	public function init(multiGridView:MultiGridView) {
+		this.multiGridView = multiGridView;
 		syncInit();
 	}
 
@@ -88,39 +56,12 @@ class GridView {
 
 	// ------- add ----------
 
-	inline function syncAddCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
-		view.addCells(posFrom, posTo, cells);
-	}
-
-	inline function syncAddActor(actor:IActor, actorKey:CellActor) {
-		view.addActor(actor.pos, actorKey, actor.name);
-	}
-
-	// ------ remove ---------
-
-	inline function syncRemoveCells(posFrom:Pos, posTo:Pos) {
-		view.removeCells(posFrom, posTo);
-	}
-
-	inline function syncRemoveActor(actorKey:CellActor) {
-		view.removeActor(actorKey);
-	}
-
-	// ------- update --------
-
-	inline function syncUpdateCell(pos:Pos, cell:CellType) { // CellParam!
-		view.updateCell(pos, cell);
-	}
-
-	inline function syncUpdateActor(actorKey:CellActor, action:Int) { // TODO: action!
-		view.updateActor(actorKey, action);
-	}
 
 
 	// ------------------------------------------
 	// ------------------------------------------
 	// ------------------------------------------
-	
+/*	
 	public function extendLeft(first = false) {
 		if (xFrom == 0) return;
 		xFrom--;
@@ -147,7 +88,7 @@ class GridView {
 		}
 		syncAddCells( P(xFrom, yFrom), P(xFrom, yTo), cells );
 	}
-
+*/
 	public function extendRight() {
 		if (xTo == Grid.WIDTH) return;
 		var cells = new Array<Int>();
@@ -163,19 +104,13 @@ class GridView {
 			if (actorKey != CellActor.EMPTY) {
 				var actor:IActor = grid.actors.get(actorKey);
 				// check if it have to use actors from left, top or leftTop neighbor-grid
-				if ( actor.grid == grid
-				    // || ( useActorsFromGridLeft && grid.left != null && actor.grid == grid.left )
-				    // || ( useActorsFromGridTop  && ((grid.top != null && actor.grid == grid.top) || (useActorsFromGridLeft && grid.leftTop != null && actor.grid == grid.leftTop)) )
-				    || ( grid.left != null && actor.grid == grid.left && (useActorsFromGridLeft || actor.gridKey == -1 )  )
-				    || ( grid.top  != null && actor.grid == grid.top && (useActorsFromGridTop || actor.gridKey == -1 )  )
-				    || ( grid.leftTop != null && actor.grid == grid.leftTop && ( (useActorsFromGridLeft && useActorsFromGridTop) || actor.gridKey == -1 )  )
-				   )
+				if ( actor.grid == grid)
 				{
-					if (actorCellAmount.isAddToView(actorKey)) syncAddActor( actor, actorKey); // actor enters the view
+					multiGridView.addActor( actor, actorKey); // actor enters the view
 				}
 			}
 		}
-		syncAddCells( P(xTo, yFrom), P(xTo, yTo), cells );
+		multiGridView.addCells( P(xTo, yFrom), P(xTo, yTo), cells );
 		xTo++;
 	}
 /*	public function extendRight(first = false) {
@@ -208,7 +143,7 @@ class GridView {
 		xTo++;
 	}
 */
-
+/*
 	public function shrinkLeft(last = false) {
 		if (xFrom == xTo) return;
 		var actorKey:CellActor = CellActor.EMPTY;
@@ -252,8 +187,8 @@ class GridView {
 		}
 		syncRemoveCells( P(xTo, yFrom), P(xTo, yTo) );
 	}
-
-	public function goLeft() { extendLeft(); shrinkRight(); }
+*/
+	// public function goLeft() { extendLeft(); shrinkRight(); }
 
 
 }

@@ -28,17 +28,19 @@ class View {
 	public var height:Int = 0;
 
 	// TODO
-	public var actors = new Vector<ViewActor>(CellActor.MAX_ACTORS);
+	// public var actors = new Vector<ViewActor>(CellActor.MAX_ACTORS);
 
 	public function new(peoteView:PeoteView)
 	{
 		this.peoteView = peoteView;
 
-		// TODO: disable testrenderings!
 		// var render = new Render(peoteView);
 
 	}
 
+	public function init(maxViews:Int) {
+		// actors = new Vector<Vector<ViewActor>>(maxViews);
+	}
 
 	// sync functions what called from automat->GridView->to here
 
@@ -53,7 +55,7 @@ class View {
 		trace("addActor", pos, actorKey, name);
 
 		// TODO
-		actors.set(actorKey, new ViewActor() ); // CHECK: actorKey have to start by 0 here!
+		// actors.set(actorKey, new ViewActor() ); // CHECK: actorKey have to start by 0 here!
 	}
 
 	// ------ remove ---------
@@ -64,7 +66,7 @@ class View {
 
 	public function removeActor(actorKey:CellActor) {
 		trace("removeActor", actorKey);
-		actors.set(actorKey, null);
+		// actors.set(actorKey, null);
 	}
 
 	// ------- update --------

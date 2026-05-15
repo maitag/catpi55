@@ -1,21 +1,22 @@
-package;
+package view;
 
-import automat.TestAutomat;
-import automat.GridView;
-import automat.Grid;
-import view.View;
 import haxe.CallStack;
-
 import lime.app.Application;
 import lime.ui.Window;
 
-import peote.view.PeoteView;
-
+import automat.TestAutomat.GridDebug;
+import automat.Grid;
+import automat.GridView;
+import automat.MultiGridView;
 import automat.actor.*;
 import automat.Pos.xy as P;
 
+import view.View;
+import peote.view.PeoteView;
 
-class Main extends Application
+
+
+class TestView extends Application
 {
 	override function onWindowCreate():Void
 	{
@@ -37,6 +38,35 @@ class Main extends Application
 	{
 		peoteView = new PeoteView(window);
 
+		var view = new View(peoteView);
+
+		var grid:Grid = GridDebug.createTestGrid("
+################################
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+#                              #
+################################
+");
+		
+		var actor = new Actor("a1");
+		
+		actor.addToGrid(grid, P(3,1)); //trace(actor.pos);
+		
+		GridDebug.traceGrid(grid, 32, 16);
+		
+
+		var multiGridView = new MultiGridView(grid, 0, 0, 8, 8, 64, 64);
 
 	}
 	
