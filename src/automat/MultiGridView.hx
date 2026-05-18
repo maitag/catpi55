@@ -9,69 +9,85 @@ import automat.Pos.xy as P;
 
 
 // TODO: store all used GridViews for easy scrolling and "re-usage"
-class GridViewRingMatrix {
-	public var x:Int = 0;
-	public var y:Int = 0;
-	public var w:Int;
-	public var h:Int;
-	public var data:Vector<GridView>;
+class GridViewCache {
 
-	public function new(sizeX:Int, sizeY:Int) {
-		data = new Vector<GridView>(sizeX * sizeY);
-		for (i in 0...data.length) data.set(i, null);
+	var data:Vector<GridView>;
+	public var sizeX:Int;
+	public var sizeY:Int;
+
+	// actual range of used GridViews
+	public var xFrom:Int = 0;
+	public var xTo:Int = 1;
+	public var yFrom:Int = 0;
+	public var yTo:Int = 1;
+	
+	public inline function new(multiGridView:MultiGridView, rootGrid:Grid, rootX:Int, rootY:Int, sizeX:Int, sizeY:Int)
+	{	
+		this.sizeX = sizeX;	
+		this.sizeY = sizeY;
+
+		data = new Vector<GridView>( sizeX * sizeY );
+
+		// initialize the root gridView
+		data.set( 0, new GridView(multiGridView, 0, rootGrid, rootX, rootX+1, rootY, rootY+1) );
+
+		// initialize all other with index but without grid-connection
+		for (i in 1...data.length) data.set( i, new GridView(multiGridView, i) );
 	}
 
-	// T
-	// O
-	// D
-	// O
+	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
+	inline function modY(y:Int) return (y<0) ? sizeY+y : y % sizeY;
+	inline function index(x:Int, y:Int) return modY(y) * sizeX + modX(x);
+
+	public inline function get(x:Int, y:Int):GridView {
+		return data.get( index(x, y) );
+	}
+
+	public inline function addToGrid(x:Int, y:Int, grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
+		data.get( index(x, y) ).addToGrid( grid, xFrom, xTo, yFrom, yTo);
+	}
+
+	public inline function removeFromGrid(x:Int, y:Int) {
+		data.get( index(x, y) ).removeFromGrid();
+	}
+
+	public function canGrowLeft():Bool {
+		if ( xFrom == xTo ) return false;
+		var y = yFrom;
+		while (y != yTo ) {
+			var grid = get(xFrom, y).grid;
+			if ( grid != null && grid.left != null  ) return true;
+			y = modY(y+1);
+		}
+		return false;
+	}
+	// public function canGrowRight():Bool 
+	
+	// TODO: growLeft()
+
 }
 
 
 // this to sync later by RPC via peote-net!
 class MultiGridView {
 
-	public var rootGridViewKey:Int = 0;
-	// TODO: better topLeft and bottomRight grid
+	// ---- handles the used GridViews -----
+	public var gridViewCache:GridViewCache;
 
-	// position into rootGrid
-	public var x:Int;
-	public var y:Int;
-
-	// viktor keys to identify the used GridViews
-	public var gridViews:GridViewRingMatrix;
-
-	// actual size over all GridViews
-	public var width:Int;
-	public var height:Int;
-
-	public var maxWidth:Int;
-	public var maxHeight:Int;
-
-	public var maxGridViewX(get, never):Int;
-	public var maxGridViewY(get, never):Int;
-	inline function get_maxGridViewX():Int return Math.ceil(maxWidth/Grid.WIDTH);
-	inline function get_maxGridViewY():Int return Math.ceil(maxHeight/Grid.HEIGHT);
-
+	// -------------------------------------
+	// first position inside rootGrid (middle from where it grows?)
+	public var rootX:Int;
+	public var rootY:Int;
 
 	public var view:View; // this will be the client into network later!
 
 	// -------------------------------------
+	
+	public function new(rootGrid:Grid, rootX:Int, rootY:Int, gridViewsSizeX:Int, gridViewsSizeY:Int) {
+		this.rootX = rootX;
+		this.rootY = rootY;
 
-	public function new(rootGrid:Grid, x:Int, y:Int, width:Int, height:Int, maxWidth:Int, maxHeight:Int) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.maxWidth = maxWidth;
-		this.maxHeight = maxHeight;
-
-		// HOW TO BOOT is easy up???
-
-		// TODO: create first rootGridView
-		// var rootGridView = new GridView(rootGrid, x, x, y, y);
-
-		gridViews = new GridViewRingMatrix(maxGridViewX, maxGridViewY);
+		gridViewCache = new GridViewCache( this, rootGrid, rootX, rootY, gridViewsSizeX, gridViewsSizeY );
 
 
 	}
@@ -101,6 +117,18 @@ class MultiGridView {
 		
 	}
 */
+
+	public function extendLeft() {
+		// if (x==0) {
+		// 	x = Grid.WIDTH-1;
+		//  gridViews.extendLeft();
+		// }
+		// else x--;
+		// for (y in 0...gridViews.height) gridViews.getLeft(y).extendLeft();
+	}
+	public function shrinkRight() {
+		// for (y in 0...gridViews.height) gridViews.getRight(y).shrinkRight();
+	}
 
 	public inline function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
 		view.addCells(posFrom, posTo, cells);

@@ -12,29 +12,42 @@ class GridView {
 
 	public var grid:Grid = null;
 
-	// actual range into ONE Grid
+	// actual range into the connected Grid
 	public var xFrom:Int = 0;
 	public var xTo:Int = 0;
 	public var yFrom:Int = 0;
 	public var yTo:Int = 0;
 
 	public var multiGridView:MultiGridView;
-	public var id:Int = 0;// vikto key to identify
+	public var index:Int = 0;// index into gridViews of MultiGridView
 
 	// -------------------------------------
 
-	public function new(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
-		this.grid = grid;
+	public function new(multiGridView:MultiGridView, index:Int, grid:Grid=null, xFrom:Int=0, xTo:Int=0, yFrom:Int=0, yTo:Int=0) {
+		this.multiGridView = multiGridView;
+		this.index = index;
+		if (grid != null) addToGrid(grid, xFrom, xTo, yFrom, yTo);
+	}
+
+	public function addToGrid(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
 		this.xFrom = xFrom;
 		this.xTo = xTo;
 		this.yFrom = yFrom;
 		this.yTo = yTo;
+		this.grid = grid;
+		grid.views.push(this);
+	}
+
+	public function removeFromGrid() {
+		grid.views.remove(this);
+		// grid = null;
 	}
 
 	public function isInside(pos:Pos):Bool {
 		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
 	}
 
+/*
 	public function init(multiGridView:MultiGridView) {
 		this.multiGridView = multiGridView;
 		syncInit();
@@ -56,7 +69,7 @@ class GridView {
 
 	// ------- add ----------
 
-
+*/
 
 	// ------------------------------------------
 	// ------------------------------------------
