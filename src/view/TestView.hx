@@ -68,6 +68,8 @@ class TestView extends Application
 
 		var multiGridView = new MultiGridView(grid, 10, 10, 3, 3); // 3x3 gridViewCache
 
+		trace(multiGridView.gridViewCache);
+
 	}
 	
 	// ------------------------------------------------------------

@@ -44,27 +44,75 @@ class GridViewCache {
 	}
 
 	public inline function addToGrid(x:Int, y:Int, grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
-		data.get( index(x, y) ).addToGrid( grid, xFrom, xTo, yFrom, yTo);
+		if (grid != null) get(x, y).addToGrid( grid, xFrom, xTo, yFrom, yTo);
 	}
 
 	public inline function removeFromGrid(x:Int, y:Int) {
-		data.get( index(x, y) ).removeFromGrid();
+		get(x, y).removeFromGrid();
 	}
 
+	// this only works for 3x3... for larger grid-graph-topology (what is also out of "convex") it needs deeper->traversing
 	public function canGrowLeft():Bool {
-		if ( xFrom == xTo ) return false;
+ 		if ( xFrom == xTo ) return false;
 		var y = yFrom;
 		while (y != yTo ) {
-			var grid = get(xFrom, y).grid;
-			if ( grid != null && grid.left != null  ) return true;
+			// var grid = get(xFrom, y).grid;
+			// if ( grid != null && grid.left != null  ) return true;
+			if ( get(xFrom, y).leftGrid != null ) return true;
 			y = modY(y+1);
 		}
 		return false;
+	}	
+	public function growLeft() {
+		var x = xFrom;
+		var y = yFrom;
+		xFrom = modX(xFrom-1);
+		while (y != yTo ) {
+			var gridView = get(x, y);
+			addToGrid(xFrom, y, gridView.leftGrid, Grid.WIDTH-1, Grid.WIDTH, gridView.yFrom, gridView.yTo);
+			y = modY(y+1);
+		}		
 	}
-	// public function canGrowRight():Bool 
-	
-	// TODO: growLeft()
+	// one step into all gridViews at left border
+	public function growViewsLeft() {
+		var y = yFrom;
+		while (y != yTo ) {
+			get(xFrom, y).growLeft();
+			y = modY(y+1);
+		}		
+	}
+	public function shrinkLeft() {
+		var y = yFrom;		
+		while (y != yTo ) {
+			removeFromGrid(xFrom, y);
+			y = modY(y+1);
+		}
+		xFrom = modX(xFrom+1);		
+	}
+	// one step into all gridViews at left border
+	public function shrinkViewsLeft() {
+		var y = yFrom;
+		while (y != yTo ) {
+			get(xFrom, y).shrinkLeft();
+			y = modY(y+1);
+		}		
+	}
 
+	
+	// debug
+	public function toString():String {
+		var s = "\n";
+		for (y in 0...sizeY) {
+			for (x in 0...sizeX) {
+				var gridView = data.get( index(x, y) );
+				var index = "null";
+				if (gridView.grid != null) index = '[${gridView.index},${gridView.xFrom},${gridView.xTo},${gridView.yFrom},${gridView.yTo}]'; 
+				s += index + ",";
+			}
+			s+="\n";
+		}
+		return s;
+	}
 }
 
 
@@ -78,6 +126,13 @@ class MultiGridView {
 	// first position inside rootGrid (middle from where it grows?)
 	public var rootX:Int;
 	public var rootY:Int;
+	
+	// size of the view relative to root-point
+	public var leftSize:Int = 0;
+	public var rightSize:Int = 0;
+	public var topSize:Int = 0;
+	public var bottomSize:Int = 0;
+
 
 	public var view:View; // this will be the client into network later!
 
@@ -93,43 +148,36 @@ class MultiGridView {
 	}
 
 /*
-	public function isInside(pos:Pos):Bool {
-		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
-	}
-*/
-/*
 	public function init(view:View) {
 		this.view = view;
 		syncInit();
 	}
 */
 
+/*	inline function syncInit() {
+	}
+*/
+	public function canGrowLeft():Bool {
+		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) return true;
+		else return gridViewCache.canGrowLeft();
+	}
+	public function growLeft() {
+		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) gridViewCache.growViewsLeft();
+		else gridViewCache.growLeft();
+		leftSize--;
+	}
+
+	public function canShrinkLeft():Bool return (leftSize > 0);
+	public function shrinkLeft() {
+		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH < Grid.WIDTH) gridViewCache.shrinkViewsLeft();
+		else gridViewCache.shrinkLeft();
+		leftSize++;
+	}
+
+
 	// ------------------------------------------
 	// -------- Sync Cells to View --------------
 	// ------------------------------------------
-/*	inline function syncInit() {
-		// send all to the MultiView
-		var _xTo = xTo; 
-		xTo = xFrom;
-		for (x in xFrom..._xTo) {
-			extendRight();
-		} 
-		
-	}
-*/
-
-	public function extendLeft() {
-		// if (x==0) {
-		// 	x = Grid.WIDTH-1;
-		//  gridViews.extendLeft();
-		// }
-		// else x--;
-		// for (y in 0...gridViews.height) gridViews.getLeft(y).extendLeft();
-	}
-	public function shrinkRight() {
-		// for (y in 0...gridViews.height) gridViews.getRight(y).shrinkRight();
-	}
-
 	public inline function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
 		view.addCells(posFrom, posTo, cells);
 	}

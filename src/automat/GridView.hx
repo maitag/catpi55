@@ -11,6 +11,17 @@ import automat.Pos.xy as P;
 class GridView {
 
 	public var grid:Grid = null;
+	public var isActive(get, never):Bool;	
+	inline function get_isActive():Bool return (grid != null);
+
+	public var leftGrid(get, never):Grid;
+	public var rightGrid(get, never):Grid;
+	public var topGrid(get, never):Grid;
+	public var bottomGrid(get, never):Grid;	
+	inline function get_leftGrid():Grid return (grid == null) ? null : grid.left;
+	inline function get_rightGrid():Grid return (grid == null) ? null : grid.right;
+	inline function get_topGrid():Grid return (grid == null) ? null : grid.top;
+	inline function get_bottomGrid():Grid return (grid == null) ? null : grid.bottom;
 
 	// actual range into the connected Grid
 	public var xFrom:Int = 0;
@@ -39,8 +50,9 @@ class GridView {
 	}
 
 	public function removeFromGrid() {
+		if (!isActive) return;
 		grid.views.remove(this);
-		// grid = null;
+		grid = null;
 	}
 
 	public function isInside(pos:Pos):Bool {
@@ -74,6 +86,12 @@ class GridView {
 	// ------------------------------------------
 	// ------------------------------------------
 	// ------------------------------------------
+	public function growLeft() {
+		if (!isActive) return;
+	}
+	public function shrinkLeft() {
+		if (!isActive) return;
+	}
 /*	
 	public function extendLeft(first = false) {
 		if (xFrom == 0) return;
