@@ -98,6 +98,7 @@ class GridViewCache {
 		}		
 	}
 
+	// TODO: right, top, bottom
 	
 	// debug
 	public function toString():String {
@@ -173,6 +174,9 @@ class MultiGridView {
 		else gridViewCache.shrinkLeft();
 		leftSize++;
 	}
+
+	// TODO: right, top, bottom
+
 
 
 	// ------------------------------------------
