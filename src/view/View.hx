@@ -43,9 +43,11 @@ class View {
 	}
 
 	// sync functions what called from automat->GridView->to here
+	public var gridViewIndex:Int = -1;
 
 	public inline function addGridView(index:Int) {
 		trace("addGridView", index);
+
 	}
 
 	public inline function removeGridView(index:Int) {
@@ -54,6 +56,7 @@ class View {
 
 	public inline function switchGridViewIndex(index:Int) {
 		trace("switchGridViewIndex", index);
+		gridViewIndex = index;
 	}
 
 	// ------- add ----------

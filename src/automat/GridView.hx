@@ -1,12 +1,9 @@
 package automat;
 
-import haxe.ds.Vector;
 import automat.actor.IActor;
 import automat.Cell.CellActor;
 import automat.Cell.CellType;
-import view.View;
 import automat.Pos.xy as P;
-
 
 class GridView {
 
@@ -61,33 +58,12 @@ class GridView {
 		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
 	}
 
-/*
-	public function init(multiGridView:MultiGridView) {
-		this.multiGridView = multiGridView;
-		syncInit();
-	}
-
 
 	// ------------------------------------------
-	// -------- Sync Cells to View --------------
+	// ---------- SHRINK AND GROW ---------------
 	// ------------------------------------------
-	inline function syncInit() {
-		// send all to the view
-		var _xTo = xTo; 
-		xTo = xFrom;
-		for (x in xFrom..._xTo) {
-			extendRight();
-		} 
-		
-	}
 
-	// ------- add ----------
-
-*/
-
-	// ------------------------------------------
-	// ------------------------------------------
-	// ------------------------------------------
+	// ------------------- LEFT -----------------------
 	public function growLeft() {
 		if (!isActive) return;
 		// if (xFrom == 0) return;
@@ -121,6 +97,7 @@ class GridView {
 		xFrom++;
 	}
 
+	// ------------------- RIGHT -----------------------
 	public function growRight() {
 		if (!isActive) return;
 		// if (xTo == Grid.WIDTH) return;
@@ -155,10 +132,7 @@ class GridView {
 		multiGridView.removeCells( P(xTo, yFrom), P(xTo, yTo) );
 	}
 
-
 	// TODO: top, bottom
-
-	// public function goLeft() { extendLeft(); shrinkRight(); }
 
 
 }

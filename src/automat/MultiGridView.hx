@@ -7,8 +7,6 @@ import automat.Cell.CellType;
 import view.View;
 import automat.Pos.xy as P;
 
-
-// TODO: store all used GridViews for easy scrolling and "re-usage"
 class GridViewCache {
 
 	var data:Vector<GridView>;
@@ -32,7 +30,7 @@ class GridViewCache {
 		for (i in 1...data.length) data.set( i, new GridView(multiGridView, i) );
 
 		// initialize the root gridView .. TODO: init !
-		data.set( 0, new GridView(multiGridView, 0, rootGrid, rootX, rootX, rootY, rootY+1) );
+		data.set( 0, new GridView(multiGridView, 0, rootGrid, rootX, rootX, rootY, rootY+1) ); // y+1 to get started somewhere while initialization-grow
 	}
 
 	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
@@ -51,19 +49,19 @@ class GridViewCache {
 		get(x, y).removeFromGrid();
 	}
 
-	// this only works for 3x3... for larger grid-graph-topology (what is also out of "convex") it needs deeper->traversing
+	// TODO: for larger grid-graph-topology (what is also out of "convex") it needs deeper->neighbour-traversing
+
+	// ------------------- LEFT -----------------------
 	public function canGrowLeft():Bool {
- 		if ( xFrom == xTo ) return false;
+		if ( xFrom == xTo ) return false;
 		var y = yFrom;
 		while (y != yTo ) {
-			// var grid = get(xFrom, y).grid;
-			// if ( grid != null && grid.left != null  ) return true;
 			if ( get(xFrom, y).leftGrid != null ) return true;
 			y = modY(y+1);
 		}
 		return false;
 	}	
-	public function growLeft() {
+	public inline function growLeft() {
 		var x = xFrom;
 		var y = yFrom;
 		xFrom = modX(xFrom-1);
@@ -73,15 +71,7 @@ class GridViewCache {
 			y = modY(y+1);
 		}		
 	}
-	// one step into all gridViews at left border
-	public function growViewsLeft() {
-		var y = yFrom;
-		while (y != yTo ) {
-			get(xFrom, y).growLeft();
-			y = modY(y+1);
-		}		
-	}
-	public function shrinkLeft() {
+	public inline function shrinkLeft() {
 		var y = yFrom;		
 		while (y != yTo ) {
 			removeFromGrid(xFrom, y);
@@ -89,8 +79,15 @@ class GridViewCache {
 		}
 		xFrom = modX(xFrom+1);		
 	}
-	// one step into all gridViews at left border
-	public function shrinkViewsLeft() {
+	// one step for all gridViews at border
+	public inline function growLeftViews() {	
+		var y = yFrom;
+		while (y != yTo ) {
+			get(xFrom, y).growLeft();
+			y = modY(y+1);
+		}		
+	}
+	public inline function shrinkLeftViews() {
 		var y = yFrom;
 		while (y != yTo ) {
 			get(xFrom, y).shrinkLeft();
@@ -170,19 +167,20 @@ class MultiGridView {
 /*	inline function syncInit() {
 	}
 */
-	public function canGrowLeft():Bool {
+
+	// ------------------- LEFT -----------------------
+	public inline function canGrowLeft():Bool {
 		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) return true;
 		else return gridViewCache.canGrowLeft();
 	}
-	public function growLeft() {
-		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) gridViewCache.growViewsLeft();
+	public inline function growLeft() {
+		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) gridViewCache.growLeftViews();
 		else gridViewCache.growLeft();
 		leftSize++;
 	}
-
-	public function canShrinkLeft():Bool return (leftSize > 0);
-	public function shrinkLeft() {
-		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH < Grid.WIDTH) gridViewCache.shrinkViewsLeft();
+	public inline function canShrinkLeft():Bool return leftSize > 0;
+	public inline function shrinkLeft() {
+		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH < Grid.WIDTH) gridViewCache.shrinkLeftViews();
 		else gridViewCache.shrinkLeft();
 		leftSize--;
 	}
@@ -190,18 +188,18 @@ class MultiGridView {
 	// TODO: right, top, bottom
 
 
+	// TODO:
+	public inline function goLeft() {
+		if ( !canGrowLeft() ) return;
+		// shrinkRight();
+		growLeft();
+	}
 
 	// ------------------------------------------
 	// ------------ Sync to View ----------------
 	// ------------------------------------------
 
 	public var lastGridViewIndex:Int = -1;
-
-	public inline function switchGridViewIndex(index:Int) {
-		if (index == lastGridViewIndex) return;
-		view.switchGridViewIndex(index);
-		lastGridViewIndex = index;
-	}
 
 	public inline function addGridView(index:Int) {
 		view.addGridView(index);
@@ -211,6 +209,12 @@ class MultiGridView {
 		view.removeGridView(index);
 	}
 	
+	public inline function switchGridViewIndex(index:Int) {
+		if (index == lastGridViewIndex) return;
+		view.switchGridViewIndex(index);
+		lastGridViewIndex = index;
+	}
+
 	public inline function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
 		view.addCells(posFrom, posTo, cells);
 	}
