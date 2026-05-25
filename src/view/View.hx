@@ -44,11 +44,23 @@ class View {
 
 	// sync functions what called from automat->GridView->to here
 
+	public inline function addGridView(index:Int) {
+		trace("addGridView", index);
+	}
+
+	public inline function removeGridView(index:Int) {
+		trace("removeGridView", index);
+	}
+
+	public inline function switchGridViewIndex(index:Int) {
+		trace("switchGridViewIndex", index);
+	}
+
 	// ------- add ----------
 
 	public function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
 		trace("addCells", posFrom, posTo);
-		for (cell in cells) trace((cell:Cell));
+		for (cell in cells) trace((cell:Cell).type);
 	}
 
 	public function addActor(pos:Pos, actorKey:CellActor, name:String) {

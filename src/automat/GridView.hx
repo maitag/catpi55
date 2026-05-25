@@ -47,12 +47,14 @@ class GridView {
 		this.yTo = yTo;
 		this.grid = grid;
 		grid.views.push(this);
+		multiGridView.addGridView(index);
 	}
 
 	public function removeFromGrid() {
 		if (!isActive) return;
 		grid.views.remove(this);
 		grid = null;
+		multiGridView.removeGridView(index);
 	}
 
 	public function isInside(pos:Pos):Bool {
@@ -92,6 +94,7 @@ class GridView {
 		xFrom--;
 		var cells = new Array<Int>();
 		var actorKey:Int;
+		multiGridView.switchGridViewIndex(index);
 		for (y in yFrom...yTo) {
 			var cell:Cell = grid.get(P(xFrom, y));
 			cells.push(cell); // TODO: CellType + CellParam!
@@ -107,6 +110,7 @@ class GridView {
 	public function shrinkLeft() {
 		if (!isActive) return;
 		// if (xFrom == xTo) return;
+		multiGridView.switchGridViewIndex(index);
 		for (y in yFrom...yTo) {
 			var cell:Cell = grid.get(P(xFrom, y));
 			if (cell.isOrigin) { 
@@ -122,6 +126,7 @@ class GridView {
 		// if (xTo == Grid.WIDTH) return;
 		var cells = new Array<Int>();
 		var actorKey:Int;
+		multiGridView.switchGridViewIndex(index);
 		for (y in yFrom...yTo) {
 			// cell
 			var cell:Cell = grid.get(P(xTo, y));
@@ -139,7 +144,8 @@ class GridView {
 	public function shrinkRight(last = false) {
 		if (!isActive) return;
 		// if (xFrom == xTo) return;
-		xTo--;		
+		xTo--;
+		multiGridView.switchGridViewIndex(index);
 		for (y in yFrom...yTo) {
 			var cell:Cell = grid.get(P(xTo, y));
 			if (cell.isOrigin) { 

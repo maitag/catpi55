@@ -48,15 +48,7 @@ class TestView extends Application
 		
 		// TestGrid.traceGrid(grid.right, 32, 16);
 		
-		var multiGridView = new MultiGridView(grid, 16, 4, 3, 3); // 3x3 gridViewCache
-		multiGridView.view = view;
-		multiGridView.growLeft();
-		multiGridView.growLeft();
-		multiGridView.growLeft();
-		multiGridView.growLeft();
-		multiGridView.growLeft();
-		multiGridView.growLeft();
-		multiGridView.growLeft();
+		var multiGridView = new MultiGridView(view, grid, 16, 4, 3, 3); // 3x3 gridViewCache
 
 		trace(multiGridView.gridViewCache);
 

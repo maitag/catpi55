@@ -28,11 +28,11 @@ class GridViewCache {
 
 		data = new Vector<GridView>( sizeX * sizeY );
 
-		// initialize the root gridView
-		data.set( 0, new GridView(multiGridView, 0, rootGrid, rootX, rootX+1, rootY, rootY+1) );
-
 		// initialize all other with index but without grid-connection
 		for (i in 1...data.length) data.set( i, new GridView(multiGridView, i) );
+
+		// initialize the root gridView .. TODO: init !
+		data.set( 0, new GridView(multiGridView, 0, rootGrid, rootX, rootX, rootY, rootY+1) );
 	}
 
 	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
@@ -133,19 +133,31 @@ class MultiGridView {
 	public var rightSize:Int = 0;
 	public var topSize:Int = 0;
 	public var bottomSize:Int = 0;
+	// max size to grow
+	public var maxLeftSize:Int = 5;
+	public var maxRightSize:Int = 6;
+	public var maxTopSize:Int = 3;
+	public var maxBottomSize:Int = 4;
 
 
 	public var view:View; // this will be the client into network later!
 
 	// -------------------------------------
 	
-	public function new(rootGrid:Grid, rootX:Int, rootY:Int, gridViewsSizeX:Int, gridViewsSizeY:Int) {
+	public function new(view:View, rootGrid:Grid, rootX:Int, rootY:Int, gridViewsSizeX:Int, gridViewsSizeY:Int) {
+		this.view = view;
 		this.rootX = rootX;
 		this.rootY = rootY;
 
+		// TODO: calculate the cache size by the max..Sizes! 
+
 		gridViewCache = new GridViewCache( this, rootGrid, rootX, rootY, gridViewsSizeX, gridViewsSizeY );
 
-
+		var i:Int=0;
+		while ( i++ < maxLeftSize && canGrowLeft() ) growLeft();
+		// i=0; while ( i++ < maxRightSize && canGrowRight() ) growRight();
+		// i=0; while ( i++ < maxTopSize && canGrowTop() ) growTop();
+		// i=0; while ( i++ < maxBottomSize && canGrowBottom() ) growBottom();
 	}
 
 /*
@@ -165,14 +177,14 @@ class MultiGridView {
 	public function growLeft() {
 		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) gridViewCache.growViewsLeft();
 		else gridViewCache.growLeft();
-		leftSize--;
+		leftSize++;
 	}
 
 	public function canShrinkLeft():Bool return (leftSize > 0);
 	public function shrinkLeft() {
 		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH < Grid.WIDTH) gridViewCache.shrinkViewsLeft();
 		else gridViewCache.shrinkLeft();
-		leftSize++;
+		leftSize--;
 	}
 
 	// TODO: right, top, bottom
@@ -180,8 +192,25 @@ class MultiGridView {
 
 
 	// ------------------------------------------
-	// -------- Sync Cells to View --------------
+	// ------------ Sync to View ----------------
 	// ------------------------------------------
+
+	public var lastGridViewIndex:Int = -1;
+
+	public inline function switchGridViewIndex(index:Int) {
+		if (index == lastGridViewIndex) return;
+		view.switchGridViewIndex(index);
+		lastGridViewIndex = index;
+	}
+
+	public inline function addGridView(index:Int) {
+		view.addGridView(index);
+	}
+
+	public inline function removeGridView(index:Int) {
+		view.removeGridView(index);
+	}
+	
 	public inline function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
 		view.addCells(posFrom, posTo, cells);
 	}
