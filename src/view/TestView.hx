@@ -4,7 +4,7 @@ import haxe.CallStack;
 import lime.app.Application;
 import lime.ui.Window;
 
-import automat.TestAutomat.GridDebug;
+import automat.TestGrid;
 import automat.Grid;
 import automat.GridView;
 import automat.MultiGridView;
@@ -40,33 +40,23 @@ class TestView extends Application
 
 		var view = new View(peoteView);
 
-		var grid:Grid = GridDebug.createTestGrid("
-################################
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-#                              #
-################################
-");
+		var grid:Grid = TestGrid.createTestGrid3x3();
 		
 		var actor = new Actor("a1");
 		
 		actor.addToGrid(grid, P(3,1)); //trace(actor.pos);
 		
-		GridDebug.traceGrid(grid, 32, 16);
+		// TestGrid.traceGrid(grid.right, 32, 16);
 		
-
-		var multiGridView = new MultiGridView(grid, 10, 10, 3, 3); // 3x3 gridViewCache
+		var multiGridView = new MultiGridView(grid, 16, 4, 3, 3); // 3x3 gridViewCache
+		multiGridView.view = view;
+		multiGridView.growLeft();
+		multiGridView.growLeft();
+		multiGridView.growLeft();
+		multiGridView.growLeft();
+		multiGridView.growLeft();
+		multiGridView.growLeft();
+		multiGridView.growLeft();
 
 		trace(multiGridView.gridViewCache);
 
