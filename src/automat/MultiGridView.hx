@@ -67,7 +67,7 @@ class GridViewCache {
 		xFrom = modX(xFrom-1);
 		while (y != yTo ) {
 			var gridView = get(x, y);
-			addToGrid(xFrom, y, gridView.leftGrid, Grid.WIDTH-1, Grid.WIDTH, gridView.yFrom, gridView.yTo);
+			addToGrid(xFrom, y, gridView.leftGrid, Grid.WIDTH, Grid.WIDTH, gridView.yFrom, gridView.yTo);
 			y = modY(y+1);
 		}		
 	}
@@ -95,9 +95,141 @@ class GridViewCache {
 		}		
 	}
 
-	// TODO: right, top, bottom
+	// ------------------- RIGHT -----------------------
+	public function canGrowRight():Bool {
+		if ( xFrom == xTo ) return false;
+		var y = yFrom;
+		while (y != yTo ) {
+			if ( get(xTo-1, y).rightGrid != null ) return true;
+			y = modY(y+1);
+		}
+		return false;
+	}	
+	public inline function growRight() {
+		var y = yFrom;
+		while (y != yTo ) {
+			var gridView = get(xTo-1, y);
+			addToGrid(xTo, y, gridView.rightGrid, 0, 0, gridView.yFrom, gridView.yTo);
+			y = modY(y+1);
+		}
+		xTo = modX(xTo+1);		
+	}
+	public inline function shrinkRight() {
+		var y = yFrom;		
+		xTo = modX(xTo-1);
+		while (y != yTo ) {
+			removeFromGrid(xTo, y);
+			y = modY(y+1);
+		}
+	}
+	// one step for all gridViews at border
+	public inline function growRightViews() {	
+		var y = yFrom;
+		while (y != yTo ) {
+			get(xTo-1, y).growRight();
+			y = modY(y+1);
+		}		
+	}
+	public inline function shrinkRightViews() {
+		var y = yFrom;
+		while (y != yTo ) {
+			get(xTo-1, y).shrinkRight();
+			y = modY(y+1);
+		}		
+	}
+
+	// -------------------- TOP ------------------------
+	public function canGrowTop():Bool {
+		if ( yFrom == yTo ) return false;
+		var x = xFrom;
+		while (x != xTo ) {
+			if ( get(x, yFrom).topGrid != null ) return true;
+			x = modY(x+1);
+		}
+		return false;
+	}	
+	public inline function growTop() {
+		var x = xFrom;
+		var y = yFrom;
+		yFrom = modX(yFrom-1);
+		while (x != xTo ) {
+			var gridView = get(x, y);
+			addToGrid(x, yFrom, gridView.topGrid, gridView.xFrom, gridView.xTo, Grid.HEIGHT, Grid.HEIGHT);
+			x = modY(x+1);
+		}		
+	}
+	public inline function shrinkTop() {
+		var x = xFrom;		
+		while (x != xTo ) {
+			removeFromGrid(x, yFrom);
+			x = modY(x+1);
+		}
+		yFrom = modX(yFrom+1);		
+	}
+	// one step for all gridViews at border
+	public inline function growTopViews() {	
+		var x = xFrom;
+		while (x != xTo ) {
+			get(x, yFrom).growTop();
+			x = modY(x+1);
+		}		
+	}
+	public inline function shrinkTopViews() {
+		var x = xFrom;
+		while (x != xTo ) {
+			get(x, yFrom).shrinkTop();
+			x = modY(x+1);
+		}		
+	}
+
+	// ------------------- BOTTOM -----------------------
+	public function canGrowBottom():Bool {
+		if ( yFrom == yTo ) return false;
+		var x = xFrom;
+		while (x != xTo ) {
+			if ( get(x, yTo-1).bottomGrid != null ) return true;
+			x = modY(x+1);
+		}
+		return false;
+	}	
+	public inline function growBottom() {
+		var x = xFrom;
+		while (x != xTo ) {
+			var gridView = get(x, yTo-1);
+			addToGrid(x, yTo, gridView.bottomGrid, gridView.xFrom, gridView.xTo, 0, 0);
+			x = modY(x+1);
+		}		
+		yTo = modX(yTo+1);
+	}
+	public inline function shrinkBottom() {
+		var x = xFrom;
+		yTo = modX(yTo-1);
+		while (x != xTo ) {
+			removeFromGrid(x, yTo);
+			x = modY(x+1);
+		}		
+	}
+	// one step for all gridViews at border
+	public inline function growBottomViews() {	
+		var x = xFrom;
+		while (x != xTo ) {
+			get(x, yTo-1).growBottom();
+			x = modY(x+1);
+		}		
+	}
+	public inline function shrinkBottomViews() {
+		var x = xFrom;
+		while (x != xTo ) {
+			get(x, yTo-1).shrinkBottom();
+			x = modY(x+1);
+		}		
+	}
+
+
 	
-	// debug
+
+
+	// ------ debug -------
 	public function toString():String {
 		var s = "\n";
 		for (y in 0...sizeY) {
@@ -150,42 +282,52 @@ class MultiGridView {
 
 		gridViewCache = new GridViewCache( this, rootGrid, rootX, rootY, gridViewsSizeX, gridViewsSizeY );
 
-		var i:Int=0;
-		while ( i++ < maxLeftSize && canGrowLeft() ) growLeft();
-		// i=0; while ( i++ < maxRightSize && canGrowRight() ) growRight();
-		// i=0; while ( i++ < maxTopSize && canGrowTop() ) growTop();
-		// i=0; while ( i++ < maxBottomSize && canGrowBottom() ) growBottom();
+		// grow up to max-sizes
+		while ( canGrowLeft() ) growLeft();
+		while ( canGrowRight() ) growRight();
+		// while ( canGrowTop() ) growTop();
+		// while ( canGrowBottom() ) growBottom();
 	}
 
-/*
-	public function init(view:View) {
-		this.view = view;
-		syncInit();
-	}
-*/
-
-/*	inline function syncInit() {
-	}
-*/
+	// TODO: let travel rootX and rootY !!!
 
 	// ------------------- LEFT -----------------------
 	public inline function canGrowLeft():Bool {
+		if (leftSize == maxLeftSize) return false;
 		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) return true;
 		else return gridViewCache.canGrowLeft();
 	}
 	public inline function growLeft() {
-		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) gridViewCache.growLeftViews();
-		else gridViewCache.growLeft();
+		if (leftSize >= rootX && (leftSize-rootX) % Grid.WIDTH == 0) gridViewCache.growLeft();
+		gridViewCache.growLeftViews();
 		leftSize++;
 	}
 	public inline function canShrinkLeft():Bool return leftSize > 0;
 	public inline function shrinkLeft() {
-		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH < Grid.WIDTH) gridViewCache.shrinkLeftViews();
-		else gridViewCache.shrinkLeft();
+		gridViewCache.shrinkLeftViews();
 		leftSize--;
+		if ( leftSize >= rootX && (leftSize-rootX) % Grid.WIDTH == 0) gridViewCache.shrinkLeft();
 	}
 
-	// TODO: right, top, bottom
+	// ------------------- RIGHT -----------------------
+	public inline function canGrowRight():Bool {
+		if (rightSize == maxRightSize) return false;
+		if ((rootX+rightSize) % Grid.WIDTH > 0) return true;
+		else return gridViewCache.canGrowRight();
+	}
+	public inline function growRight() {
+		if ((rootX+rightSize) % Grid.WIDTH == 0) gridViewCache.growRight();
+		gridViewCache.growRightViews();
+		rightSize++;
+	}
+	public inline function canShrinkRight():Bool return rightSize > 0;
+	public inline function shrinkRight() {
+		gridViewCache.shrinkRightViews();
+		rightSize--;
+		if ((rootX+rightSize) % Grid.WIDTH == 0) gridViewCache.shrinkRight();
+	}
+
+	// TODO: top, bottom
 
 
 	// TODO:

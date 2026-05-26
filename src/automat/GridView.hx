@@ -63,6 +63,8 @@ class GridView {
 	// ---------- SHRINK AND GROW ---------------
 	// ------------------------------------------
 
+	// TODO: optimize it without cell arrays !
+
 	// ------------------- LEFT -----------------------
 	public function growLeft() {
 		if (!isActive) return;
@@ -132,7 +134,74 @@ class GridView {
 		multiGridView.removeCells( P(xTo, yFrom), P(xTo, yTo) );
 	}
 
-	// TODO: top, bottom
+	// -------------------- TOP ------------------------
+	public function growTop() {
+		if (!isActive) return;
+		// if (yFrom == 0) return;
+		yFrom--;
+		var cells = new Array<Int>();
+		var actorKey:Int;
+		multiGridView.switchGridViewIndex(index);
+		for (x in xFrom...xTo) {
+			var cell:Cell = grid.get(P(x, yFrom));
+			cells.push(cell); // TODO: CellType + CellParam!
+			if (cell.isOrigin) {
+				actorKey = cell.actor;
+				var actor:IActor = grid.actors.get(actorKey);
+				multiGridView.addActor( actor, actorKey); // actor enters the view
+			}
+		}
+		multiGridView.addCells( P(xFrom, yFrom), P(xTo, yFrom), cells );
+	}
+
+	public function shrinkTop() {
+		if (!isActive) return;
+		// if (yFrom == yTo) return;
+		multiGridView.switchGridViewIndex(index);
+		for (x in xFrom...xTo) {
+			var cell:Cell = grid.get(P(x, yFrom));
+			if (cell.isOrigin) { 
+				multiGridView.removeActor( cell.actor ); // actor leaves the view
+			}
+		}
+		multiGridView.removeCells( P(xFrom, yFrom), P(xTo, yFrom) );
+		yFrom++;
+	}
+
+	// ------------------- BOTTOM ----------------------
+	public function growBottom() {
+		if (!isActive) return;
+		// if (yTo == Grid.HEIGHT) return;
+		var cells = new Array<Int>();
+		var actorKey:Int;
+		multiGridView.switchGridViewIndex(index);
+		for (x in xFrom...xTo) {
+			// cell
+			var cell:Cell = grid.get(P(x, yTo));
+			cells.push(cell); // TODO: CellType + CellParam!
+			if (cell.isOrigin) {
+				actorKey = cell.actor;
+				var actor:IActor = grid.actors.get(actorKey);
+				multiGridView.addActor( actor, actorKey); // actor enters the view
+			}
+		}
+		multiGridView.addCells( P(xFrom, yTo), P(xTo, yTo), cells );
+		yTo++;
+	}
+
+	public function shrinkBottom(last = false) {
+		if (!isActive) return;
+		// if (yFrom == yTo) return;
+		yTo--;
+		multiGridView.switchGridViewIndex(index);
+		for (x in xFrom...xTo) {
+			var cell:Cell = grid.get(P(x, yTo));
+			if (cell.isOrigin) { 
+				multiGridView.removeActor( cell.actor ); // actor leaves the view
+			}
+		}
+		multiGridView.removeCells( P(xFrom, yTo), P(xTo, yTo) );
+	}
 
 
 }

@@ -184,7 +184,7 @@ public static inline var TESTGRID_1:String = "
 #                                                              #
 #         EEEE                                                 #
 #       EEEEEE                                                 #
-#      EEE EEE .m                                              #
+#      EEE EEE .m#E                                            #
 #          EEE                                                 #
 #          EEE                                                 #
 #          EEE                                                 #
