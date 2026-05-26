@@ -285,8 +285,10 @@ class MultiGridView {
 		// grow up to max-sizes
 		while ( canGrowLeft() ) growLeft();
 		while ( canGrowRight() ) growRight();
-		// while ( canGrowTop() ) growTop();
-		// while ( canGrowBottom() ) growBottom();
+		trace("TOOOOOP");
+		while ( canGrowTop() ) growTop();
+		trace("BOOOOTOM");
+		while ( canGrowBottom() ) growBottom();
 	}
 
 	// TODO: let travel rootX and rootY !!!
@@ -327,14 +329,63 @@ class MultiGridView {
 		if ((rootX+rightSize) % Grid.WIDTH == 0) gridViewCache.shrinkRight();
 	}
 
-	// TODO: top, bottom
+	// -------------------- TOP ------------------------
+	public inline function canGrowTop():Bool {
+		if (topSize == maxTopSize) return false;
+		if (rootY-topSize > 0 || (topSize-rootY) % Grid.HEIGHT > 0) return true;
+		else return gridViewCache.canGrowTop();
+	}
+	public inline function growTop() {
+		if (topSize >= rootY && (topSize-rootY) % Grid.HEIGHT == 0) gridViewCache.growTop();
+		gridViewCache.growTopViews();
+		topSize++;
+	}
+	public inline function canShrinkTop():Bool return topSize > 0;
+	public inline function shrinkTop() {
+		gridViewCache.shrinkTopViews();
+		topSize--;
+		if ( topSize >= rootY && (topSize-rootY) % Grid.HEIGHT == 0) gridViewCache.shrinkTop();
+	}
+
+	// ------------------- BOTTOM ----------------------
+	public inline function canGrowBottom():Bool {
+		if (bottomSize == maxBottomSize) return false;
+		if ((rootY+bottomSize) % Grid.HEIGHT > 0) return true;
+		else return gridViewCache.canGrowBottom();
+	}
+	public inline function growBottom() {
+		if ((rootY+bottomSize) % Grid.HEIGHT == 0) gridViewCache.growBottom();
+		gridViewCache.growBottomViews();
+		bottomSize++;
+	}
+	public inline function canShrinkBottom():Bool return bottomSize > 0;
+	public inline function shrinkBottom() {
+		gridViewCache.shrinkBottomViews();
+		bottomSize--;
+		if ((rootY+bottomSize) % Grid.HEIGHT == 0) gridViewCache.shrinkBottom();
+	}
 
 
-	// TODO:
-	public inline function goLeft() {
+	// ------------ SCROLLING --------------
+	public inline function scrollLeft() {
 		if ( !canGrowLeft() ) return;
-		// shrinkRight();
+		shrinkRight();
 		growLeft();
+	}
+	public inline function scrollRight() {
+		if ( !canGrowRight() ) return;
+		shrinkLeft();
+		growRight();
+	}
+	public inline function scrollTop() {
+		if ( !canGrowTop() ) return;
+		shrinkBottom();
+		growTop();
+	}
+	public inline function scrollBottom() {
+		if ( !canGrowBottom() ) return;
+		shrinkTop();
+		growBottom();
 	}
 
 	// ------------------------------------------

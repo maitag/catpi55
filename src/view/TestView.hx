@@ -44,11 +44,11 @@ class TestView extends Application
 		
 		var actor = new Actor("a1");
 		
-		actor.addToGrid(grid, P(3,1)); //trace(actor.pos);
+		actor.addToGrid(grid, P(17,5)); //trace(actor.pos);
 		
-		// TestGrid.traceGrid(grid.right, 32, 16);
+		TestGrid.traceGrid(grid, 32, 16);
 		
-		var multiGridView = new MultiGridView(view, grid, 16, 4, 3, 3); // 3x3 gridViewCache
+		var multiGridView = new MultiGridView(view, grid,   16, 4,   3, 3); // 3x3 gridViewCache
 
 		trace(multiGridView.gridViewCache);
 
