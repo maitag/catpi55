@@ -1,6 +1,6 @@
-package render;
+package render.actor;
 
-class ElemStatic implements peote.view.Element
+class ActorElemStatic implements peote.view.Element
 {
 	// position in pixel (relative to upper left corner of Display)
 	@posX public var x:Int = 0;
@@ -14,10 +14,9 @@ class ElemStatic implements peote.view.Element
 	@texTile public var tile:Int = 0;
 
 	// scale out the gap;
-	@const @texSizeX var texSizeX:Float;
-	@const @texSizeY var texSizeY:Float;
-
-	var OPTIONS = { texRepeatX:false, texRepeatY:false };
+	// @const @texSizeX var texSizeX:Float;
+	// @const @texSizeY var texSizeY:Float;
+	// var OPTIONS = { texRepeatX:false, texRepeatY:false };
 
 	// --------------------------------------------------------------------------
 	

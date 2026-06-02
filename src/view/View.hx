@@ -57,6 +57,7 @@ class View {
 	public inline function switchGridViewIndex(index:Int) {
 		trace("switchGridViewIndex", index);
 		gridViewIndex = index;
+		
 	}
 
 	// ------- add ----------

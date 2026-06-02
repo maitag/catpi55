@@ -12,86 +12,20 @@ import peote.view.TextureFormat;
 import peote.view.Color;
 import peote.view.Load;
 
+import render.cell.CellDisplay;
+import render.cell.CellElemAnim;
+import render.cell.CellElemStatic;
 
 class Render {
 
 	var peoteView:PeoteView;
-	var display:Display;
 
-	var bufferStatic:Buffer<ElemStatic>;
-	var bufferAnim:Buffer<ElemAnim>;
-
-	var programStatic:Program;
-	var programAnim:Program;
+	//----------------------------------------------------
 
  	public function new(peoteView:PeoteView)
 	{
 		this.peoteView = peoteView;
-
-		/*
-		var textureStatic = new Texture(Tiles.width, Tiles.height, 1, {
-			format:TextureFormat.RGBA,
-			// smoothExpand: true,
-			smoothShrink: true,
-			// mipmap: true,
-			powerOfTwo: false
-		});
-
-		textureStatic.tilesX = Tiles.tilesX;
-		textureStatic.tilesY = Tiles.tilesY;
-		
-		Load.imageArray([
-			Tiles.fileName
-			],
-			true,
-			function (image:Array<Image>) {
-
-				textureStatic.setData(image[0]);
-				
-			}
-		);
-		*/
-		//----------------------------------------------------
-		
-		display = new Display(0, 0, 512, 512, Color.BLUE1);
-		peoteView.addDisplay(display);
 	
-		bufferStatic = new Buffer<ElemStatic>(1024, 512);
-		// bufferAnim = new Buffer<ElemAnim>(1024, 512);
-
-		programStatic = new Program(bufferStatic);
-		// programAnim = new Program(bufferAnim);
-
-		// programStatic.setTexture(textureStatic);
-		
-		// to reduce visual gap while zooming, not need whitout texture-interpolation (smooth) or by using framebuffer-way
-		var zoomFix = 0.0;
-		// var zoomFix = 0.37;
-		
-		/*
-		programStatic.setFormula("texSizeX", '${Util.toFloatString(
-			zoomFix + Tiles.tileWidth+Tiles.gap+Tiles.gap
-		)}');
-		programStatic.setFormula("texSizeY", '${Util.toFloatString(
-			zoomFix + Tiles.tileHeight+Tiles.gap+Tiles.gap
-		)}');
-		*/
-
-		// textureStatic.setSmooth(true, false);
-
-		programStatic.blendEnabled = true;
-
-		display.addProgram(programStatic);
-		// display.addProgram(programAnim);
-
-		// ----------------------------------------
-
-		// var e0 = new ElemStatic(Tiles.Cube, 0, 0, Tiles.tileWidth, Tiles.tileHeight);
-		// bufferStatic.addElement(e0);
-	
-	
-
-		
 
 	}
 

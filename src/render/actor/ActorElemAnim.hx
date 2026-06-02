@@ -1,6 +1,6 @@
-package render;
+package render.actor;
 
-class ElemAnim implements peote.view.Element
+class ActorElemAnim implements peote.view.Element
 {
 	// position in pixel (relative to upper left corner of Display)
 	@posX @anim("Pos") public var x:Int = 0;
@@ -11,9 +11,12 @@ class ElemAnim implements peote.view.Element
 	@sizeY public var h:Int = 128;
 	
 	// tile number
-	@texTile public var tile:Int = 0;
+	@anim("Tile") @texTile public var tile:Int = 0;
 
-	// var OPTIONS = { texRepeatX:true, texRepeatY:true };
+	// scale out the gap;
+	// @const @texSizeX var texSizeX:Float;
+	// @const @texSizeY var texSizeY:Float;
+	// var OPTIONS = { texRepeatX:false, texRepeatY:false };
 
 	// --------------------------------------------------------------------------
 	
@@ -24,6 +27,11 @@ class ElemAnim implements peote.view.Element
 		this.y = y;
 		this.w = w;
 		this.h = h;
+	}
+
+	public function play(startFrame:Int, endFrame:Int, startTime:Float, duration:Float) {
+		animTile(startFrame, endFrame);
+		timeTile(startTime, duration);
 	}
 
 }
