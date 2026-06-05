@@ -12,10 +12,14 @@
 	
 	
 	<!-- <app main="Main" path="bin" file="Main" /> -->
-	<app main="view.TestView" path="bin" file="TestView" />
-	<!-- <app main="asset.TestChars" path="bin" file="TestAsset" /> -->
+	<!-- <app main="render.cell.TestCellRender" path="bin" file="TestCellRender" /> -->
+	<!-- <app main="view.TestView" path="bin" file="TestView" /> -->
 	<!-- <app main="automat.TestAutomat" path="bin" file="TestAutomat" /> -->
 	<!-- <app main="util.pool.TestPool" path="bin" file="TestPool" /> -->
+
+	<app main="asset.TestAsset" path="bin" file="TestAsset" />
+	<haxedef name="assets" value="Cells" />
+
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->
 
