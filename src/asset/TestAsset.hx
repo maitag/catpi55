@@ -12,7 +12,15 @@ import peote.view.Display;
 import peote.view.Program;
 import peote.view.Color;
 
-import asset.generated.Chars;
+#if (assets=="Cells")
+import asset.generated.Cells as Asset;
+import asset.generated.Cells.TileID as TileID;
+import asset.generated.Cells.AnimID as AnimID;
+#else
+import asset.generated.Chars as Asset;
+import asset.generated.Chars.TileID as TileID;
+import asset.generated.Chars.AnimID as AnimID;
+#end
 
 class ElemAnim implements Element
 {
@@ -65,7 +73,7 @@ class ElemAnim implements Element
 	}
 }
 
-class TestChars extends Application
+class TestAsset extends Application
 {
 	override function onWindowCreate():Void
 	{
@@ -98,7 +106,7 @@ class TestChars extends Application
 
 		display.addProgram(program);
 		
-		program.setMultiTexture(Util.loadTextures(Chars.sheets), "custom");
+		program.setMultiTexture(Util.loadTextures(Asset.sheets), "custom");
 
 		var x:Int = 10;
 		var y:Int = 10;
@@ -107,8 +115,8 @@ class TestChars extends Application
 		{
 			trace(TileID.names[tileID]);
 
-			var tile = Chars.tile(tileID);
-			var sheet = Chars.sheets[tile.sheet];
+			var tile = Asset.tile(tileID);
+			var sheet = Asset.sheets[tile.sheet];
 
 			for (animID in tile.animID)
 			{
@@ -117,7 +125,7 @@ class TestChars extends Application
 				var e = new ElemAnim(x, y, sheet.width, sheet.height, sheet.gap, tile.sheet);
 				
 				var anim = tile.anim(animID);
-				e.play(anim.start, anim.end, 0, (anim.end - anim.start + 1)/Chars.FPS);
+				e.play(anim.start, anim.end, 0, (anim.end - anim.start + 1)/Asset.FPS);
 				buffer.addElement(e);
 
 				x += sheet.width + 10;

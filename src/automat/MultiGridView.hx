@@ -7,6 +7,16 @@ import automat.Cell.CellType;
 import view.View;
 import automat.Pos.xy as P;
 
+/*
+
+Automate Model & Simmulation (Server)       View and Rendering (Client)
+-------------------------------------       ------------------------------
+grid -> gridView \                                         -> renderCell
+grid -> gridView   --> multiGridView  ----> view -> render -> renderActor
+grid -> gridView /                                         -> render...
+...
+*/
+
 class GridViewCache {
 
 	var data:Vector<GridView>;
