@@ -1,5 +1,6 @@
 package render.cell;
 
+import automat.Cell;
 import haxe.CallStack;
 
 import lime.app.Application;
@@ -30,7 +31,15 @@ class TestCellRender extends Application
 	{
 		peoteView = new PeoteView(window);
 
-		var cellRender = new CellRender(peoteView);
+
+
+		CellRender.init(peoteView);
+
+		var cellRender = new CellRender();
+
+		cellRender.initView(400, 400, 10, 10);
+		
+		cellRender.extendLeft( [new Cell(CellType.EARTH)] , true );
 
 	}
 	

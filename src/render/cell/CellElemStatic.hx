@@ -7,8 +7,8 @@ class CellElemStatic implements peote.view.Element
 	@posY public var y:Int = 0;
 		
 	// size in pixel
-	@sizeX public var w:Int = 64;
-	@sizeY public var h:Int = 64;
+	@sizeX public var w:Int = 32;
+	@sizeY public var h:Int = 32;
 	
 	// tile number
 	@texTile public var tile:Int = 0;
@@ -20,7 +20,7 @@ class CellElemStatic implements peote.view.Element
 
 	// --------------------------------------------------------------------------
 	
-	public function new(tile:Int = 0, x:Int = 0, y:Int = 0, w:Int = 128, h:Int = 128)
+	public function new(tile:Int = 0, x:Int = 0, y:Int = 0, w:Int = 32, h:Int = 32)
 	{
 		this.tile = tile;
 		this.x = x;

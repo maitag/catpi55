@@ -22,22 +22,23 @@ abstract CellDisplay(Display) to Display
 	}
 	*/
 
-	public function new(x:Int, y:Int, w:Int, h:Int, bufferStatic:Buffer<CellElemStatic>, bufferAnim:Buffer<CellElemAnim>)
+	public function new(x:Int, y:Int, w:Int, h:Int, bufferStatic:Buffer<CellElemStatic>, bufferAnim:Buffer<CellElemAnim>, texture:Texture)
 	{
 		this = new Display(x, y, w, h, Color.BLUE1);
 
 		//----------------------------------------------------
 		
 		var programStatic = new Program(bufferStatic);
-		// programAnim = new Program(bufferAnim);
 
-		// programStatic.setTexture(textureStatic);
+		programStatic.setTexture(texture);
+		// texture.setSmooth(true, false);
+
+		programStatic.blendEnabled = true;
 		
+		/*
 		// to reduce visual gap while zooming, not need whitout texture-interpolation (smooth) or by using framebuffer-way
 		var zoomFix = 0.0;
 		// var zoomFix = 0.37;
-		
-		/*
 		programStatic.setFormula("texSizeX", '${Util.toFloatString(
 			zoomFix + Tiles.tileWidth+Tiles.gap+Tiles.gap
 		)}');
@@ -46,13 +47,11 @@ abstract CellDisplay(Display) to Display
 		)}');
 		*/
 
-		// textureStatic.setSmooth(true, false);
-
-		programStatic.blendEnabled = true;
+		// TODO: extra programs for animated elements etc.
+		// programAnim = new Program(bufferAnim);
 
 		this.addProgram(programStatic);
 		// this.addProgram(programAnim);
-
 	}
 
 
