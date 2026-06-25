@@ -24,9 +24,24 @@ class View {
 
 	public var peoteView:PeoteView;
 	
-	public var width:Int = 0;
-	public var height:Int = 0;
+	// todo: setter of xFrom ...
+	// public var width:Int = 0;
+	// public var height:Int = 0;
 
+	// each added grid will store its offset to grid where its started the view
+	public var gridOffsets:Vector<Pos>;
+
+	// from here it grows into all directions (set on first root-grid initialization)
+	public var rootX:Int = 0;
+	public var rootY:Int = 0;
+
+	// actual range into global position values over multigridviews from where it starts
+	public var xFrom:Int = 0;
+	public var xTo:Int = 0;
+	public var yFrom:Int = 0;
+	public var yTo:Int = 0;
+		
+	
 	// TODO
 	// public var actors = new Vector<ViewActor>(CellActor.MAX_ACTORS);
 
@@ -63,8 +78,9 @@ class View {
 	// ------- add ----------
 
 	public function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
-		trace("addCells", posFrom, posTo);
-		for (cell in cells) trace((cell:Cell).type);
+
+		trace("addCells", 'from:$posFrom -> to $posTo', [for (cell in cells) (cell:Cell).type.toString()].join(",") );
+		// for (cell in cells) trace((cell:Cell).type);
 	}
 
 	public function addActor(pos:Pos, actorKey:CellActor, name:String) {

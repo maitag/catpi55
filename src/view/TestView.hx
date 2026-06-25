@@ -38,8 +38,7 @@ class TestView extends Application
 	{
 		peoteView = new PeoteView(window);
 
-		var view = new View(peoteView);
-
+		
 		var grid:Grid = TestGrid.createTestGrid3x3();
 		
 		var actor = new Actor("a1");
@@ -48,7 +47,11 @@ class TestView extends Application
 		
 		TestGrid.traceGrid(grid, 32, 16);
 		
-		var multiGridView = new MultiGridView(view, grid,   16, 4,   3, 3); // 3x3 gridViewCache
+		var rootX:Int = 16;
+		var rootY:Int = 5;
+
+		var view = new View(peoteView);
+		var multiGridView = new MultiGridView(view, grid,   rootX, rootY,   3, 3); // 3x3 gridViewCache
 
 		trace(multiGridView.gridViewCache);
 

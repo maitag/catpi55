@@ -39,7 +39,7 @@ class TestCellRender extends Application
 
 		cellRender.initView(400, 400, 10, 10);
 		
-		cellRender.extendLeft( [new Cell(CellType.EARTH)] , true );
+		// cellRender.extendLeft( [new Cell(CellType.EARTH)] , true );
 
 	}
 	

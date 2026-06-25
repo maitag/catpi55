@@ -29,12 +29,13 @@ class ElemViewCache<T> {
 	public var sizeX:Int;
 	public var sizeY:Int;
 
+	/*
 	// actual range of used elements
 	public var xFrom:Int = 0;
 	public var xTo:Int = 0;
 	public var yFrom:Int = 0;
 	public var yTo:Int = 0;
-	
+*/	
 	public inline function new(sizeX:Int, sizeY:Int)
 	{	
 		this.sizeX = sizeX;	
@@ -44,7 +45,8 @@ class ElemViewCache<T> {
 
 	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
 	inline function modY(y:Int) return (y<0) ? sizeY+y : y % sizeY;
-	inline function index(x:Int, y:Int) return modY(yFrom+y) * sizeX + modX(xFrom+x);
+	// inline function index(x:Int, y:Int) return modY(yFrom+y) * sizeX + modX(xFrom+x);
+	inline function index(x:Int, y:Int) return modY(y) * sizeX + modX(x);
 
 	public inline function get(x:Int, y:Int):T {
 		return data.get( index(x, y) );
@@ -52,7 +54,7 @@ class ElemViewCache<T> {
 	public inline function set(x:Int, y:Int, value:T) {
 		data.set( index(x, y), value );
 	}
-
+/*
 	public inline function extendLeft(values:Array<T>, init = false) {
 		if (!init && xFrom == xTo) throw("Error extendLeft: out of bounds");
 		xFrom = modX(xFrom-1);
@@ -65,7 +67,7 @@ class ElemViewCache<T> {
 		xFrom = modX(xFrom+1);
 		xTo = modX(xTo+1);
 	}
-
+*/
 
 }
 
@@ -135,13 +137,32 @@ class CellRender {
 	}
 	// public function purgeView() {}
 	
-	public function addCell(x:Int, y:Int, cellType:Int) {}
+	public function addCell(x:Int, y:Int, cellType:CellType) {
+		switch (cellType) {
+			case EARTH:
+				var element = new CellElemStatic(TileID.EARTH, x*32, y*32, 32, 32);
+				elemViewCache.set(x, y, element);
+				cellBufferStatic.addElement(element);
+
+			case ROCK:
+				var element = new CellElemStatic(TileID.ROCK, x*32, y*32, 32, 32);
+				elemViewCache.set(x, y, element);
+				cellBufferStatic.addElement(element);
+
+			// for fluids and air later maybe different Program and Shader
+			case WATER:
+				// T O D O
+
+			default:
+		}
+
+	}
 
 	public function delCell(x:Int, y:Int) {}
 
 	public function updateCell(x:Int, y:Int) {}
 
-
+/*
 	// ----------------------------------------
 	// not sure yet how to delegate them from MultiGridView->View down to here
 
@@ -179,5 +200,5 @@ class CellRender {
 
 		// TODO: scroll the Display
 	}
-
+*/
 }
