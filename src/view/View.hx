@@ -1,9 +1,11 @@
 package view;
 
+import automat.Grid;
 import haxe.ds.Vector;
 import peote.view.PeoteView;
 
 import automat.Pos;
+import automat.Pos.xy as P;
 import automat.Cell;
 import automat.Cell.CellActor;
 import automat.GridView;
@@ -28,8 +30,8 @@ class View {
 	// public var width:Int = 0;
 	// public var height:Int = 0;
 
-	// each added grid will store its offset to grid where its started the view
-	public var gridOffsets:Vector<Pos>;
+	// each added grid will store its data here (at now only the offset!)
+	public var gridData:Vector<Pos>;
 
 	// from here it grows into all directions (set on first root-grid initialization)
 	public var rootX:Int = 0;
@@ -53,33 +55,47 @@ class View {
 
 	}
 
-	public function init(maxViews:Int) {
-		// actors = new Vector<Vector<ViewActor>>(maxViews);
-	}
 
-	// sync functions what called from automat->GridView->to here
-	public var gridViewIndex:Int = -1;
+	// ----------------------------------------------
+	// --------- Sync from MultiGridView ------------
+	// ----------------------------------------------
+
+	public function init(gridViewsSizeX:Int, gridViewsSizeY:Int) {
+		trace("init", gridViewsSizeX, gridViewsSizeY);
+		// actors = new Vector<Vector<ViewActor>>(maxGridViews);
+		gridData = new Vector<Pos>(gridViewsSizeX * gridViewsSizeY);
+
+		// TODO: init the RenderView -> ElementCache with same size
+
+	}
 
 	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
 		trace("addGridView", index, offsetX, offsetY);
-
+		gridData.set(index, P(offsetX, offsetY));
 	}
 
 	public inline function removeGridView(index:Int) {
 		trace("removeGridView", index);
 	}
 
+	// sync functions what called from automat->GridView->to here
+	var gridViewIndex:Int = -1;
+	var gridViewX:Int = 0;
+	var gridViewY:Int = 0;
+
 	public inline function switchGridViewIndex(index:Int) {
 		trace("switchGridViewIndex", index);
 		gridViewIndex = index;
-		
+		var offset = gridData.get(index);
+		gridViewX = offset.x * Grid.WIDTH;
+		gridViewY = offset.y * Grid.HEIGHT;
 	}
 
 	// ------- add ----------
 
-	public function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
+	public function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Int>) {
 
-		trace("addCells", 'from:$posFrom -> to $posTo', [for (cell in cells) (cell:Cell).type.toString()].join(",") );
+		trace("addCells", 'from:${xFrom+gridViewX},${yFrom+gridViewY} -> to ${xTo+gridViewX},${yTo+gridViewY}', [for (cell in cells) (cell:Cell).type.toString()].join(",") );
 		// for (cell in cells) trace((cell:Cell).type);
 	}
 
@@ -92,8 +108,8 @@ class View {
 
 	// ------ remove ---------
 
-	public function removeCells(posFrom:Pos, posTo:Pos) {
-		trace("removeCells", posFrom, posTo);
+	public function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
+		trace("removeCells", xFrom, yFrom, xTo, yTo);
 	}
 
 	public function removeActor(actorKey:CellActor) {

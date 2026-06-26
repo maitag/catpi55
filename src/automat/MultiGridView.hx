@@ -49,16 +49,22 @@ class MultiGridView {
 		this.rootX = rootX;
 		this.rootY = rootY;
 
-		// TODO: calculate the cache size by the max..Sizes! 
+		// TODO: calculate the cache size by the max..Sizes!
+
+
+		// initialize the View
+		initView(gridViewsSizeX, gridViewsSizeY);
 
 		gridViewCache = new GridViewCache( this, rootGrid, rootX, rootY, gridViewsSizeX, gridViewsSizeY );
 
 		// grow up to max-sizes
+		trace("grow left");
 		while ( canGrowLeft() ) growLeft();
+		trace("grow right");
 		while ( canGrowRight() ) growRight();
-		trace("TOOOOOP");
+		trace("grow top");
 		while ( canGrowTop() ) growTop();
-		trace("BOOOOTOM");
+		trace("grow bottom");
 		while ( canGrowBottom() ) growBottom();
 	}
 
@@ -165,6 +171,10 @@ class MultiGridView {
 
 	public var lastGridViewIndex:Int = -1;
 
+	public inline function initView(gridViewsSizeX:Int, gridViewsSizeY:Int) {
+		view.init(gridViewsSizeX, gridViewsSizeY);
+	}
+
 	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
 		view.addGridView(index, offsetX, offsetY);
 	}
@@ -179,8 +189,8 @@ class MultiGridView {
 		lastGridViewIndex = index;
 	}
 
-	public inline function addCells(posFrom:Pos, posTo:Pos, cells:Array<Int>) {
-		view.addCells(posFrom, posTo, cells);
+	public inline function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Int>) {
+		view.addCells(xFrom, yFrom, xTo, yTo, cells);
 	}
 
 	public inline function addActor(actor:IActor, actorKey:CellActor) {
@@ -189,8 +199,8 @@ class MultiGridView {
 
 	// ------ remove ---------
 
-	public inline function removeCells(posFrom:Pos, posTo:Pos) {
-		view.removeCells(posFrom, posTo);
+	public inline function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
+		view.removeCells(xFrom, yFrom, xTo, yTo);
 	}
 
 	public inline function removeActor(actorKey:CellActor) {

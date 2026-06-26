@@ -49,11 +49,14 @@ class TestView extends Application
 		
 		var rootX:Int = 16;
 		var rootY:Int = 5;
+		// 3x3 gridViewCache
+		var gridViewsX = 3;
+		var gridViewsY = 3;
 
 		var view = new View(peoteView);
-		var multiGridView = new MultiGridView(view, grid,   rootX, rootY,   3, 3); // 3x3 gridViewCache
+		var multiGridView = new MultiGridView(view, grid, rootX, rootY, gridViewsX, gridViewsY);
 
-		trace(multiGridView.gridViewCache);
+		// trace(multiGridView.gridViewCache);
 
 	}
 	
