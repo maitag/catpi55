@@ -44,11 +44,18 @@ class MultiGridView {
 
 	// -------------------------------------
 	
-	public function new(view:View, rootGrid:Grid, rootX:Int, rootY:Int, gridViewsSizeX:Int, gridViewsSizeY:Int) {
+	public function new(view:View, rootGrid:Grid, rootX:Int, rootY:Int,
+		maxLeftSize:Int, maxRightSize:Int, maxTopSize:Int, maxBottomSize:Int,
+		gridViewsSizeX:Int, gridViewsSizeY:Int)
+	{
 		this.view = view;
 		this.rootX = rootX;
 		this.rootY = rootY;
-
+		this.maxLeftSize = maxLeftSize;
+		this.maxRightSize = maxRightSize;
+		this.maxTopSize = maxTopSize;
+		this.maxBottomSize = maxBottomSize;
+	
 		// TODO: calculate the cache size by the max..Sizes!
 
 
@@ -189,24 +196,47 @@ class MultiGridView {
 		lastGridViewIndex = index;
 	}
 
+	// ------ add cells ---------
+
 	public inline function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Int>) {
 		view.addCells(xFrom, yFrom, xTo, yTo, cells);
 	}
 
-	public inline function addActor(actor:IActor, actorKey:CellActor) {
-		view.addActor(actor.pos, actorKey, actor.name);
+	public inline function addCellsHorizontal(y:Int, xFrom:Int, xTo:Int, cells:Array<Int>) {
+		view.addCellsHorizontal(y, xFrom, xTo, cells);
 	}
 
-	// ------ remove ---------
+	public inline function addCellsVertical(x:Int, yFrom:Int, yTo:Int, cells:Array<Int>) {
+		view.addCellsVertical(x, yFrom, yTo, cells);
+	}
+
+	// ------ remove cells ---------
 
 	public inline function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
 		view.removeCells(xFrom, yFrom, xTo, yTo);
+	}
+
+	public inline function removeCellsHorizontal(y:Int, xFrom:Int, xTo:Int) {
+		view.removeCellsHorizontal(y, xFrom, xTo);
+	}
+
+	public inline function removeCellsVertical(x:Int, yFrom:Int, yTo:Int) {
+		view.removeCellsVertical(x, yFrom, yTo);
+	}
+
+
+	// ------- actor ---------
+
+
+	public inline function addActor(actor:IActor, actorKey:CellActor) {
+		view.addActor(actor.pos, actorKey, actor.name);
 	}
 
 	public inline function removeActor(actorKey:CellActor) {
 		view.removeActor(actorKey);
 	}
 
+	
 	// ------- update --------
 
 	public inline function updateCell(pos:Pos, cell:CellType) { // CellParam!

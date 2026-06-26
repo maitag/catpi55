@@ -1,32 +1,20 @@
 package render;
 
-import lime.graphics.Image;
-
-import peote.view.intern.Util;
 import peote.view.PeoteView;
-import peote.view.Display;
-import peote.view.Buffer;
-import peote.view.Program;
-import peote.view.Texture;
-import peote.view.TextureFormat;
-import peote.view.Color;
-import peote.view.Load;
-
-import render.cell.CellDisplay;
-import render.cell.CellElemAnim;
-import render.cell.CellElemStatic;
+import render.cell.CellRender;
 
 class Render {
 
-	var peoteView:PeoteView;
+	//--------------- STATIC ---------------------------
 
-	//----------------------------------------------------
+	public static var peoteView:PeoteView;
 
- 	public function new(peoteView:PeoteView)
+	public static function init(peoteView:PeoteView)
 	{
-		this.peoteView = peoteView;
-	
+		Render.peoteView = peoteView;
 
+		CellRender.init(peoteView);
+		// ActorRender.init(peoteView);
 	}
 
 

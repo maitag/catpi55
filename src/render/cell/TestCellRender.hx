@@ -32,14 +32,15 @@ class TestCellRender extends Application
 		peoteView = new PeoteView(window);
 
 
+		Render.init(peoteView);
 
-		CellRender.init(peoteView);
+		var cellRender = new CellRender(0, 0, 400, 400);
 
-		var cellRender = new CellRender();
-
-		cellRender.initView(400, 400, 10, 10);
+		cellRender.initView(64, 64);
 		
-		// cellRender.extendLeft( [new Cell(CellType.EARTH)] , true );
+		cellRender.addCell( 0, 0, CellType.EARTH );
+		cellRender.addCellsHorizontal( 0, 1, 3, [new Cell(CellType.EARTH), new Cell(CellType.ROCK)] );
+		cellRender.addCellsVertical( 0, 1, 3, [new Cell(CellType.EARTH), new Cell(CellType.ROCK)] );
 
 	}
 	

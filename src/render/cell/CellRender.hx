@@ -1,7 +1,5 @@
 package render.cell;
 
-import automat.Cell;
-import peote.view.TextureConfig;
 import haxe.ds.Vector;
 import lime.graphics.Image;
 
@@ -12,8 +10,12 @@ import peote.view.Buffer;
 import peote.view.Program;
 import peote.view.Texture;
 import peote.view.TextureFormat;
+import peote.view.TextureConfig;
 import peote.view.Color;
 import peote.view.Load;
+
+import automat.Grid;
+import automat.Cell;
 
 import render.cell.CellDisplay;
 import render.cell.CellElemAnim;
@@ -119,27 +121,42 @@ class CellRender {
 
 	var elemViewCache:ElemViewCache<CellElemStatic>;
 
- 	public function new()
+ 	public function new(x:Int, y:Int, width:Int, height:Int)
 	{	
 		cellBufferStatic = new Buffer<CellElemStatic>(1024, 512);
 		cellBufferAnim = new Buffer<CellElemAnim>(1024, 512);
 
 		// ----------------------------------------
 
-		cellDisplay = new CellDisplay(10, 10, 512, 512, cellBufferStatic, cellBufferAnim, texture);
+		cellDisplay = new CellDisplay(x, y, width, height, cellBufferStatic, cellBufferAnim, texture);
 		peoteView.addDisplay(cellDisplay);
 		
 	}
 
-	public function initView(width:Int, height:Int, sizeX:Int, sizeY:Int)
+	public function initView(gridViewsSizeX:Int, gridViewsSizeY:Int)
 	{
-		elemViewCache = new ElemViewCache<CellElemStatic>(sizeX, sizeY);
+		elemViewCache = new ElemViewCache<CellElemStatic>(gridViewsSizeX * Grid.WIDTH, gridViewsSizeY * Grid.HEIGHT);
 	}
 	// public function purgeView() {}
 	
-	public function addCell(x:Int, y:Int, cellType:CellType) {
+	public function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Cell>) {
+		var i:Int = 0;
+		for (y in yFrom...yTo)		
+			for (x in xFrom...xTo)
+				addCell(x, y, cells[i++].type);
+	}
+
+	public function addCellsHorizontal(y:Int, xFrom:Int, xTo:Int, cells:Array<Cell>) {
+		for (i in 0...(xTo - xFrom)) addCell(xFrom+i, y, cells[i].type);
+	}
+
+	public function addCellsVertical(x:Int, yFrom:Int, yTo:Int, cells:Array<Cell>) {
+		for (i in 0...(yTo - yFrom)) addCell(x, yFrom+i, cells[i].type);
+	}
+
+	public inline function addCell(x:Int, y:Int, cellType:CellType) {
 		switch (cellType) {
-			case EARTH:
+			case EARTH:trace("render EARTH");
 				var element = new CellElemStatic(TileID.EARTH, x*32, y*32, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);

@@ -86,7 +86,7 @@ class GridView {
 				multiGridView.addActor( actor, actorKey); // actor enters the view
 			}
 		}
-		multiGridView.addCells( xFrom, yFrom, xFrom, yTo, cells );
+		multiGridView.addCellsVertical( xFrom, yFrom, yTo, cells );
 	}
 
 	public function shrinkLeft() {
@@ -99,7 +99,7 @@ class GridView {
 				multiGridView.removeActor( cell.actor ); // actor leaves the view
 			}
 		}
-		multiGridView.removeCells( xFrom, yFrom, xFrom, yTo );
+		multiGridView.removeCellsVertical( xFrom, yFrom, yTo );
 		xFrom++;
 	}
 
@@ -120,7 +120,7 @@ class GridView {
 				multiGridView.addActor( actor, actorKey); // actor enters the view
 			}
 		}
-		multiGridView.addCells( xTo, yFrom, xTo, yTo, cells );
+		multiGridView.addCellsVertical( xTo, yFrom, yTo, cells );
 		xTo++;
 	}
 
@@ -135,7 +135,7 @@ class GridView {
 				multiGridView.removeActor( cell.actor ); // actor leaves the view
 			}
 		}
-		multiGridView.removeCells( xTo, yFrom, xTo, yTo );
+		multiGridView.removeCellsVertical( xTo, yFrom, yTo );
 	}
 
 	// -------------------- TOP ------------------------
@@ -155,7 +155,7 @@ class GridView {
 				multiGridView.addActor( actor, actorKey); // actor enters the view
 			}
 		}
-		multiGridView.addCells( xFrom, yFrom, xTo, yFrom, cells );
+		multiGridView.addCellsHorizontal( yFrom, xFrom, xTo, cells );
 	}
 
 	public function shrinkTop() {
@@ -168,7 +168,7 @@ class GridView {
 				multiGridView.removeActor( cell.actor ); // actor leaves the view
 			}
 		}
-		multiGridView.removeCells( xFrom, yFrom, xTo, yFrom );
+		multiGridView.removeCellsHorizontal( yFrom, xFrom,  xTo );
 		yFrom++;
 	}
 
@@ -189,7 +189,7 @@ class GridView {
 				multiGridView.addActor( actor, actorKey); // actor enters the view
 			}
 		}
-		multiGridView.addCells( xFrom, yTo, xTo, yTo, cells );
+		multiGridView.addCellsHorizontal( yTo, xFrom, xTo, cells );
 		yTo++;
 	}
 
@@ -204,7 +204,7 @@ class GridView {
 				multiGridView.removeActor( cell.actor ); // actor leaves the view
 			}
 		}
-		multiGridView.removeCells( xFrom, yTo, xTo, yTo );
+		multiGridView.removeCellsHorizontal( yTo, xFrom, xTo );
 	}
 
 

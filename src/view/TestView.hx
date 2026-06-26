@@ -4,6 +4,8 @@ import haxe.CallStack;
 import lime.app.Application;
 import lime.ui.Window;
 
+import peote.view.PeoteView;
+
 import automat.TestGrid;
 import automat.Grid;
 import automat.GridView;
@@ -11,8 +13,8 @@ import automat.MultiGridView;
 import automat.actor.*;
 import automat.Pos.xy as P;
 
+import render.Render;
 import view.View;
-import peote.view.PeoteView;
 
 
 
@@ -38,6 +40,7 @@ class TestView extends Application
 	{
 		peoteView = new PeoteView(window);
 
+		Render.init(peoteView);
 		
 		var grid:Grid = TestGrid.createTestGrid3x3();
 		
@@ -47,16 +50,17 @@ class TestView extends Application
 		
 		TestGrid.traceGrid(grid, 32, 16);
 		
-		var rootX:Int = 16;
-		var rootY:Int = 5;
+		var rootX:Int = 10;
+		var rootY:Int = 10;
 		// 3x3 gridViewCache
 		var gridViewsX = 3;
 		var gridViewsY = 3;
 
-		var view = new View(peoteView);
-		var multiGridView = new MultiGridView(view, grid, rootX, rootY, gridViewsX, gridViewsY);
+		var view = new View(peoteView, 100, 0, 600, 600);
+		var multiGridView = new MultiGridView(view, grid, rootX, rootY, 10, 10, 10, 10, gridViewsX, gridViewsY);
 
 		// trace(multiGridView.gridViewCache);
+		
 
 	}
 	
