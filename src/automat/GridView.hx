@@ -28,23 +28,27 @@ class GridView {
 
 	public var multiGridView:MultiGridView;
 	public var index:Int = 0;// index into gridViews of MultiGridView
+	public var offsetX:Int = 0;// offset to rootGrid
+	public var offsetY:Int = 0;// offset to rootGrid
 
 	// -------------------------------------
 
 	public function new(multiGridView:MultiGridView, index:Int, grid:Grid=null, xFrom:Int=0, xTo:Int=0, yFrom:Int=0, yTo:Int=0) {
 		this.multiGridView = multiGridView;
 		this.index = index;
-		if (grid != null) addToGrid(grid, xFrom, xTo, yFrom, yTo);
+		if (grid != null) addToGrid(grid, 0, 0, xFrom, xTo, yFrom, yTo);
 	}
 
-	public function addToGrid(grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
+	public function addToGrid(grid:Grid, offsetX:Int, offsetY:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 		this.xFrom = xFrom;
 		this.xTo = xTo;
 		this.yFrom = yFrom;
 		this.yTo = yTo;
 		this.grid = grid;
 		grid.views.push(this);
-		multiGridView.addGridView(index);
+		multiGridView.addGridView(index, offsetX, offsetY);
 	}
 
 	public function removeFromGrid() {

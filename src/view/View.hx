@@ -60,8 +60,8 @@ class View {
 	// sync functions what called from automat->GridView->to here
 	public var gridViewIndex:Int = -1;
 
-	public inline function addGridView(index:Int) {
-		trace("addGridView", index);
+	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
+		trace("addGridView", index, offsetX, offsetY);
 
 	}
 

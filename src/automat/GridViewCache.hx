@@ -38,8 +38,8 @@ class GridViewCache {
 		return data.get( index(x, y) );
 	}
 
-	public inline function addToGrid(x:Int, y:Int, grid:Grid, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
-		if (grid != null) get(x, y).addToGrid( grid, xFrom, xTo, yFrom, yTo);
+	public inline function addToGrid(x:Int, y:Int, grid:Grid, offsetX:Int, offsetY:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
+		if (grid != null) get(x, y).addToGrid( grid, offsetX, offsetY, xFrom, xTo, yFrom, yTo);
 	}
 
 	public inline function removeFromGrid(x:Int, y:Int) {
@@ -64,7 +64,7 @@ class GridViewCache {
 		xFrom = modX(xFrom-1);
 		while (y != yTo ) {
 			var gridView = get(x, y);
-			addToGrid(xFrom, y, gridView.leftGrid, Grid.WIDTH, Grid.WIDTH, gridView.yFrom, gridView.yTo);
+			addToGrid(xFrom, y, gridView.leftGrid, gridView.offsetX-1, gridView.offsetY, Grid.WIDTH, Grid.WIDTH, gridView.yFrom, gridView.yTo);
 			y = modY(y+1);
 		}		
 	}
@@ -106,7 +106,7 @@ class GridViewCache {
 		var y = yFrom;
 		while (y != yTo ) {
 			var gridView = get(xTo-1, y);
-			addToGrid(xTo, y, gridView.rightGrid, 0, 0, gridView.yFrom, gridView.yTo);
+			addToGrid(xTo, y, gridView.rightGrid, gridView.offsetX+1, gridView.offsetY, 0, 0, gridView.yFrom, gridView.yTo);
 			y = modY(y+1);
 		}
 		xTo = modX(xTo+1);		
@@ -151,7 +151,7 @@ class GridViewCache {
 		yFrom = modX(yFrom-1);
 		while (x != xTo ) {
 			var gridView = get(x, y);
-			addToGrid(x, yFrom, gridView.topGrid, gridView.xFrom, gridView.xTo, Grid.HEIGHT, Grid.HEIGHT);
+			addToGrid(x, yFrom, gridView.topGrid, gridView.offsetX, gridView.offsetY-1, gridView.xFrom, gridView.xTo, Grid.HEIGHT, Grid.HEIGHT);
 			x = modY(x+1);
 		}		
 	}
@@ -193,7 +193,7 @@ class GridViewCache {
 		var x = xFrom;
 		while (x != xTo ) {
 			var gridView = get(x, yTo-1);
-			addToGrid(x, yTo, gridView.bottomGrid, gridView.xFrom, gridView.xTo, 0, 0);
+			addToGrid(x, yTo, gridView.bottomGrid, gridView.offsetX, gridView.offsetY+1, gridView.xFrom, gridView.xTo, 0, 0);
 			x = modY(x+1);
 		}		
 		yTo = modX(yTo+1);

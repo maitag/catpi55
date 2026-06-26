@@ -165,8 +165,8 @@ class MultiGridView {
 
 	public var lastGridViewIndex:Int = -1;
 
-	public inline function addGridView(index:Int) {
-		view.addGridView(index);
+	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
+		view.addGridView(index, offsetX, offsetY);
 	}
 
 	public inline function removeGridView(index:Int) {
