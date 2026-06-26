@@ -30,16 +30,8 @@ class ElemViewCache<T> {
 	var data:Vector<T>;
 	public var sizeX:Int;
 	public var sizeY:Int;
-
-	/*
-	// actual range of used elements
-	public var xFrom:Int = 0;
-	public var xTo:Int = 0;
-	public var yFrom:Int = 0;
-	public var yTo:Int = 0;
-*/	
-	public inline function new(sizeX:Int, sizeY:Int)
-	{	
+	
+	public inline function new(sizeX:Int, sizeY:Int) {	
 		this.sizeX = sizeX;	
 		this.sizeY = sizeY;
 		data = new Vector( sizeX * sizeY );
@@ -47,7 +39,6 @@ class ElemViewCache<T> {
 
 	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
 	inline function modY(y:Int) return (y<0) ? sizeY+y : y % sizeY;
-	// inline function index(x:Int, y:Int) return modY(yFrom+y) * sizeX + modX(xFrom+x);
 	inline function index(x:Int, y:Int) return modY(y) * sizeX + modX(x);
 
 	public inline function get(x:Int, y:Int):T {
@@ -56,21 +47,6 @@ class ElemViewCache<T> {
 	public inline function set(x:Int, y:Int, value:T) {
 		data.set( index(x, y), value );
 	}
-/*
-	public inline function extendLeft(values:Array<T>, init = false) {
-		if (!init && xFrom == xTo) throw("Error extendLeft: out of bounds");
-		xFrom = modX(xFrom-1);
-	}
-	public inline function shrinkLeft() {
-		if (xFrom == xTo) throw("Error shrinkLeft: out of bounds");
-		xFrom = modX(xFrom+1);
-	}
-	public inline function scrollLeft() {
-		xFrom = modX(xFrom+1);
-		xTo = modX(xTo+1);
-	}
-*/
-
 }
 
 class CellRender {
@@ -156,13 +132,23 @@ class CellRender {
 
 	public inline function addCell(x:Int, y:Int, cellType:CellType) {
 		switch (cellType) {
-			case EARTH:trace("render EARTH");
+			case EARTH:
 				var element = new CellElemStatic(TileID.EARTH, x*32, y*32, 32, 32);
+				elemViewCache.set(x, y, element);
+				cellBufferStatic.addElement(element);
+
+			case WOOD:
+				var element = new CellElemStatic(TileID.WOOD, x*32, y*32, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case ROCK:
 				var element = new CellElemStatic(TileID.ROCK, x*32, y*32, 32, 32);
+				elemViewCache.set(x, y, element);
+				cellBufferStatic.addElement(element);
+
+			case METAL:
+				var element = new CellElemStatic(TileID.METAL, x*32, y*32, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
@@ -175,47 +161,45 @@ class CellRender {
 
 	}
 
-	public function delCell(x:Int, y:Int) {}
+	public function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
+		
+	}
 
-	public function updateCell(x:Int, y:Int) {}
+	public function removeCellsHorizontal(y:Int, xFrom:Int, xTo:Int) {
+		for (x in xFrom...xTo) removeCell(x, y);
+	}
 
-/*
-	// ----------------------------------------
-	// not sure yet how to delegate them from MultiGridView->View down to here
+	public function removeCellsVertical(x:Int, yFrom:Int, yTo:Int) {
+		for (y in yFrom...yTo) removeCell(x, y);
+	}
 
-	public function extendLeft(values:Array<Cell> , init = false) {
-		for (value in values) {
-
-			switch (value.type) {
-				case EARTH:
-					var element = new CellElemStatic(TileID.EARTH, 0, 0, 32, 32);
-					elemViewCache.extendLeft([element], init);
-					cellBufferStatic.addElement(element);
-
-				case ROCK:
-					var element = new CellElemStatic(TileID.ROCK, 0, 0, 32, 32);
-					elemViewCache.extendLeft([element], init);
-					cellBufferStatic.addElement(element);
-
-				// for fluids and air later maybe different Program and Shader
-				case WATER:
-					// T O D O
-
-				default:
-			}
-			
+	public inline function removeCell(x:Int, y:Int) {
+		var element = elemViewCache.get(x, y);
+		if (element!=null) {
+			cellBufferStatic.removeElement(element);
+			elemViewCache.set(x, y, null);
 		}
 	}
 
-	public inline function shrinkLeft() {
-		elemViewCache.shrinkLeft();
+
+
+	public function updateCell(x:Int, y:Int) {
+
 	}
 
-	public function scrollLeft(values:Array<Cell>) {
-		elemViewCache.scrollLeft();
-		// TODO: set new values on the right side by using old ones from left side
 
-		// TODO: scroll the Display
+	// ------- scrolling ----------
+	
+	public function scrollLeft() {
+		cellDisplay.xOffset += 32;
+		
 	}
-*/
+
+	public function scrollRight() {
+		cellDisplay.xOffset -= 32;
+	}
+
+
+
+
 }

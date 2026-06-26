@@ -19,5 +19,16 @@ class RenderView {
 	{
 		cellRender.initView(gridViewsSizeX, gridViewsSizeY);
 	}
+
+	// ------- scrolling ----------
+	
+	public function scrollLeft() {
+		cellRender.scrollLeft();
+		// actorRenderer.scrollLeft();
+	}
+	public function scrollRight() {
+		cellRender.scrollRight();
+		// actorRenderer.scrollRight();
+	}
 	
 }

@@ -35,6 +35,8 @@ class TestView extends Application
 	// --------------- SAMPLE STARTS HERE -------------------------
 	// ------------------------------------------------------------	
 	var peoteView:PeoteView;
+	var multiGridView:MultiGridView;
+	var view:View;
 
 	public function start(window:Window)
 	{
@@ -56,12 +58,11 @@ class TestView extends Application
 		var gridViewsX = 3;
 		var gridViewsY = 3;
 
-		var view = new View(peoteView, 100, 0, 600, 600);
-		var multiGridView = new MultiGridView(view, grid, rootX, rootY, 10, 10, 10, 10, gridViewsX, gridViewsY);
+		view = new View(peoteView, 100, 0, 600, 600);
+		multiGridView = new MultiGridView(view, grid, rootX, rootY, 10, 10, 10, 10, gridViewsX, gridViewsY);
 
 		// trace(multiGridView.gridViewCache);
 		
-
 	}
 	
 	// ------------------------------------------------------------
@@ -95,7 +96,17 @@ class TestView extends Application
 	// override function onTouchEnd (touch:lime.ui.Touch):Void {}
 	
 	// ----------------- KEYBOARD EVENTS ---------------------------
-	// override function onKeyDown (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {}	
+	override function onKeyDown (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {
+		switch(keyCode) {
+			case RIGHT:
+				multiGridView.scrollRight();
+				view.scrollRight();
+			case LEFT:
+				multiGridView.scrollLeft();
+				view.scrollLeft();
+			default:
+		}
+	}	
 	// override function onKeyUp (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {}
 
 	// -------------- other WINDOWS EVENTS ----------------------------

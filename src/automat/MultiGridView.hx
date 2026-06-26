@@ -151,13 +151,18 @@ class MultiGridView {
 
 
 	// ------------ SCROLLING --------------
+
+	// TODO: still buggy here!
+
 	public inline function scrollLeft() {
-		if ( !canGrowLeft() ) return;
+		rootX--; leftSize--; rightSize++;
+		if ( !canGrowLeft() ) {rootX++;leftSize++;rightSize--;return;}
 		shrinkRight();
 		growLeft();
 	}
 	public inline function scrollRight() {
-		if ( !canGrowRight() ) return;
+		rootX++;leftSize++;rightSize--;
+		if ( !canGrowRight() ) {rootX--; leftSize--; rightSize++;return;}
 		shrinkLeft();
 		growRight();
 	}
