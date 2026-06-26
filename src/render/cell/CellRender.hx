@@ -111,6 +111,7 @@ class CellRender {
 
 	public function initView(gridViewsSizeX:Int, gridViewsSizeY:Int)
 	{
+		// TODO: size here in depend of maximum-Left/Right sizes in MultiGridView!
 		elemViewCache = new ElemViewCache<CellElemStatic>(gridViewsSizeX * Grid.WIDTH, gridViewsSizeY * Grid.HEIGHT);
 	}
 	// public function purgeView() {}
