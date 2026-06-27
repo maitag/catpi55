@@ -192,12 +192,19 @@ class CellRender {
 	// ------- scrolling ----------
 	
 	public function scrollLeft() {
-		cellDisplay.xOffset += 32;
-		
+		cellDisplay.xOffset += 32;		
 	}
 
 	public function scrollRight() {
 		cellDisplay.xOffset -= 32;
+	
+	}
+	public function scrollTop() {
+		cellDisplay.yOffset += 32;		
+	}
+
+	public function scrollBottom() {
+		cellDisplay.yOffset -= 32;
 	}
 
 

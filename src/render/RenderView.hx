@@ -30,5 +30,13 @@ class RenderView {
 		cellRender.scrollRight();
 		// actorRenderer.scrollRight();
 	}
+	public function scrollTop() {
+		cellRender.scrollTop();
+		// actorRenderer.scrollTop();
+	}
+	public function scrollBottom() {
+		cellRender.scrollBottom();
+		// actorRenderer.scrollBottom();
+	}
 	
 }

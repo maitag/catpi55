@@ -52,14 +52,17 @@ class TestView extends Application
 		
 		TestGrid.traceGrid(grid, 32, 16);
 		
-		var rootX:Int = 10;
-		var rootY:Int = 10;
+		var rootX:Int = 1;
+		var rootY:Int = 1;
 		// 3x3 gridViewCache
 		var gridViewsX = 3;
 		var gridViewsY = 3;
 
+		var maxWidth = 19;
+		var maxHeight = 19;
+
 		view = new View(peoteView, 100, 0, 600, 600);
-		multiGridView = new MultiGridView(view, grid, rootX, rootY, 10, 10, 10, 10, gridViewsX, gridViewsY);
+		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight, gridViewsX, gridViewsY);
 
 		// trace(multiGridView.gridViewCache);
 		
@@ -104,6 +107,12 @@ class TestView extends Application
 			case LEFT:
 				multiGridView.scrollLeft();
 				view.scrollLeft();
+			case UP:
+				multiGridView.scrollTop();
+				view.scrollTop();
+			case DOWN:
+				multiGridView.scrollBottom();
+				view.scrollBottom();
 			default:
 		}
 	}	

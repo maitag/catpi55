@@ -23,58 +23,36 @@ class MultiGridView {
 	// ---- handles the used GridViews -----
 	public var gridViewCache:GridViewCache;
 
-	// -------------------------------------
-	// first position inside rootGrid (middle from where it grows)
-	public var rootX:Int;
-	public var rootY:Int;
-	
-	// size of the view relative to root-point
-	public var leftSize:Int = 0;
-	public var rightSize:Int = 0;
-	public var topSize:Int = 0;
-	public var bottomSize:Int = 0;
-	// max size to grow
-	public var maxLeftSize:Int = 5;
-	public var maxRightSize:Int = 6;
-	public var maxTopSize:Int = 3;
-	public var maxBottomSize:Int = 4;
+	// size of the view
+	public var xFrom:Int = 0;
+	public var xTo:Int = 0;
+	public var yFrom:Int = 0;
+	public var yTo:Int = 0;
 
-	// TODO:
-	// public var xFrom:Int = 0;
-	// public var xTo:Int = 0;
-	// public var yFrom:Int = 0;
-	// public var yTo:Int = 0;
+	public var maxWidth:Int = 32;
+	public var maxHeight:Int = 32;
 
-	// public var maxWidth:Int = 32;
-	// public var maxHeight:Int = 32;
-
-	// public var width(get,never):Int;
-	// inline function get_width():Int return xTo - xFrom;
-	// public var height(get,never):Int;
-	// inline function get_height():Int return yTo - yFrom;
+	public var width(get,never):Int;
+	inline function get_width():Int return xTo - xFrom;
+	public var height(get,never):Int;
+	inline function get_height():Int return yTo - yFrom;
 
 	public var view:View; // this will be the client into network later!
 
 	// -------------------------------------
 	
 	public function new(view:View, rootGrid:Grid, rootX:Int, rootY:Int,
-		maxLeftSize:Int, maxRightSize:Int, maxTopSize:Int, maxBottomSize:Int,
+		maxWidth:Int, maxHeight:Int,
 		gridViewsSizeX:Int, gridViewsSizeY:Int)
 	{
 		this.view = view;
-		this.rootX = rootX;
-		this.rootY = rootY;
-		this.maxLeftSize = maxLeftSize;
-		this.maxRightSize = maxRightSize;
-		this.maxTopSize = maxTopSize;
-		this.maxBottomSize = maxBottomSize;
-	
-		// TODO:
-		// xFrom = xTo = rootX;
-		// yFrom = yTo = rootY;
-		// this.maxWidth = maxWidth;
-		// this.maxHeight = maxHeight;
-		
+		xFrom = xTo = rootX;
+		yFrom = rootY;
+		yTo = rootY+1; // look at gridViewCache ..maybe "+1" is also need here at initialization?
+		this.maxWidth = maxWidth;
+		this.maxHeight = maxHeight;
+
+		trace(width, height, xFrom, xTo, yFrom, yTo);
 		
 		// initialize the View
 		// TODO: elementCache can be smaller also (maxWidth and maxHeight?)
@@ -84,17 +62,6 @@ class MultiGridView {
 		gridViewCache = new GridViewCache( this, rootGrid, rootX, rootY, gridViewsSizeX, gridViewsSizeY );
 
 		// grow up to max-sizes
-		trace("grow left");
-		while ( canGrowLeft() ) growLeft();
-		trace("grow right");
-		while ( canGrowRight() ) growRight();
-		trace("grow top");
-		while ( canGrowTop() ) growTop();
-		trace("grow bottom");
-		while ( canGrowBottom() ) growBottom();
-
-		// TODO:
-		/*
 		var moreToGrow = true;
 		while (moreToGrow) {
 			moreToGrow = false;
@@ -103,55 +70,30 @@ class MultiGridView {
 			if ( canGrowTop()   ) { moreToGrow = true; growTop();    }
 			if ( canGrowBottom()) { moreToGrow = true; growBottom(); }
 		}
-		*/
+
+		trace(width, height, xFrom, xTo, yFrom, yTo);
 
 	}
 
 	// ------------ SCROLLING --------------
-
-	// TODO: still buggy here!
-	// BETTER:
-	// "grow-point" rootX/Y only for initialisation
-	// xFrom/xTo and yFrom/yTo instead of leftSize/rightSize/...
-	// width/height-getters (in depend of from/to)
-	// and maxWidth/maxHeight then
-
-	/*public inline function scrollLeft() {
-		rootX--; leftSize--; rightSize++;
-		if ( !canGrowLeft() ) {rootX++;leftSize++;rightSize--;return;}
-		shrinkRight();
-		growLeft();
-	}
-	public inline function scrollRight() {
-		rootX++;leftSize++;rightSize--;
-		if ( !canGrowRight() ) {rootX--; leftSize--; rightSize++;return;}
-		shrinkLeft();
-		growRight();
-	}*/
 	public inline function scrollLeft() {
-		shrinkRight();
-		growLeft();
-		rootX--;leftSize--;rightSize++;
+		if (canShrinkRight()) shrinkRight();
+		if (canGrowLeft()) growLeft();
 	}
 	public inline function scrollRight() {
-		shrinkLeft();
-		growRight();
-		rootX++;leftSize++;rightSize--;
+		if (canShrinkLeft()) shrinkLeft();
+		if (canGrowRight()) growRight();
 	}
 	public inline function scrollTop() {
-		if ( !canGrowTop() ) return;
-		shrinkBottom();
-		growTop();
+		if (canShrinkBottom()) shrinkBottom();
+		if (canGrowTop()) growTop();
 	}
 	public inline function scrollBottom() {
-		if ( !canGrowBottom() ) return;
-		shrinkTop();
-		growBottom();
+		if (canShrinkTop()) shrinkTop();
+		if (canGrowBottom()) growBottom();
 	}
 
 	// ------------------- LEFT -----------------------
-	// TODO
-	/*
 	public inline function canGrowLeft():Bool {
 		if (width == maxWidth) return false;
 		if (xFrom % Grid.WIDTH > 0) return true;
@@ -159,87 +101,58 @@ class MultiGridView {
 	}
 	public inline function growLeft() {
 		if (xFrom % Grid.WIDTH == 0) gridViewCache.growLeft();
-		gridViewCache.growLeftViews();
-		xFrom--;
+		gridViewCache.growLeftViews(); xFrom--;
 	}
 	public inline function canShrinkLeft():Bool return width > 0;
 	public inline function shrinkLeft() {
-		gridViewCache.shrinkLeftViews();
-		xFrom++;
+		gridViewCache.shrinkLeftViews(); xFrom++;
 		if (xFrom % Grid.WIDTH == 0) gridViewCache.shrinkLeft();
-	}*/
-	public inline function canGrowLeft():Bool {
-		if (leftSize == maxLeftSize) return false;
-		if (rootX-leftSize > 0 || (leftSize-rootX) % Grid.WIDTH > 0) return true;
-		else return gridViewCache.canGrowLeft();
 	}
-	public inline function growLeft() {
-		if (leftSize >= rootX && (leftSize-rootX) % Grid.WIDTH == 0) gridViewCache.growLeft();
-		gridViewCache.growLeftViews();
-		leftSize++;
-	}
-	public inline function canShrinkLeft():Bool return leftSize > 0;
-	public inline function shrinkLeft() {
-		gridViewCache.shrinkLeftViews();
-		leftSize--;
-		if ( leftSize >= rootX && (leftSize-rootX) % Grid.WIDTH == 0) gridViewCache.shrinkLeft();
-	}
-
 	// ------------------- RIGHT -----------------------
 	public inline function canGrowRight():Bool {
-		if (rightSize == maxRightSize) return false;
-		if ((rootX+rightSize) % Grid.WIDTH > 0) return true;
+		if (width == maxWidth) return false;
+		if (xTo % Grid.WIDTH > 0) return true;
 		else return gridViewCache.canGrowRight();
 	}
 	public inline function growRight() {
-		if ((rootX+rightSize) % Grid.WIDTH == 0) gridViewCache.growRight();
-		gridViewCache.growRightViews();
-		rightSize++;
+		if (xTo % Grid.WIDTH == 0) gridViewCache.growRight();
+		gridViewCache.growRightViews(); xTo++;
 	}
-	public inline function canShrinkRight():Bool return rightSize > 0;
+	public inline function canShrinkRight():Bool return width > 0;
 	public inline function shrinkRight() {
-		gridViewCache.shrinkRightViews();
-		rightSize--;
-		if ((rootX+rightSize) % Grid.WIDTH == 0) gridViewCache.shrinkRight();
+		gridViewCache.shrinkRightViews(); xTo--;
+		if (xTo % Grid.WIDTH == 0) gridViewCache.shrinkRight();
 	}
-
 	// -------------------- TOP ------------------------
 	public inline function canGrowTop():Bool {
-		if (topSize == maxTopSize) return false;
-		if (rootY-topSize > 0 || (topSize-rootY) % Grid.HEIGHT > 0) return true;
+		if (height == maxHeight) return false;
+		if (yFrom % Grid.HEIGHT > 0) return true;
 		else return gridViewCache.canGrowTop();
 	}
 	public inline function growTop() {
-		if (topSize >= rootY && (topSize-rootY) % Grid.HEIGHT == 0) gridViewCache.growTop();
-		gridViewCache.growTopViews();
-		topSize++;
+		if (yFrom % Grid.HEIGHT == 0) gridViewCache.growTop();
+		gridViewCache.growTopViews(); yFrom--;
 	}
-	public inline function canShrinkTop():Bool return topSize > 0;
+	public inline function canShrinkTop():Bool return height > 0;
 	public inline function shrinkTop() {
-		gridViewCache.shrinkTopViews();
-		topSize--;
-		if ( topSize >= rootY && (topSize-rootY) % Grid.HEIGHT == 0) gridViewCache.shrinkTop();
+		gridViewCache.shrinkTopViews(); yFrom++;
+		if (yFrom % Grid.HEIGHT == 0) gridViewCache.shrinkTop();
 	}
-
 	// ------------------- BOTTOM ----------------------
 	public inline function canGrowBottom():Bool {
-		if (bottomSize == maxBottomSize) return false;
-		if ((rootY+bottomSize) % Grid.HEIGHT > 0) return true;
+		if (height == maxHeight) return false;
+		if (yTo % Grid.HEIGHT > 0) return true;
 		else return gridViewCache.canGrowBottom();
 	}
 	public inline function growBottom() {
-		if ((rootY+bottomSize) % Grid.HEIGHT == 0) gridViewCache.growBottom();
-		gridViewCache.growBottomViews();
-		bottomSize++;
+		if (yTo % Grid.HEIGHT == 0) gridViewCache.growBottom();
+		gridViewCache.growBottomViews(); yTo++;
 	}
-	public inline function canShrinkBottom():Bool return bottomSize > 0;
+	public inline function canShrinkBottom():Bool return height > 0;
 	public inline function shrinkBottom() {
-		gridViewCache.shrinkBottomViews();
-		bottomSize--;
-		if ((rootY+bottomSize) % Grid.HEIGHT == 0) gridViewCache.shrinkBottom();
+		gridViewCache.shrinkBottomViews(); yTo--;
+		if (yTo % Grid.HEIGHT == 0) gridViewCache.shrinkBottom();
 	}
-
-
 
 	// ------------------------------------------
 	// ------------ Sync to View ----------------

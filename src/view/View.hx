@@ -172,5 +172,11 @@ class View {
 	public function scrollRight() {
 		renderView.scrollRight();
 	}
+	public function scrollTop() {
+		renderView.scrollTop();
+	}
+	public function scrollBottom() {
+		renderView.scrollBottom();
+	}
 
 }

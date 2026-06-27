@@ -184,11 +184,11 @@ public static inline var TESTGRID_1:String = "
 #                                                              #
 #         EEEE                                                 #
 #       EEEEEE                                                 #
-#      EEE EEE .m#E                                            #
-#          EEE                                                 #
-#          EEE                                                 #
-#          EEE                                                 #
-#        EEEEEEE                                               #
+#      EEE EEE .m#E         R   R       R      R   R   RRRRR   #
+#          EEE              R   R      R R      R R    R       #
+#          EEE              RRRRR     R   R      R     RRRRR  ..
+#          EEE              R   R    RRRRRRR    R R    R       #
+#        EEEEEEE            R   R   R       R  R   R   RRRRR   #
 #        EEEEEEE                                               #
 #                                                              #
 #                                                              #
@@ -253,15 +253,15 @@ public static inline var TESTGRID_2:String = "
 #       EEEEEEEE                                               #
 #      EEE    EEE                                              #
 #            EEE                                               #
-#           EEE                                                #
-#         EEEE                                                 #
-#       EEEEEEEEE                                              #
-#       EEEEEEEEE                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
+....        EEE                                                #
+#  .      EEEE                                                 #
+#  .    EEEEEEEEE                                              #
+#  .    EEEEEEEEE                                              #
+#  .                  .     R     RRR                          #
+#  .                   .    R    R                             #
+#  ......................   R     RR    ........................
+#                      .    R       R                          #
+#                     .     R    RRR                           #
 #                                                              #
 #                                                              #
 #                                                              #
@@ -327,19 +327,19 @@ public static inline var TESTGRID_3:String = "
 #                                                              #
 #                                                              #
 #                                                              #
+#   #   #     ##    #######   ###     ####      #       ###    #
+#   ##  #    #  #      #      #  #    #        # #      #  #   #
+#   # # #   #    #     #      #   #   ###     #   #     #   #  #
+#   #  ##    #  #      #      #  #    #      #######    #  #   #
+#   #   #     ##       #      ###     ####  #       #   ###    #
 #                                                              #
 #                                                              #
 #                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
+#     R  R  R   R      ###     ####      #       ###           #
+#     R  R  RR  R      #  #    #        # #      #  #          #
+#     R  R  R R R  ..  #   #   ###     #   #     #   #         #
+#     R  R  R R R      #  #    #      #######    #  #          #
+#      RR   R  RR      ###     ####  #       #   ###           #
 #                                                              #
 #                                                              #
 #                                                              #
