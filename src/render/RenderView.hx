@@ -15,9 +15,9 @@ class RenderView {
 		
 	}
 
-	public function initView(gridViewsSizeX:Int, gridViewsSizeY:Int)
+	public function initView(maxWidth:Int, maxHeight:Int)
 	{
-		cellRender.initView(gridViewsSizeX, gridViewsSizeY);
+		cellRender.initView(maxWidth, maxHeight);
 	}
 
 	// ------- scrolling ----------

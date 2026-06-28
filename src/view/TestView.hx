@@ -52,17 +52,14 @@ class TestView extends Application
 		
 		TestGrid.traceGrid(grid, 32, 16);
 		
-		var rootX:Int = 1;
-		var rootY:Int = 1;
-		// 3x3 gridViewCache
-		var gridViewsX = 3;
-		var gridViewsY = 3;
+		var rootX:Int = 0;
+		var rootY:Int = 0;
 
 		var maxWidth = 19;
 		var maxHeight = 19;
 
 		view = new View(peoteView, 100, 0, 600, 600);
-		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight, gridViewsX, gridViewsY);
+		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 
 		// trace(multiGridView.gridViewCache);
 		

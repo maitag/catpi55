@@ -7,14 +7,14 @@ class GridViewCache {
 
 	var data:Vector<GridView>;
 	
-	public var sizeX:Int;
-	public var sizeY:Int;
+	public var sizeX(default, null):Int;
+	public var sizeY(default, null):Int;
 
 	// actual range of used GridViews
-	public var xFrom:Int = 0;
-	public var xTo:Int = 1;
-	public var yFrom:Int = 0;
-	public var yTo:Int = 1;
+	var xFrom:Int = 0;
+	var xTo:Int = 1;
+	var yFrom:Int = 0;
+	var yTo:Int = 1;
 	
 	public inline function new(multiGridView:MultiGridView, rootGrid:Grid, rootX:Int, rootY:Int, sizeX:Int, sizeY:Int)
 	{	
@@ -38,8 +38,8 @@ class GridViewCache {
 		return data.get( index(x, y) );
 	}
 
-	public inline function addToGrid(x:Int, y:Int, grid:Grid, offsetX:Int, offsetY:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
-		if (grid != null) get(x, y).addToGrid( grid, offsetX, offsetY, xFrom, xTo, yFrom, yTo);
+	public inline function addToGrid(x:Int, y:Int, grid:Grid, offsetX:Int, offsetY:Int, _xFrom:Int, _xTo:Int, _yFrom:Int, _yTo:Int) {
+		if (grid != null) get(x, y).addToGrid( grid, offsetX, offsetY, _xFrom, _xTo, _yFrom, _yTo);
 	}
 
 	public inline function removeFromGrid(x:Int, y:Int) {
@@ -47,183 +47,86 @@ class GridViewCache {
 	}
 
 	// TODO: for larger grid-graph-topology (what is also out of "convex") it needs deeper->neighbour-traversing
-
 	// ------------------- LEFT -----------------------
 	public function canGrowLeft():Bool {
-		if ( xFrom == xTo ) return false;
-		var y = yFrom;
-		while (y != yTo ) {
-			if ( get(xFrom, y).leftGrid != null ) return true;
-			y = modY(y+1);
-		}
+		for (y in yFrom...yTo) if ( get(xFrom, y).leftGrid != null ) return true;
 		return false;
 	}	
 	public inline function growLeft() {
-		var x = xFrom;
-		var y = yFrom;
-		xFrom = modX(xFrom-1);
-		while (y != yTo ) {
-			var gridView = get(x, y);
-			addToGrid(xFrom, y, gridView.leftGrid, gridView.offsetX-1, gridView.offsetY, Grid.WIDTH, Grid.WIDTH, gridView.yFrom, gridView.yTo);
-			y = modY(y+1);
-		}		
+		for (y in yFrom...yTo) {
+			var gridView = get(xFrom, y);
+			// TODO: no need gridView.offsetX/Y if using xFrom-1 and xTo instead
+			// trace("always equal X ?",xFrom-1, gridView.offsetX-1);
+			// trace("always equal Y ?",y, gridView.offsetY);
+			addToGrid(xFrom-1, y, gridView.leftGrid, gridView.offsetX-1, gridView.offsetY, Grid.WIDTH, Grid.WIDTH, gridView.yFrom, gridView.yTo);
+		}
+		xFrom--;
 	}
 	public inline function shrinkLeft() {
-		var y = yFrom;		
-		while (y != yTo ) {
-			removeFromGrid(xFrom, y);
-			y = modY(y+1);
-		}
-		xFrom = modX(xFrom+1);		
+		for (y in yFrom...yTo) removeFromGrid(xFrom, y);
+		xFrom++;
 	}
-	// one step for all gridViews at border
-	public inline function growLeftViews() {	
-		var y = yFrom;
-		while (y != yTo ) {
-			get(xFrom, y).growLeft();
-			y = modY(y+1);
-		}		
-	}
-	public inline function shrinkLeftViews() {
-		var y = yFrom;
-		while (y != yTo ) {
-			get(xFrom, y).shrinkLeft();
-			y = modY(y+1);
-		}		
-	}
+	public inline function growLeftViews() for (y in yFrom...yTo) get(xFrom, y).growLeft();
+	public inline function shrinkLeftViews() for (y in yFrom...yTo) get(xFrom, y).shrinkLeft();	
 
 	// ------------------- RIGHT -----------------------
-	public function canGrowRight():Bool {
-		if ( xFrom == xTo ) return false;
-		var y = yFrom;
-		while (y != yTo ) {
-			if ( get(xTo-1, y).rightGrid != null ) return true;
-			y = modY(y+1);
-		}
+	public function canGrowRight():Bool { trace("KKKKK", yFrom, yTo, xTo);
+		for (y in yFrom...yTo) if ( get(xTo-1, y).rightGrid != null ) return true;
 		return false;
 	}	
 	public inline function growRight() {
-		var y = yFrom;
-		while (y != yTo ) {
+		for (y in yFrom...yTo) {
 			var gridView = get(xTo-1, y);
 			addToGrid(xTo, y, gridView.rightGrid, gridView.offsetX+1, gridView.offsetY, 0, 0, gridView.yFrom, gridView.yTo);
-			y = modY(y+1);
 		}
-		xTo = modX(xTo+1);		
+		xTo++;
 	}
 	public inline function shrinkRight() {
-		var y = yFrom;		
-		xTo = modX(xTo-1);
-		while (y != yTo ) {
-			removeFromGrid(xTo, y);
-			y = modY(y+1);
-		}
+		xTo--;
+		for (y in yFrom...yTo) removeFromGrid(xTo, y);
 	}
-	// one step for all gridViews at border
-	public inline function growRightViews() {	
-		var y = yFrom;
-		while (y != yTo ) {
-			get(xTo-1, y).growRight();
-			y = modY(y+1);
-		}		
-	}
-	public inline function shrinkRightViews() {
-		var y = yFrom;
-		while (y != yTo ) {
-			get(xTo-1, y).shrinkRight();
-			y = modY(y+1);
-		}		
-	}
+	public inline function growRightViews() for (y in yFrom...yTo) get(xTo-1, y).growRight();
+	public inline function shrinkRightViews() for (y in yFrom...yTo) get(xTo-1, y).shrinkRight();
 
 	// -------------------- TOP ------------------------
 	public function canGrowTop():Bool {
-		if ( yFrom == yTo ) return false;
-		var x = xFrom;
-		while (x != xTo ) {
-			if ( get(x, yFrom).topGrid != null ) return true;
-			x = modY(x+1);
-		}
+		for (x in xFrom...xTo) if ( get(x, yFrom).topGrid != null ) return true;
 		return false;
 	}	
 	public inline function growTop() {
-		var x = xFrom;
-		var y = yFrom;
-		yFrom = modX(yFrom-1);
-		while (x != xTo ) {
-			var gridView = get(x, y);
-			addToGrid(x, yFrom, gridView.topGrid, gridView.offsetX, gridView.offsetY-1, gridView.xFrom, gridView.xTo, Grid.HEIGHT, Grid.HEIGHT);
-			x = modY(x+1);
-		}		
+		for (x in xFrom...xTo) {
+			var gridView = get(x, yFrom);
+			addToGrid(x, yFrom-1, gridView.topGrid, gridView.offsetX, gridView.offsetY-1, gridView.xFrom, gridView.xTo, Grid.HEIGHT, Grid.HEIGHT);
+		}
+		yFrom--;
 	}
 	public inline function shrinkTop() {
-		var x = xFrom;		
-		while (x != xTo ) {
-			removeFromGrid(x, yFrom);
-			x = modY(x+1);
-		}
-		yFrom = modX(yFrom+1);		
+		for (x in xFrom...xTo) removeFromGrid(x, yFrom);
+		yFrom++;		
 	}
-	// one step for all gridViews at border
-	public inline function growTopViews() {	
-		var x = xFrom;
-		while (x != xTo ) {
-			get(x, yFrom).growTop();
-			x = modY(x+1);
-		}		
-	}
-	public inline function shrinkTopViews() {
-		var x = xFrom;
-		while (x != xTo ) {
-			get(x, yFrom).shrinkTop();
-			x = modY(x+1);
-		}		
-	}
+	public inline function growTopViews() for (x in xFrom...xTo) get(x, yFrom).growTop();
+	public inline function shrinkTopViews() for (x in xFrom...xTo) get(x, yFrom).shrinkTop();
 
 	// ------------------- BOTTOM -----------------------
 	public function canGrowBottom():Bool {
-		if ( yFrom == yTo ) return false;
-		var x = xFrom;
-		while (x != xTo ) {
-			if ( get(x, yTo-1).bottomGrid != null ) return true;
-			x = modY(x+1);
-		}
+		for (x in xFrom...xTo) if ( get(x, yTo-1).bottomGrid != null ) return true;
 		return false;
 	}	
 	public inline function growBottom() {
-		var x = xFrom;
-		while (x != xTo ) {
+		for (x in xFrom...xTo) {
 			var gridView = get(x, yTo-1);
 			addToGrid(x, yTo, gridView.bottomGrid, gridView.offsetX, gridView.offsetY+1, gridView.xFrom, gridView.xTo, 0, 0);
-			x = modY(x+1);
-		}		
-		yTo = modX(yTo+1);
+		}
+		yTo++;
 	}
 	public inline function shrinkBottom() {
-		var x = xFrom;
-		yTo = modX(yTo-1);
-		while (x != xTo ) {
-			removeFromGrid(x, yTo);
-			x = modY(x+1);
-		}		
+		yTo--;
+		for (x in xFrom...xTo) removeFromGrid(x, yTo);	
 	}
-	// one step for all gridViews at border
-	public inline function growBottomViews() {	
-		var x = xFrom;
-		while (x != xTo ) {
-			get(x, yTo-1).growBottom();
-			x = modY(x+1);
-		}		
-	}
-	public inline function shrinkBottomViews() {
-		var x = xFrom;
-		while (x != xTo ) {
-			get(x, yTo-1).shrinkBottom();
-			x = modY(x+1);
-		}		
-	}
+	public inline function growBottomViews() for (x in xFrom...xTo) get(x, yTo-1).growBottom();	
+	public inline function shrinkBottomViews() for (x in xFrom...xTo) get(x, yTo-1).shrinkBottom();	
 
 
-	
 	// ------ debug -------
 	public function toString():String {
 		var s = "\n";

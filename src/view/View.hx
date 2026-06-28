@@ -62,16 +62,16 @@ class View {
 	// --------- Sync from MultiGridView ------------
 	// ----------------------------------------------
 
-	public function init(gridViewsSizeX:Int, gridViewsSizeY:Int) {
+	public function init(maxGrids:Int, maxWidth:Int, maxHeight:Int) {
 
-		trace("init", gridViewsSizeX, gridViewsSizeY);
+		trace("init", maxGrids, maxWidth, maxHeight);
 
 		// actors = new Vector<Vector<ViewActor>>(maxGridViews);
 
 
-		gridData = new Vector<Pos>(gridViewsSizeX * gridViewsSizeY);
+		gridData = new Vector<Pos>(maxGrids);
 
-		renderView.initView(gridViewsSizeX, gridViewsSizeY);
+		renderView.initView(maxWidth, maxHeight);
 
 		// TODO: init the RenderView -> ElementCache with same size
 

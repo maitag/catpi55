@@ -36,7 +36,10 @@ class GridView {
 	public function new(multiGridView:MultiGridView, index:Int, grid:Grid=null, xFrom:Int=0, xTo:Int=0, yFrom:Int=0, yTo:Int=0) {
 		this.multiGridView = multiGridView;
 		this.index = index;
-		if (grid != null) addToGrid(grid, 0, 0, xFrom, xTo, yFrom, yTo);
+		if (grid != null) {
+			addToGrid(grid, 0, 0, xFrom, xTo, yFrom, yTo);
+			growRight();
+		}
 	}
 
 	public function addToGrid(grid:Grid, offsetX:Int, offsetY:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int) {
