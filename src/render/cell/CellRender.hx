@@ -90,7 +90,7 @@ class CellRender {
 
 	//----------------------------------------------------
 
-	var cellDisplay:CellDisplay;
+	public var cellDisplay:CellDisplay;
 
 	var cellBufferStatic:Buffer<CellElemStatic>;
 	var cellBufferAnim:Buffer<CellElemAnim>;

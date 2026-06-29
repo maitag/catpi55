@@ -46,7 +46,8 @@ class TestView extends Application
 		Render.init(peoteView);
 		
 		// var grid:Grid = TestGrid.createTestGrid3x3();
-		var grid:Grid = TestGrid.createMaze(50,50);
+		var grid:Grid = TestGrid.createMaze(2,2);
+		// var grid:Grid = TestGrid.createMaze(50,50);
 		
 		// var actor = new Actor("a1");		
 		// actor.addToGrid(grid, P(17,5)); //trace(actor.pos);
@@ -86,8 +87,10 @@ class TestView extends Application
 	// override function onMouseDown (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
 	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
-		if (deltaY<0) peoteView.zoom /= 1.1;
-		else peoteView.zoom *= 1.1;
+		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
+		if (deltaY<0) view.renderView.cellRender.cellDisplay.zoom /= 1.1;
+		else view.renderView.cellRender.cellDisplay.zoom *= 1.1;
+		trace(view.renderView.cellRender.cellDisplay.zoom);
 	}
 	// override function onMouseMoveRelative (x:Float, y:Float):Void {}
 
