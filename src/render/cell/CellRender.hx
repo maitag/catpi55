@@ -27,7 +27,7 @@ import asset.generated.Cells.TileID as TileID;
 
 class ElemViewCache<T> {
 
-	var data:Vector<T>;
+	public var data:Vector<T>;
 	public var sizeX:Int;
 	public var sizeY:Int;
 	
@@ -118,7 +118,7 @@ class CellRender {
 	
 	public function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Cell>) {
 		var i:Int = 0;
-		for (y in yFrom...yTo)		
+		for (y in yFrom...yTo)
 			for (x in xFrom...xTo)
 				addCell(x, y, cells[i++].type);
 	}
@@ -132,24 +132,26 @@ class CellRender {
 	}
 
 	public inline function addCell(x:Int, y:Int, cellType:CellType) {
+		var px = x*32 + scrollOffsetX;
+		var py = y*32 + scrollOffsetY;
 		switch (cellType) {
 			case EARTH:
-				var element = new CellElemStatic(TileID.EARTH, x*32, y*32, 32, 32);
+				var element = new CellElemStatic(TileID.EARTH, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case WOOD:
-				var element = new CellElemStatic(TileID.WOOD, x*32, y*32, 32, 32);
+				var element = new CellElemStatic(TileID.WOOD, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case ROCK:
-				var element = new CellElemStatic(TileID.ROCK, x*32, y*32, 32, 32);
+				var element = new CellElemStatic(TileID.ROCK, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case METAL:
-				var element = new CellElemStatic(TileID.METAL, x*32, y*32, 32, 32);
+				var element = new CellElemStatic(TileID.METAL, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
@@ -163,7 +165,9 @@ class CellRender {
 	}
 
 	public function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
-		
+		for (y in yFrom...yTo)		
+			for (x in xFrom...xTo)
+				removeCell(x, y);
 	}
 
 	public function removeCellsHorizontal(y:Int, xFrom:Int, xTo:Int) {
@@ -190,20 +194,64 @@ class CellRender {
 
 
 	// ------- scrolling ----------
+
+	public var scrollOffsetX:Int = 0;
+	public var scrollOffsetY:Int = 0;
+	static inline var RESET_AT_OFFSET:Int = 16384;
 	
 	public function scrollLeft() {
+		if (cellDisplay.xOffset >= RESET_AT_OFFSET) {			
+			scrollOffsetX += RESET_AT_OFFSET;
+			for (i in 0...(elemViewCache.sizeX * elemViewCache.sizeY)) {
+				var element = elemViewCache.data.get(i);
+				if (element!=null) element.x += RESET_AT_OFFSET;
+			}
+			cellBufferStatic.update();
+			cellDisplay.xOffset -= RESET_AT_OFFSET;
+		}
+
 		cellDisplay.xOffset += 32;		
 	}
 
 	public function scrollRight() {
-		cellDisplay.xOffset -= 32;
-	
+		if (cellDisplay.xOffset <= -RESET_AT_OFFSET) {			
+			scrollOffsetX -= RESET_AT_OFFSET;
+			for (i in 0...(elemViewCache.sizeX * elemViewCache.sizeY)) {
+				var element = elemViewCache.data.get(i);
+				if (element!=null) element.x -= RESET_AT_OFFSET;
+			}
+			cellBufferStatic.update();
+			cellDisplay.xOffset += RESET_AT_OFFSET;
+		}
+
+		cellDisplay.xOffset -= 32;	
 	}
+
 	public function scrollTop() {
+		if (cellDisplay.yOffset >= RESET_AT_OFFSET) {			
+			scrollOffsetY += RESET_AT_OFFSET;
+			for (i in 0...elemViewCache.data.length) {
+				var element = elemViewCache.data.get(i);
+				if (element!=null) element.y += RESET_AT_OFFSET;
+			}
+			cellBufferStatic.update();
+			cellDisplay.yOffset -= RESET_AT_OFFSET;
+		}
+
 		cellDisplay.yOffset += 32;		
 	}
 
 	public function scrollBottom() {
+		if (cellDisplay.yOffset <= -RESET_AT_OFFSET) {			
+			scrollOffsetY -= RESET_AT_OFFSET;
+			for (i in 0...elemViewCache.data.length) {
+				var element = elemViewCache.data.get(i);
+				if (element!=null) element.y -= RESET_AT_OFFSET;
+			}
+			cellBufferStatic.update();
+			cellDisplay.yOffset += RESET_AT_OFFSET;
+		}
+
 		cellDisplay.yOffset -= 32;
 	}
 

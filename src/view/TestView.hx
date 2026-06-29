@@ -1,5 +1,6 @@
 package view;
 
+import util.Maze;
 import haxe.CallStack;
 import lime.app.Application;
 import lime.ui.Window;
@@ -44,13 +45,13 @@ class TestView extends Application
 
 		Render.init(peoteView);
 		
-		var grid:Grid = TestGrid.createTestGrid3x3();
+		// var grid:Grid = TestGrid.createTestGrid3x3();
+		var grid:Grid = TestGrid.createMaze(50,50);
 		
-		var actor = new Actor("a1");
+		// var actor = new Actor("a1");		
+		// actor.addToGrid(grid, P(17,5)); //trace(actor.pos);
 		
-		actor.addToGrid(grid, P(17,5)); //trace(actor.pos);
-		
-		TestGrid.traceGrid(grid, 32, 16);
+		// TestGrid.traceGrid(grid, 64, 64);
 		
 		var rootX:Int = 0;
 		var rootY:Int = 0;
@@ -62,7 +63,7 @@ class TestView extends Application
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 
 		// trace(multiGridView.gridViewCache);
-		
+		// trace(new Maze(10,10).toString());
 	}
 	
 	// ------------------------------------------------------------
@@ -99,18 +100,26 @@ class TestView extends Application
 	override function onKeyDown (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {
 		switch(keyCode) {
 			case RIGHT:
-				multiGridView.scrollRight();
-				view.scrollRight();
+				if (multiGridView.canGrowRight(false)) {
+					multiGridView.scrollRight();
+					view.scrollRight();
+				}
 			case LEFT:
-				multiGridView.scrollLeft();
-				view.scrollLeft();
-			case UP:
-				multiGridView.scrollTop();
-				view.scrollTop();
-			case DOWN:
-				multiGridView.scrollBottom();
-				view.scrollBottom();
-			default:
+				if (multiGridView.canGrowLeft(false)) {
+					multiGridView.scrollLeft();
+					view.scrollLeft();
+				}
+				case UP:
+				if (multiGridView.canGrowTop(false)) {
+					multiGridView.scrollTop();
+					view.scrollTop();
+				}
+				case DOWN:
+				if (multiGridView.canGrowBottom(false)) {
+					multiGridView.scrollBottom();
+					view.scrollBottom();
+				}
+				default:
 		}
 	}	
 	// override function onKeyUp (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {}

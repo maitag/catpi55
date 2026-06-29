@@ -50,7 +50,7 @@ class MultiGridView {
 		// calculate the cache size by the max..Sizes!
 		var gridViewsSizeX:Int = Math.ceil(maxWidth / Grid.WIDTH) + 1;
 		var gridViewsSizeY:Int = Math.ceil(maxHeight / Grid.HEIGHT) + 1;
-		trace("KKKKKKKKKKKK", gridViewsSizeX, gridViewsSizeY);
+		
 		// initialize the View
 		initView(gridViewsSizeX * gridViewsSizeY, maxWidth, maxHeight);
 		
@@ -77,27 +77,27 @@ class MultiGridView {
 	public inline function scrollLeft() {
 		if (canShrinkRight()) shrinkRight();
 		if (canGrowLeft()) growLeft();
-		trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
+		// trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
 	}
 	public inline function scrollRight() {
 		if (canShrinkLeft()) shrinkLeft();
 		if (canGrowRight()) growRight();
-		trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
+		// trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
 	}
 	public inline function scrollTop() {
 		if (canShrinkBottom()) shrinkBottom();
 		if (canGrowTop()) growTop();
-		trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
+		// trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
 	}
 	public inline function scrollBottom() {
 		if (canShrinkTop()) shrinkTop();
 		if (canGrowBottom()) growBottom();
-		trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
+		// trace('width:$width, height:$height, xFrom:$xFrom, xTo:$xTo, yFrom:$yFrom, yTo:$yTo');
 	}
 
 	// ------------------- LEFT -----------------------
-	public inline function canGrowLeft():Bool {
-		if (width == maxWidth) return false;
+	public inline function canGrowLeft(checkMaxSize=true):Bool {
+		if (checkMaxSize && width == maxWidth) return false;
 		if (xFrom % Grid.WIDTH > 0) return true;
 		else return gridViewCache.canGrowLeft();
 	}
@@ -111,8 +111,8 @@ class MultiGridView {
 		if (xFrom % Grid.WIDTH == 0) gridViewCache.shrinkLeft();
 	}
 	// ------------------- RIGHT -----------------------
-	public inline function canGrowRight():Bool {
-		if (width == maxWidth) return false;
+	public inline function canGrowRight(checkMaxSize=true):Bool {
+		if (checkMaxSize && width == maxWidth) return false;
 		if (xTo % Grid.WIDTH > 0) return true;
 		else return gridViewCache.canGrowRight();
 	}
@@ -126,8 +126,8 @@ class MultiGridView {
 		if (xTo % Grid.WIDTH == 0) gridViewCache.shrinkRight();
 	}
 	// -------------------- TOP ------------------------
-	public inline function canGrowTop():Bool {
-		if (height == maxHeight) return false;
+	public inline function canGrowTop(checkMaxSize=true):Bool {
+		if (checkMaxSize && height == maxHeight) return false;
 		if (yFrom % Grid.HEIGHT > 0) return true;
 		else return gridViewCache.canGrowTop();
 	}
@@ -141,8 +141,8 @@ class MultiGridView {
 		if (yFrom % Grid.HEIGHT == 0) gridViewCache.shrinkTop();
 	}
 	// ------------------- BOTTOM ----------------------
-	public inline function canGrowBottom():Bool {
-		if (height == maxHeight) return false;
+	public inline function canGrowBottom(checkMaxSize=true):Bool {
+		if (checkMaxSize && height == maxHeight) return false;
 		if (yTo % Grid.HEIGHT > 0) return true;
 		else return gridViewCache.canGrowBottom();
 	}

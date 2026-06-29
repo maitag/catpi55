@@ -1,5 +1,9 @@
 package automat;
 
+import asset.generated.Cells.Air;
+import automat.Cell.CellType;
+import haxe.ds.Vector;
+import util.Maze;
 import automat.Pos.xy as P;
 
 class TestGrid
@@ -74,6 +78,41 @@ class TestGrid
 		trace(s);
 	}
 	
+	public static function createMaze(width:Int, height:Int):Grid {
+		var maze = new Maze( width*Grid.WIDTH, height*Grid.HEIGHT);
+		
+		var rootGrid:Grid = new Grid();
+		var grids = new Vector<Grid>(width*height);
+		var i = function(x:Int, y:Int):Int return (x + y*width);
+		
+		for (y in 0...height) for (x in 0...width) {
+			var grid:Grid = (x==0 && y==0) ? rootGrid : new Grid();
+			grids.set( i(x,y), grid );
+			// knot them:
+			if (x>0) {  grids.get(i(x-1,y)).right = grid; grid.left = grids.get(i(x-1,y)); }
+			if (y>0) {  grids.get(i(x,y-1)).bottom = grid; grid.top = grids.get(i(x,y-1)); }
+		}
+		
+		for (y in 0...height) for (x in 0...width) {
+			var grid:Grid = grids.get(i(x,y));
+			for (gy in 0...Grid.HEIGHT) for (gx in 0...Grid.WIDTH) {
+				var cellType:CellType = CellType.AIR;
+				if ( !maze.get(x*Grid.WIDTH+gx, y*Grid.HEIGHT+gy) ) {
+					switch (i(x,y) % 4) {
+						case 0: cellType = CellType.EARTH;
+						case 1: cellType = CellType.ROCK;
+						case 2: cellType = CellType.METAL;
+						default: cellType = CellType.WOOD;
+					}					
+				}
+				grid.set(P(gx, gy), new Cell(cellType) );
+			}
+		}
+
+
+		return rootGrid;
+	}
+
 	public static function createTestGrid3x3():Grid {
 		var grid11 = createTestGrid(TESTGRID_1);
 		var grid12 = createTestGrid(TESTGRID_2);

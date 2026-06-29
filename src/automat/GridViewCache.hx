@@ -70,7 +70,7 @@ class GridViewCache {
 	public inline function shrinkLeftViews() for (y in yFrom...yTo) get(xFrom, y).shrinkLeft();	
 
 	// ------------------- RIGHT -----------------------
-	public function canGrowRight():Bool { trace("KKKKK", yFrom, yTo, xTo);
+	public function canGrowRight():Bool {
 		for (y in yFrom...yTo) if ( get(xTo-1, y).rightGrid != null ) return true;
 		return false;
 	}	
