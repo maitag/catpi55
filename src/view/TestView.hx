@@ -7,12 +7,13 @@ import lime.ui.Window;
 
 import peote.view.PeoteView;
 
-import automat.TestGrid;
+import automat.GridTestData;
 import automat.Grid;
 import automat.GridView;
 import automat.MultiGridView;
 import automat.actor.*;
-import automat.Pos.xy as P;
+
+import util.Pos.xy as P;
 
 import render.Render;
 import view.View;
@@ -45,24 +46,25 @@ class TestView extends Application
 
 		Render.init(peoteView);
 		
-		// var grid:Grid = TestGrid.createTestGrid3x3();
-		var grid:Grid = TestGrid.createMaze(2,2);
-		// var grid:Grid = TestGrid.createMaze(50,50);
+		var grid:Grid = GridTestData.create3x3();
+		// var grid:Grid = GridTestData.createMaze(2,2);
+		// var grid:Grid = GridTestData.createMaze(50,50);
 		
-		// var actor = new Actor("a1");		
-		// actor.addToGrid(grid, P(17,5)); //trace(actor.pos);
+		var actor = new Actor("a1");		
+		actor.addToGrid(grid, P(1,1)); //trace(actor.pos);
 		
-		// TestGrid.traceGrid(grid, 64, 64);
+		// GridTestData.traceGrid(grid, 64, 64);
 		
 		var rootX:Int = 0;
 		var rootY:Int = 0;
 
-		var maxWidth = 19;
-		var maxHeight = 19;
+		var maxWidth = 40;
+		var maxHeight = 30;
 
-		view = new View(peoteView, 100, 0, 600, 600);
+		view = new View(peoteView, 0, 0, 1280, 640);
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 
+		view.renderView.cellRender.cellDisplay.zoom = 0.620921323059155;
 		// trace(multiGridView.gridViewCache);
 		// trace(new Maze(10,10).toString());
 	}
@@ -88,8 +90,12 @@ class TestView extends Application
 	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
 		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
-		if (deltaY<0) view.renderView.cellRender.cellDisplay.zoom /= 1.1;
-		else view.renderView.cellRender.cellDisplay.zoom *= 1.1;
+		if (deltaY<0) {
+			if (view.renderView.cellRender.cellDisplay.zoom > 0.63)
+				view.renderView.cellRender.cellDisplay.zoom /= 1.1;
+		}			
+		else 
+			view.renderView.cellRender.cellDisplay.zoom *= 1.1;
 		trace(view.renderView.cellRender.cellDisplay.zoom);
 	}
 	// override function onMouseMoveRelative (x:Float, y:Float):Void {}

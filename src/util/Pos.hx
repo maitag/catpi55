@@ -1,15 +1,15 @@
-package automat;
+package util;
 
 #if !macro
-@:build(automat.Pos.PosMacro.build(6,6)) abstract Pos(Int) from Int to Int {}
+@:build(util.Pos.PosMacro.build(6,6)) abstract Pos(Int) from Int to Int {}
 
-// @:build(automat.Pos.PosMacro.build(5,5)) abstract Pos32(Int) to Int {}
-// @:build(automat.Pos.PosMacro.build(6,6)) abstract Pos64(Int) to Int {}
-// @:build(automat.Pos.PosMacro.build(7,7)) abstract Pos128(Int) to Int {}
-// @:build(automat.Pos.PosMacro.build(8,8)) abstract Pos256(Int) to Int {}
+// @:build(util.Pos.PosMacro.build(5,5)) abstract Pos32(Int) to Int {}
+// @:build(util.Pos.PosMacro.build(6,6)) abstract Pos64(Int) to Int {}
+// @:build(util.Pos.PosMacro.build(7,7)) abstract Pos128(Int) to Int {}
+// @:build(util.Pos.PosMacro.build(8,8)) abstract Pos256(Int) to Int {}
 
-// @:build(automat.Pos.PosMacro.build(6,5)) abstract Pos64x32(Int) to Int {}
-// @:build(automat.Pos.PosMacro.build(5,6)) abstract Pos32x64(Int) to Int {}
+// @:build(util.Pos.PosMacro.build(6,5)) abstract Pos64x32(Int) to Int {}
+// @:build(util.Pos.PosMacro.build(5,6)) abstract Pos32x64(Int) to Int {}
 
 
 // this is manual haxe code for using fully Int 32 bitsize

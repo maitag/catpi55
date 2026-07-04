@@ -1,6 +1,8 @@
 package automat.actor;
 
 import automat.Cell.CellType;
+
+import util.Pos;
 import util.BitGrid;
 
 // thx to Nanjizael for inspiration (^_^)

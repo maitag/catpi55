@@ -5,7 +5,9 @@ import automat.actor.IActor;
 import automat.Cell.CellActor;
 import automat.Cell.CellType;
 import view.View;
-import automat.Pos.xy as P;
+
+import util.Pos;
+// import util.Pos.xy as P;
 
 /*
 
@@ -230,9 +232,5 @@ class MultiGridView {
 	public inline function updateActor(actorKey:CellActor, action:Int) { // TODO: action!
 		view.updateActor(actorKey, action);
 	}
-
-
-	// public function goLeft() { extendLeft(); shrinkRight(); }
-
 
 }

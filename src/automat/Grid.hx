@@ -4,7 +4,8 @@ import haxe.ds.Vector;
 
 import automat.Cell.CellActor;
 import automat.actor.IActor;
-import automat.Pos.xy as P;
+import util.Pos;
+import util.Pos.xy as P;
 
 @:allow(automat.actor)
 class Grid {

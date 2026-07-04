@@ -1,5 +1,7 @@
 package automat;
 
+import util.Pos;
+
 enum abstract ActionType(Int) from Int to Int {
 
 	var CELL_MOVE;

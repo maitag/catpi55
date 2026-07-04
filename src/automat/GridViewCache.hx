@@ -1,7 +1,6 @@
 package automat;
 
 import haxe.ds.Vector;
-import automat.Pos.xy as P;
 
 class GridViewCache {
 

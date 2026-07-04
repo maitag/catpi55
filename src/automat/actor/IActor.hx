@@ -1,5 +1,7 @@
 package automat.actor;
 
+import util.Pos;
+
 interface IActor {
 	public var type(get, never):ActorType;
 	public var name:String;

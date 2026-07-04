@@ -12,7 +12,8 @@ import lime.ui.Window;
 import peote.view.PeoteView;
 
 import automat.actor.*;
-import automat.Pos.xy as P;
+
+import util.Pos.xy as P;
 
 
 class Main extends Application

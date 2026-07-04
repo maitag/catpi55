@@ -1,6 +1,8 @@
 package automat.actor;
 
 import automat.Cell.CellType;
+
+import util.Pos;
 import util.BitGrid;
 
 @:build(automat.actor.Shape.ShapeMacro.build("

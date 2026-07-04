@@ -4,11 +4,11 @@ import asset.generated.Cells.Air;
 import automat.Cell.CellType;
 import haxe.ds.Vector;
 import util.Maze;
-import automat.Pos.xy as P;
+import util.Pos.xy as P;
 
-class TestGrid
+class GridTestData
 {
-	public static function createTestGrid(testGrid:String):Grid {
+	public static function create(testGrid:String):Grid {
 		var grid = new Grid();
 
 		testGrid = ~/^\r?\n+/g.replace(~/\r?\n+$/g.replace(testGrid, ""), "");
@@ -113,18 +113,18 @@ class TestGrid
 		return rootGrid;
 	}
 
-	public static function createTestGrid3x3():Grid {
-		var grid11 = createTestGrid(TESTGRID_1);
-		var grid12 = createTestGrid(TESTGRID_2);
-		var grid13 = createTestGrid(TESTGRID_3);
+	public static function create3x3():Grid {
+		var grid11 = create(TESTGRID_1);
+		var grid12 = create(TESTGRID_2);
+		var grid13 = create(TESTGRID_3);
 
-		var grid21 = createTestGrid(TESTGRID_1);
-		var grid22 = createTestGrid(TESTGRID_2);
-		var grid23 = createTestGrid(TESTGRID_3);
+		var grid21 = create(TESTGRID_1);
+		var grid22 = create(TESTGRID_2);
+		var grid23 = create(TESTGRID_3);
 
-		var grid31 = createTestGrid(TESTGRID_1);
-		var grid32 = createTestGrid(TESTGRID_2);
-		var grid33 = createTestGrid(TESTGRID_3);
+		var grid31 = create(TESTGRID_1);
+		var grid32 = create(TESTGRID_2);
+		var grid33 = create(TESTGRID_3);
 
 		knotGridsLeftRight([grid11, grid12, grid13]);
 		knotGridsLeftRight([grid21, grid22, grid23]);
@@ -223,7 +223,7 @@ public static inline var TESTGRID_1:String = "
 #                                                              #
 #         EEEE                                                 #
 #       EEEEEE                                                 #
-#      EEE EEE .m#E         R   R       R      R   R   RRRRR   #
+#      EEE EEE              R   R       R      R   R   RRRRR   #
 #          EEE              R   R      R R      R R    R       #
 #          EEE              RRRRR     R   R      R     RRRRR  ..
 #          EEE              R   R    RRRRRRR    R R    R       #

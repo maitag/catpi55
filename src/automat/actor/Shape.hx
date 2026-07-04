@@ -4,8 +4,10 @@ package automat.actor;
 
 import automat.Cell;
 import automat.Cell.CellActor;
+
 import util.BitGrid;
-import automat.Pos.xy as P;
+import util.Pos;
+import util.Pos.xy as P;
 
 
 // optimized shapes without macro:
@@ -269,7 +271,7 @@ class ShapeMacro {
 				kind: FFun({
 					args: [
 						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-						{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
+						{name:"pos", opt:false, meta:[], type: macro:util.Pos}
 					],
 					expr: macro $b{e},
 					ret: null
@@ -351,7 +353,7 @@ class ShapeMacro {
 				kind: FFun({
 					args: [
 						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-						{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
+						{name:"pos", opt:false, meta:[], type: macro:util.Pos}
 					],
 					expr: macro $b{e},
 					ret: macro:Bool
@@ -498,33 +500,33 @@ class ShapeMacro {
 						if ((xOff == -1 && x == 0) || (xOff == 1 && x == bitGrid.width-1) || (yOff == -1 && y == 0) || (yOff == 1 && y == bitGrid.height-1)) {
 							if (!originWasSet && y == 0 && x == originXOffset) { 
 								originWasSet = true;
-								e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey, true) );
+								e.push( macro grid.setCellActorAt(util.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey, true) );
 							}
-							else e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey, false) );
+							else e.push( macro grid.setCellActorAt(util.Pos.xy(pos.x+$v{x+xOff}, pos.y+$v{y+yOff}), gridKey, false) );
 						}
 						if ((xOff == -1 && x == bitGrid.width-1) || (xOff == 1 && x == 0) || (yOff == -1 && y == bitGrid.height-1) || (yOff == 1 && y == 0)) {
 							if (!originWasDel && y == 0 && x == originXOffset) originWasDel = true;
-							e.push( macro grid.delCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
+							e.push( macro grid.delCellActorAt(util.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
 						}
 						else if ( !bitGrid.get(x-xOff,y-yOff) ) {
 							if (!originWasDel && y == 0 && x == originXOffset) originWasDel = true;
-							e.push( macro grid.delCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
+							e.push( macro grid.delCellActorAt(util.Pos.xy(pos.x+$v{x}, pos.y+$v{y})) );
 						}
 					}
 					else if ( ( (x-xOff)>=0 && (x-xOff)<bitGrid.width && (y-yOff)>=0 && (y-yOff)<bitGrid.height ) && bitGrid.get(x-xOff,y-yOff) ) {
 						if (!originWasSet && y == 0 && x == originXOffset) { 
 							originWasSet = true;
-							e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey, true) );
+							e.push( macro grid.setCellActorAt(util.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey, true) );
 						}
-						else e.push( macro grid.setCellActorAt(automat.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey, false) );
+						else e.push( macro grid.setCellActorAt(util.Pos.xy(pos.x+$v{x}, pos.y+$v{y}), gridKey, false) );
 					}
 				}
 				// remove old origin
-				if (!originWasDel) e.push( macro grid.delActorOriginAt(automat.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
+				if (!originWasDel) e.push( macro grid.delActorOriginAt(util.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
 				// change position
-				e.push( macro pos = automat.Pos.xy(pos.x + $v{xOff}, pos.y + $v{yOff}) );
+				e.push( macro pos = util.Pos.xy(pos.x + $v{xOff}, pos.y + $v{yOff}) );
 				// set new origin
-				if (!originWasSet) e.push( macro grid.setActorOriginAt(automat.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
+				if (!originWasSet) e.push( macro grid.setActorOriginAt(util.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
 				return e;
 			}
 
@@ -540,9 +542,9 @@ class ShapeMacro {
 						else {
 							// Optimization: keep the actor key while remove and adding again
 							var g = grid; removeFromGrid();
-							// if (pos.x == 0) addToGrid(g.left, automat.Pos.xy($v{bitGrid.width - 1},pos.y));
-							if (pos.x == 0) addToGrid(g.left, automat.Pos.xy(Grid.WIDTH-1,pos.y));
-							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y));
+							// if (pos.x == 0) addToGrid(g.left, util.Pos.xy($v{bitGrid.width - 1},pos.y));
+							if (pos.x == 0) addToGrid(g.left, util.Pos.xy(Grid.WIDTH-1,pos.y));
+							else addToGrid(g, util.Pos.xy(pos.x-1, pos.y));
 						}
 						// TODO: more optimized and grid-neigbour-change:
 						/*
@@ -600,9 +602,9 @@ class ShapeMacro {
 						else {
 							var g = grid;
 							removeFromGrid();
-							// if (pos.x == $v{bitGrid.width - 1}) addToGrid(g.right, automat.Pos.xy(0, pos.y));
-							if (pos.x == Grid.WIDTH-1) addToGrid(g.right, automat.Pos.xy(0, pos.y));
-							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y));
+							// if (pos.x == $v{bitGrid.width - 1}) addToGrid(g.right, util.Pos.xy(0, pos.y));
+							if (pos.x == Grid.WIDTH-1) addToGrid(g.right, util.Pos.xy(0, pos.y));
+							else addToGrid(g, util.Pos.xy(pos.x+1, pos.y));
 						},
 					ret: null
 				})
@@ -619,8 +621,8 @@ class ShapeMacro {
 							$b{f(0,-1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.y == 0) addToGrid(g.top, automat.Pos.xy(pos.x, Grid.HEIGHT-1));
-							else addToGrid(g, automat.Pos.xy(pos.x, pos.y-1));
+							if (pos.y == 0) addToGrid(g.top, util.Pos.xy(pos.x, Grid.HEIGHT-1));
+							else addToGrid(g, util.Pos.xy(pos.x, pos.y-1));
 						},
 					ret: null
 				})
@@ -637,8 +639,8 @@ class ShapeMacro {
 							$b{f(0,1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.y == Grid.HEIGHT-1) addToGrid(g.bottom, automat.Pos.xy(pos.x, 0));
-							else addToGrid(g, automat.Pos.xy(pos.x, pos.y+1));
+							if (pos.y == Grid.HEIGHT-1) addToGrid(g.bottom, util.Pos.xy(pos.x, 0));
+							else addToGrid(g, util.Pos.xy(pos.x, pos.y+1));
 						},
 					ret: null
 				})
@@ -655,10 +657,10 @@ class ShapeMacro {
 							$b{f(-1,-1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.x == 0 && pos.y == 0) addToGrid(g.leftTop, automat.Pos.xy(Grid.WIDTH - 1, Grid.HEIGHT - 1));
-							else if (pos.x == 0) addToGrid(g.left, automat.Pos.xy(Grid.WIDTH - 1, pos.y-1));
-							else if (pos.y == 0) addToGrid(g.top, automat.Pos.xy(pos.x-1, Grid.HEIGHT - 1));
-							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y-1));
+							if (pos.x == 0 && pos.y == 0) addToGrid(g.leftTop, util.Pos.xy(Grid.WIDTH - 1, Grid.HEIGHT - 1));
+							else if (pos.x == 0) addToGrid(g.left, util.Pos.xy(Grid.WIDTH - 1, pos.y-1));
+							else if (pos.y == 0) addToGrid(g.top, util.Pos.xy(pos.x-1, Grid.HEIGHT - 1));
+							else addToGrid(g, util.Pos.xy(pos.x-1, pos.y-1));
 						},
 					ret: null
 				})
@@ -675,10 +677,10 @@ class ShapeMacro {
 							$b{f(-1,1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.x == 0 && pos.y == Grid.HEIGHT - 1) addToGrid(g.leftBottom, automat.Pos.xy(Grid.WIDTH - 1, 0));
-							else if (pos.x == 0) addToGrid(g.left, automat.Pos.xy(Grid.WIDTH - 1, pos.y+1));
-							else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, automat.Pos.xy(pos.x-1, 0));
-							else addToGrid(g, automat.Pos.xy(pos.x-1, pos.y+1));					
+							if (pos.x == 0 && pos.y == Grid.HEIGHT - 1) addToGrid(g.leftBottom, util.Pos.xy(Grid.WIDTH - 1, 0));
+							else if (pos.x == 0) addToGrid(g.left, util.Pos.xy(Grid.WIDTH - 1, pos.y+1));
+							else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, util.Pos.xy(pos.x-1, 0));
+							else addToGrid(g, util.Pos.xy(pos.x-1, pos.y+1));					
 						},
 					ret: null
 				})
@@ -695,10 +697,10 @@ class ShapeMacro {
 							$b{f(1,-1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.x == Grid.WIDTH - 1 && pos.y == 0) addToGrid(g.rightTop, automat.Pos.xy(0, Grid.HEIGHT - 1));
-							else if (pos.x == Grid.WIDTH - 1) addToGrid(g.right, automat.Pos.xy(0, pos.y-1));
-							else if (pos.y == 0) addToGrid(g.bottom, automat.Pos.xy(pos.x+1, Grid.HEIGHT - 1));
-							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y-1));
+							if (pos.x == Grid.WIDTH - 1 && pos.y == 0) addToGrid(g.rightTop, util.Pos.xy(0, Grid.HEIGHT - 1));
+							else if (pos.x == Grid.WIDTH - 1) addToGrid(g.right, util.Pos.xy(0, pos.y-1));
+							else if (pos.y == 0) addToGrid(g.bottom, util.Pos.xy(pos.x+1, Grid.HEIGHT - 1));
+							else addToGrid(g, util.Pos.xy(pos.x+1, pos.y-1));
 						},
 					ret: null
 				})
@@ -715,10 +717,10 @@ class ShapeMacro {
 							$b{f(1,1)};
 						else {
 							var g = grid; removeFromGrid();
-							if (pos.x == Grid.WIDTH - 1 && pos.y == Grid.HEIGHT - 1) addToGrid(g.rightBottom, automat.Pos.xy(0, 0));
-							else if (pos.x == Grid.WIDTH - 1) addToGrid(g.left, automat.Pos.xy(0, pos.y+1));
-							else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, automat.Pos.xy(pos.x+1, 0));
-							else addToGrid(g, automat.Pos.xy(pos.x+1, pos.y+1));
+							if (pos.x == Grid.WIDTH - 1 && pos.y == Grid.HEIGHT - 1) addToGrid(g.rightBottom, util.Pos.xy(0, 0));
+							else if (pos.x == Grid.WIDTH - 1) addToGrid(g.left, util.Pos.xy(0, pos.y+1));
+							else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, util.Pos.xy(pos.x+1, 0));
+							else addToGrid(g, util.Pos.xy(pos.x+1, pos.y+1));
 						},
 					ret: null
 				})
@@ -745,7 +747,7 @@ class ShapeMacro {
 					kind: FFun({
 						args: [
 							{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-							{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
+							{name:"pos", opt:false, meta:[], type: macro:util.Pos}
 						],
 						expr: macro automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
 						ret: null
@@ -772,7 +774,7 @@ class ShapeMacro {
 					kind: FFun({
 						args: [
 							{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-							{name:"pos", opt:false, meta:[], type: macro:automat.Pos}
+							{name:"pos", opt:false, meta:[], type: macro:util.Pos}
 						],
 						expr: macro return automat.actor.Shape.$fname(grid, pos, blockedCellType, shapeBitGrid),
 						ret: macro:Bool

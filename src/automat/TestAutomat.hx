@@ -1,21 +1,17 @@
 package automat;
 
 import haxe.Timer;
-import automat.Cell.CellActor;
-import util.BitUtil;
 import lime.app.Application;
 
-import util.BitGrid;
+import automat.Cell.CellActor;
 
 import automat.actor.Actor;
-import automat.actor.Shape;
-
 import automat.actor.Haxe;
 import automat.actor.Live;//<-
 
-import automat.TestGrid;
+import automat.GridTestData;
 
-import automat.Pos.xy as P;
+import util.Pos.xy as P;
 
 class TestAutomat extends Application {
 
@@ -23,20 +19,6 @@ class TestAutomat extends Application {
 	public function new() {
 		super();
 		
-		
-		// -------- test Pos ----------
-		/*
-		trace(Pos.xMax, Pos.yMax);
-		var p = new Pos(36,4);
-		trace("pos:",p.x,p.y);
-		p = Pos.xy(4,5);
-		trace("pos:",p.x,p.y);
-		var p = new Pos(3,4);
-		p.x-=1;
-		p.y+=1;
-		trace(p);
-		*/
-
 		// -------- test cell ----------
 		/*
 		var c0 = new Cell(WATER,42);
@@ -64,35 +46,10 @@ class TestAutomat extends Application {
 		trace(grid.get(new Pos(0,1)));
 		*/
 
-		// -------- test BitGrid ----------
-		/*
-		var bitGrid:BitGrid = [
-			"#  #  #   #",
-			"#  #   # # ",
-			"####    #  ",
-			"#  #   # # ",
-			"#  #  #   #",
-		];		
-		// bitGrid.set(0,0, false);
-		// bitGrid.set(1,0);
-		trace("\n"+bitGrid, bitGrid.width, bitGrid.height, bitGrid.hasGap());
-
-		var bitGrid:BitGrid = "
-			|                             |
-			|   #  #   ##   #   #  ####   |
-			|   #  #  #  #   # #   #      |
-			|   ####  ####    #    ####   |
-			|   #  #  #  #   # #   #      |
-			|   #  #  #  #  #   #  ####   |
-			|                             |
-		";
-		trace("\n"+bitGrid, bitGrid.width, bitGrid.height, bitGrid.hasGap());
-		*/
-
 
 		/*
 		// -------- grid testdata ----------
-		var grid = TestGrid.createTestGrid(TestGrid.TESTGRID);
+		var grid = GridTestData.create(GridTestData.TESTGRID);
 		// trace(grid.get(new Pos(1,1)));
 
 		grid.setAction(new Action(CELL_MOVE, new Pos(1,1)), 0); // immediadly
@@ -108,7 +65,7 @@ class TestAutomat extends Application {
 
 		// -------- add/remove Actors ----------
 
-		var grid = TestGrid.createTestGrid("
+		var grid = GridTestData.create("
 ################################
 #                              #
 #                              #
@@ -180,12 +137,12 @@ E                              #
 		
 		var live = new Live("on shitball around The S u n STAR;)");
 		live.addToGrid(grid, P(7,1));
-		TestGrid.traceGrid(grid, 32, 16);
+		GridTestData.traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
 			if ( live.freeDown() ) {
 				live.goDown();
-				TestGrid.traceGrid(grid, 32, 16, true);
+				GridTestData.traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 1001); // night ,) 
 			}
 		}		
@@ -195,12 +152,12 @@ E                              #
 		// TIME for haxe now:
 		var haxe = new Haxe("forever! \\o/");
 		haxe.addToGrid(grid, P(3,5));
-		TestGrid.traceGrid(grid, 32, 16);
+		GridTestData.traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
 			if ( haxe.freeDown() ) {
 				haxe.goDown();
-				TestGrid.traceGrid(grid, 32, 16, true);
+				GridTestData.traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 900);
 			}
 		}		
