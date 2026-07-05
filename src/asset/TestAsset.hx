@@ -16,6 +16,10 @@ import peote.view.Color;
 import asset.generated.Cells as Asset;
 import asset.generated.Cells.TileID as TileID;
 import asset.generated.Cells.AnimID as AnimID;
+#elseif (assets=="Actors")
+import asset.generated.Actors as Asset;
+import asset.generated.Actors.TileID as TileID;
+import asset.generated.Actors.AnimID as AnimID;
 #else
 import asset.generated.Chars as Asset;
 import asset.generated.Chars.TileID as TileID;
@@ -57,8 +61,7 @@ class ElemAnim implements Element
 
 	public static var buffer:Buffer<ElemAnim>;
 	
-
-	public function new(x:Int, y:Int, w:Int, h:Int, gap:Int, sheet:Int) {
+	public function new(x:Int, y:Int, w:Int, h:Int, gap:Int, sheet:Int) {	
 		this.x = x;
 		this.y = y;
 		this.w = w;

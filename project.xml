@@ -12,13 +12,14 @@
 	
 	
 	<!-- <app main="Main" path="bin" file="Main" /> -->
+	<app main="view.TestView" path="bin" file="TestView" />
 	<!-- <app main="render.cell.TestCellRender" path="bin" file="TestCellRender" /> -->
-	<!-- <app main="view.TestView" path="bin" file="TestView" /> -->
 	<!-- <app main="automat.TestAutomat" path="bin" file="TestAutomat" /> -->
+	<!-- <app main="util.TestUtil" path="bin" file="TestUtil" /> -->
 	<!-- <app main="util.pool.TestPool" path="bin" file="TestPool" /> -->
 
-	<app main="asset.TestAsset" path="bin" file="TestAsset" />
-	<haxedef name="assets" value="Cells" />
+	<!-- <app main="asset.TestAsset" path="bin" file="TestAsset" /> -->
+	<!-- <haxedef name="assets" value="Cells" /> -->
 
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->
@@ -57,7 +58,7 @@
 	<haxedef name="keep_inline_positions" />
 	
 	<!-- for html5 and loading inside onPreloadComplete-event the assets need to be embed=true --> 
-	<assets path="assets" exclude="lime.svg|render|*.blend|*.sh" embed="false" />
+	<assets path="assets" exclude="lime.svg|render|renderCell|renderActor|*.blend|*.sh" embed="false" />
 	
 	<icon path="assets/lime.svg" />
 	
