@@ -7,10 +7,11 @@ import asset.Anim;
 
 @:publicFields enum abstract TileID(Int) from Int to Int {
     var STONE1x1;
+    var STONE1x2;
     var STONE2x2;
-    public static var names = ["STONE1x1", "STONE2x2"];
+    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2"];
     @:from static public function fromString(s:String):TileID return names.indexOf(s);
-    public static function iterator() return new IntIterator(0,2);
+    public static function iterator() return new IntIterator(0,3);
 }
 
 @:publicFields enum abstract AnimID(Int) from Int to Int {
@@ -39,9 +40,20 @@ interface Tile {
     }
     var animID:Array<AnimID> = [still];
 }
-@:publicFields class Stone2x2 implements Tile {
+@:publicFields class Stone1x2 implements Tile {
     inline function new () {};
     var sheet(get, never):Int; inline function get_sheet() return 1;
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(0, 0);
+            default: throw("Error, Stone1x2 don't have this animation"); null;
+        }
+    }
+    var animID:Array<AnimID> = [still];
+}
+@:publicFields class Stone2x2 implements Tile {
+    inline function new () {};
+    var sheet(get, never):Int; inline function get_sheet() return 2;
     inline function anim(id:AnimID):Anim {
         return switch(id) {
             case still: new Anim(0, 0);
@@ -56,11 +68,13 @@ class Actors {
     public static var FPS:Int = 12;
     public static var sheets:Array<Sheet> = [
         new Sheet("actors32x32.png", 32, 32, 0, 8, 1),
+        new Sheet("actors32x64.png", 32, 64, 0, 8, 1),
         new Sheet("actors64x64.png", 64, 64, 0, 8, 1),
     ];
     public inline static function tile(id:TileID):Tile {
         return switch(id) {
             case STONE1x1: new Stone1x1();
+            case STONE1x2: new Stone1x2();
             case STONE2x2: new Stone2x2();
             default:  throw("Error, no tile for this ID"); null;
         }
