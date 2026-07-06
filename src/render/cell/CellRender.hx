@@ -3,26 +3,17 @@ package render.cell;
 import haxe.ds.Vector;
 import lime.graphics.Image;
 
-import peote.view.intern.Util;
 import peote.view.PeoteView;
-import peote.view.Display;
 import peote.view.Buffer;
-import peote.view.Program;
 import peote.view.Texture;
 import peote.view.TextureFormat;
 import peote.view.TextureConfig;
-import peote.view.Color;
 import peote.view.Load;
 
-import automat.Grid;
 import automat.Cell;
 
-import render.cell.CellDisplay;
-import render.cell.CellElemAnim;
-import render.cell.CellElemStatic;
-
 import asset.generated.Cells as CellAsset;
-import asset.generated.Cells.TileID as TileID;
+import asset.generated.Cells.TileID as CellTileID;
 // import asset.generated.Cells.AnimID as AnimID;
 
 class ElemViewCache<T> {
@@ -52,19 +43,15 @@ class ElemViewCache<T> {
 class CellRender {
 
 	//--------------- STATIC ---------------------------
-
 	public static var peoteView:PeoteView;
-
 	public static var texture:Texture;
 
-	public static function init(peoteView:PeoteView)
-	{
+	public static function init(peoteView:PeoteView) {
 		CellRender.peoteView = peoteView;
 		loadTextures();
 	}
 
-	public static function loadTextures()
-	{
+	public static function loadTextures() {
 		var sheet = CellAsset.sheets[0];
 
 		var textureConfig:TextureConfig = {
@@ -84,8 +71,7 @@ class CellRender {
 			function (image:Image) {
 				texture.setData(image);				
 			}
-		);
-		
+		);		
 	}
 
 	//----------------------------------------------------
@@ -102,16 +88,11 @@ class CellRender {
 		cellBufferStatic = new Buffer<CellElemStatic>(1024, 512);
 		cellBufferAnim = new Buffer<CellElemAnim>(1024, 512);
 
-		// ----------------------------------------
-
 		cellDisplay = new CellDisplay(x, y, width, height, cellBufferStatic, cellBufferAnim, texture);
-		peoteView.addDisplay(cellDisplay);
-		
+		peoteView.addDisplay(cellDisplay);		
 	}
 
-	public function initView(maxWidth:Int, maxHeight:Int)
-	{
-		// TODO: size here in depend of maximum-Left/Right sizes in MultiGridView!
+	public function initView(maxWidth:Int, maxHeight:Int) {
 		elemViewCache = new ElemViewCache<CellElemStatic>(maxWidth, maxHeight);
 	}
 	// public function purgeView() {}
@@ -136,22 +117,22 @@ class CellRender {
 		var py = y*32 + scrollOffsetY;
 		switch (cellType) {
 			case EARTH:
-				var element = new CellElemStatic(TileID.EARTH, px, py, 32, 32);
+				var element = new CellElemStatic(CellTileID.EARTH, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case WOOD:
-				var element = new CellElemStatic(TileID.WOOD, px, py, 32, 32);
+				var element = new CellElemStatic(CellTileID.WOOD, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case ROCK:
-				var element = new CellElemStatic(TileID.ROCK, px, py, 32, 32);
+				var element = new CellElemStatic(CellTileID.ROCK, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case METAL:
-				var element = new CellElemStatic(TileID.METAL, px, py, 32, 32);
+				var element = new CellElemStatic(CellTileID.METAL, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
@@ -161,7 +142,6 @@ class CellRender {
 
 			default:
 		}
-
 	}
 
 	public function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
@@ -187,9 +167,8 @@ class CellRender {
 	}
 
 
-
 	public function updateCell(x:Int, y:Int) {
-
+		// TODO
 	}
 
 

@@ -1,5 +1,6 @@
 package view;
 
+import automat.actor.ActorType;
 import haxe.ds.Vector;
 
 import peote.view.PeoteView;
@@ -52,9 +53,7 @@ class View {
 	public function new(peoteView:PeoteView, x:Int, y:Int, width:Int, height:Int)
 	{
 		this.peoteView = peoteView;
-
 		renderView = new RenderView(x, y, width, height);
-
 	}
 
 
@@ -136,22 +135,16 @@ class View {
 
 	// ------ actor --------
 
-	public function addActor(pos:Pos, actorKey:CellActor, name:String) {
-
+	public function addActor(pos:Pos, actorKey:CellActor, actorType:ActorType) {
 		var mapkey = ( gridViewIndex << (CellActor.bits-1)) & actorKey;
-
-		trace("addActor", pos, mapkey, name);
-
-		// TODO
-		// actors.set(actorKey, new ViewActor() ); // CHECK: actorKey have to start by 0 here!
+		trace("addActor", pos, mapkey, actorType);
+		// renderView.actorRender.addActor(pos.x+gridViewX, pos.y+gridViewY, mapkey, actorType);
 	}
 
 	public function removeActor(actorKey:CellActor) {
-
 		var mapkey = ( gridViewIndex << (CellActor.bits-1)) & actorKey;
-
 		trace("removeActor", mapkey);
-		// actors.set(actorKey, null);
+		// renderView.actorRender.removeActor(mapkey);
 	}
 
 	// ------- update --------

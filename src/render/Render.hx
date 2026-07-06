@@ -2,6 +2,7 @@ package render;
 
 import peote.view.PeoteView;
 import render.cell.CellRender;
+import render.actor.ActorRender;
 
 class Render {
 
@@ -14,7 +15,7 @@ class Render {
 		Render.peoteView = peoteView;
 
 		CellRender.init(peoteView);
-		// ActorRender.init(peoteView);
+		ActorRender.init(peoteView);
 	}
 
 

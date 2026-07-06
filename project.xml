@@ -19,7 +19,7 @@
 	<!-- <app main="util.pool.TestPool" path="bin" file="TestPool" /> -->
 
 	<!-- <app main="asset.TestAsset" path="bin" file="TestAsset" /> -->
-	<!-- <haxedef name="assets" value="Cells" /> -->
+	<!-- <haxedef name="assets" value="Actors" /> -->
 
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->

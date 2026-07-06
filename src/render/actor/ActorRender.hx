@@ -1,50 +1,53 @@
 package render.actor;
 
+import haxe.ds.IntMap;
 import lime.graphics.Image;
 
-import peote.view.intern.Util;
 import peote.view.PeoteView;
-import peote.view.Display;
 import peote.view.Buffer;
-import peote.view.Program;
 import peote.view.Texture;
 import peote.view.TextureFormat;
-import peote.view.Color;
+import peote.view.TextureConfig;
 import peote.view.Load;
 
-import render.actor.ActorDisplay;
-import render.actor.ActorElemAnim;
-import render.actor.ActorElemStatic;
+import automat.actor.ActorType;
+
+// TODO
+// import asset.generated.Actors as ActorAsset;
+// import asset.generated.Actors.TileID as ActorTileID;
+// import asset.generated.Actors.AnimID as AnimID;
 
 class ActorRender {
 
-	var peoteView:PeoteView;
-	var actorDisplay:ActorDisplay;
+	//--------------- STATIC ---------------------------
+	public static var peoteView:PeoteView;
+	public static var texture:Texture;
 
-	var actorBufferStatic:Buffer<ActorElemStatic>;
-	var actorBufferAnim:Buffer<ActorElemAnim>;
+	public static function init(peoteView:PeoteView) {
+		ActorRender.peoteView = peoteView;
+		loadTextures();
+	}
 
 	public static function loadTextures() {
-		/*
-		var textureStatic = new Texture(Tiles.width, Tiles.height, 1, {
+		// TODO
+		/*var sheet = ActorAsset.sheets[0];
+
+		var textureConfig:TextureConfig = {
 			format:TextureFormat.RGBA,
 			// smoothExpand: true,
 			smoothShrink: true,
 			// mipmap: true,
-			powerOfTwo: false
-		});
+			powerOfTwo: false,
+			tilesX: sheet.tilesX,
+			tilesY: sheet.tilesY
+		};
 
-		textureStatic.tilesX = Tiles.tilesX;
-		textureStatic.tilesY = Tiles.tilesY;
+		texture = new Texture(sheet.width*sheet.tilesX, sheet.height*sheet.tilesY, 1, textureConfig);
 		
-		Load.imageArray([
-			Tiles.fileName
-			],
+		Load.image( "assets/" + sheet.name,
 			true,
-			function (image:Array<Image>) {
-
-				textureStatic.setData(image[0]);
-				
+			function (image:Image) {
+				texture.setData(image);				
 			}
 		);
 		*/
@@ -52,20 +55,117 @@ class ActorRender {
 
 	//----------------------------------------------------
 
- 	public function new(peoteView:PeoteView)
+	public var actorDisplay:ActorDisplay;
+
+	var actorBufferStatic:Buffer<ActorElemStatic>;
+	var actorBufferAnim:Buffer<ActorElemAnim>;
+
+	var elemViewMap:IntMap<ActorElemStatic>;
+
+ 	public function new(x:Int, y:Int, width:Int, height:Int)
 	{
-		this.peoteView = peoteView;
-	
 		actorBufferStatic = new Buffer<ActorElemStatic>(1024, 512);
 		actorBufferAnim = new Buffer<ActorElemAnim>(1024, 512);
 
-		// ----------------------------------------
-
-		actorDisplay = new ActorDisplay(0, 0, 512, 512, actorBufferStatic, actorBufferAnim);
+		actorDisplay = new ActorDisplay(x, y, width, height, actorBufferStatic, actorBufferAnim, texture);
 		peoteView.addDisplay(actorDisplay);
-		
+	}
 
+	public function initView(maxWidth:Int, maxHeight:Int) {
+		elemViewMap = new IntMap<ActorElemStatic>();
+	}
+	// public function purgeView() {}
+
+	public inline function addActor(x:Int, y:Int, mapkey:Int, actorType:ActorType) {
+		var px = x*32 + scrollOffsetX;
+		var py = y*32 + scrollOffsetY;
+		switch (actorType) {
+			case STONE1x1:
+				// TODO
+				// var element = new ActorElemStatic(ActorTileID.STONE1x1, px, py, 32, 32);
+				// elemViewMap.set(mapkey, element);
+				// actorBufferStatic.addElement(element);
+
+			default:
+		}
+	}
+	
+	public inline function removeActor(mapkey:Int) {
+		var element = elemViewMap.get(mapkey);
+		// if (element!=null) {
+			actorBufferStatic.removeElement(element);
+			// TODO: is this need?
+			// elemViewMap.remove(mapkey);
+			// elemViewMap.set(mapkey, null);
+		// }
+	}
+
+	public function updateActor(mapkey:Int, action:Int) { // TODO: action!
+		// TODO
 	}
 
 
+
+	// ------- scrolling ----------
+
+	public var scrollOffsetX:Int = 0;
+	public var scrollOffsetY:Int = 0;
+	static inline var RESET_AT_OFFSET:Int = 16384;
+	
+	public function scrollLeft() {
+		if (actorDisplay.xOffset >= RESET_AT_OFFSET) {			
+			scrollOffsetX += RESET_AT_OFFSET;
+			// for (i in 0...(elemViewMap.sizeX * elemViewMap.sizeY)) {
+				// var element = elemViewMap.data.get(i);
+				// if (element!=null) element.x += RESET_AT_OFFSET;
+			// }
+			actorBufferStatic.update();
+			actorDisplay.xOffset -= RESET_AT_OFFSET;
+		}
+
+		actorDisplay.xOffset += 32;		
+	}
+
+	public function scrollRight() {
+		if (actorDisplay.xOffset <= -RESET_AT_OFFSET) {			
+			scrollOffsetX -= RESET_AT_OFFSET;
+			// for (i in 0...(elemViewMap.sizeX * elemViewMap.sizeY)) {
+				// var element = elemViewMap.data.get(i);
+				// if (element!=null) element.x -= RESET_AT_OFFSET;
+			// }
+			actorBufferStatic.update();
+			actorDisplay.xOffset += RESET_AT_OFFSET;
+		}
+
+		actorDisplay.xOffset -= 32;	
+	}
+
+	public function scrollTop() {
+		if (actorDisplay.yOffset >= RESET_AT_OFFSET) {			
+			scrollOffsetY += RESET_AT_OFFSET;
+			// for (i in 0...elemViewMap.data.length) {
+			// 	var element = elemViewMap.data.get(i);
+			// 	if (element!=null) element.y += RESET_AT_OFFSET;
+			// }
+			actorBufferStatic.update();
+			actorDisplay.yOffset -= RESET_AT_OFFSET;
+		}
+
+		actorDisplay.yOffset += 32;		
+	}
+
+	public function scrollBottom() {
+		if (actorDisplay.yOffset <= -RESET_AT_OFFSET) {			
+			scrollOffsetY -= RESET_AT_OFFSET;
+			// for (i in 0...elemViewMap.data.length) {
+			// 	var element = elemViewMap.data.get(i);
+			// 	if (element!=null) element.y -= RESET_AT_OFFSET;
+			// }
+			actorBufferStatic.update();
+			actorDisplay.yOffset += RESET_AT_OFFSET;
+		}
+
+		actorDisplay.yOffset -= 32;
+	}
+	
 }
