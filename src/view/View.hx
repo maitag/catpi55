@@ -136,15 +136,15 @@ class View {
 	// ------ actor --------
 
 	public function addActor(pos:Pos, actorKey:CellActor, actorType:ActorType) {
-		var mapkey = ( gridViewIndex << (CellActor.bits-1)) & actorKey;
-		trace("addActor", pos, mapkey, actorType);
-		// renderView.actorRender.addActor(pos.x+gridViewX, pos.y+gridViewY, mapkey, actorType);
+		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
+		trace("addActor", 'x:${pos.x+gridViewX} y:${pos.y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:$mapkey');		
+		renderView.actorRender.addActor(pos.x+gridViewX, pos.y+gridViewY, mapkey, actorType);
 	}
 
 	public function removeActor(actorKey:CellActor) {
-		var mapkey = ( gridViewIndex << (CellActor.bits-1)) & actorKey;
+		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
 		trace("removeActor", mapkey);
-		// renderView.actorRender.removeActor(mapkey);
+		renderView.actorRender.removeActor(mapkey);
 	}
 
 	// ------- update --------

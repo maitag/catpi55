@@ -10,11 +10,13 @@ import peote.view.TextureFormat;
 import peote.view.TextureConfig;
 import peote.view.Load;
 
+import asset.Util;
 import automat.Cell;
 
-import asset.generated.Cells as CellAsset;
-import asset.generated.Cells.TileID as CellTileID;
-// import asset.generated.Cells.AnimID as AnimID;
+// assets
+import asset.generated.cells.Cells;
+import asset.generated.cells.Cells.TileID;
+// import asset.generated.cells.Cells.AnimID;
 
 class ElemViewCache<T> {
 
@@ -52,26 +54,15 @@ class CellRender {
 	}
 
 	public static function loadTextures() {
-		var sheet = CellAsset.sheets[0];
-
 		var textureConfig:TextureConfig = {
 			format:TextureFormat.RGBA,
 			// smoothExpand: true,
 			smoothShrink: true,
 			// mipmap: true,
 			powerOfTwo: false,
-			tilesX: sheet.tilesX,
-			tilesY: sheet.tilesY
 		};
 
-		texture = new Texture(sheet.width*sheet.tilesX, sheet.height*sheet.tilesY, 1, textureConfig);
-		
-		Load.image( "assets/" + sheet.name,
-			true,
-			function (image:Image) {
-				texture.setData(image);				
-			}
-		);		
+		texture = Util.loadTextures(Cells.sheets, textureConfig, false)[0];
 	}
 
 	//----------------------------------------------------
@@ -116,23 +107,32 @@ class CellRender {
 		var px = x*32 + scrollOffsetX;
 		var py = y*32 + scrollOffsetY;
 		switch (cellType) {
+			// TODO
 			case EARTH:
-				var element = new CellElemStatic(CellTileID.EARTH, px, py, 32, 32);
+				var tile = Cells.tile(TileID.EARTH);
+				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
+				// var element = new CellElemStatic(TileID.EARTH, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case WOOD:
-				var element = new CellElemStatic(CellTileID.WOOD, px, py, 32, 32);
+				var tile = Cells.tile(TileID.WOOD);
+				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
+				// var element = new CellElemStatic(TileID.WOOD, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case ROCK:
-				var element = new CellElemStatic(CellTileID.ROCK, px, py, 32, 32);
+				var tile = Cells.tile(TileID.ROCK);
+				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
+				// var element = new CellElemStatic(TileID.ROCK, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
 			case METAL:
-				var element = new CellElemStatic(CellTileID.METAL, px, py, 32, 32);
+				var tile = Cells.tile(TileID.METAL);
+				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
+				// var element = new CellElemStatic(TileID.METAL, px, py, 32, 32);
 				elemViewCache.set(x, y, element);
 				cellBufferStatic.addElement(element);
 
@@ -140,7 +140,7 @@ class CellRender {
 			case WATER:
 				// T O D O
 
-			default:
+			default: //throw('CellRender - cellType $cellType not implemented yet!');
 		}
 	}
 

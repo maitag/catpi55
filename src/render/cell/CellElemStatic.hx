@@ -20,7 +20,7 @@ class CellElemStatic implements peote.view.Element
 
 	// --------------------------------------------------------------------------
 	
-	public function new(tile:Int = 0, x:Int = 0, y:Int = 0, w:Int = 32, h:Int = 32)
+	public function new(tile:Int, x:Int, y:Int, w:Int, h:Int)
 	{
 		this.tile = tile;
 		this.x = x;

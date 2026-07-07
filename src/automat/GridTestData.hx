@@ -1,6 +1,5 @@
 package automat;
 
-import asset.generated.Cells.Air;
 import automat.Cell.CellType;
 import haxe.ds.Vector;
 import util.Maze;

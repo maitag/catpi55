@@ -7,11 +7,14 @@ class ActorElemStatic implements peote.view.Element
 	@posY public var y:Int = 0;
 		
 	// size in pixel
-	@sizeX public var w:Int = 64;
-	@sizeY public var h:Int = 64;
+	@sizeX public var w:Int = 32;
+	@sizeY public var h:Int = 32;
 	
 	// tile number
 	@texTile public var tile:Int = 0;
+
+	// texture unit (sheet index!)
+	@texUnit public var sheet:Int=0;
 
 	// scale out the gap;
 	// @const @texSizeX var texSizeX:Float;
@@ -20,9 +23,10 @@ class ActorElemStatic implements peote.view.Element
 
 	// --------------------------------------------------------------------------
 	
-	public function new(tile:Int = 0, x:Int = 0, y:Int = 0, w:Int = 128, h:Int = 128)
+	public function new(tile:Int, sheet:Int, x:Int, y:Int, w:Int, h:Int)
 	{
 		this.tile = tile;
+		this.sheet = sheet;
 		this.x = x;
 		this.y = y;
 		this.w = w;

@@ -13,17 +13,17 @@ import peote.view.Program;
 import peote.view.Color;
 
 #if (assets=="Cells")
-import asset.generated.Cells as Asset;
-import asset.generated.Cells.TileID as TileID;
-import asset.generated.Cells.AnimID as AnimID;
+import asset.generated.cells.Cells as Asset;
+import asset.generated.cells.Cells.TileID as TileID;
+import asset.generated.cells.Cells.AnimID as AnimID;
 #elseif (assets=="Actors")
-import asset.generated.Actors as Asset;
-import asset.generated.Actors.TileID as TileID;
-import asset.generated.Actors.AnimID as AnimID;
+import asset.generated.actors.Actors as Asset;
+import asset.generated.actors.Actors.TileID as TileID;
+import asset.generated.actors.Actors.AnimID as AnimID;
 #else
-import asset.generated.Chars as Asset;
-import asset.generated.Chars.TileID as TileID;
-import asset.generated.Chars.AnimID as AnimID;
+import asset.generated.chars.Chars as Asset;
+import asset.generated.chars.Chars.TileID as TileID;
+import asset.generated.chars.Chars.AnimID as AnimID;
 #end
 
 class ElemAnim implements Element

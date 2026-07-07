@@ -50,8 +50,18 @@ class TestView extends Application
 		// var grid:Grid = GridTestData.createMaze(2,2);
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
-		var actor = new Actor("a1");		
-		actor.addToGrid(grid, P(1,1)); //trace(actor.pos);
+		var actor1 = new Stone1x1("Stone1x1");
+		actor1.addToGrid(grid, P(1,1));
+
+		var actor2 = new Stone1x2("Stone1x2");
+		actor2.addToGrid(grid, P(2,1));
+
+		var actor3 = new Stone2x2("Stone2x2");
+		actor3.addToGrid(grid, P(3,1));
+
+
+		var actor4 = new Stone2x2("Stone2x2");
+		actor4.addToGrid(grid.right, P(0,0));
 		
 		// GridTestData.traceGrid(grid, 64, 64);
 		
@@ -65,6 +75,7 @@ class TestView extends Application
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 
 		view.renderView.cellRender.cellDisplay.zoom = 0.620921323059155;
+		view.renderView.actorRender.actorDisplay.zoom = 0.620921323059155;
 		// trace(multiGridView.gridViewCache);
 		// trace(new Maze(10,10).toString());
 	}
@@ -91,11 +102,15 @@ class TestView extends Application
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
 		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
 		if (deltaY<0) {
-			if (view.renderView.cellRender.cellDisplay.zoom > 0.63)
+			if (view.renderView.cellRender.cellDisplay.zoom > 0.63) {
 				view.renderView.cellRender.cellDisplay.zoom /= 1.1;
+				view.renderView.actorRender.actorDisplay.zoom = view.renderView.cellRender.cellDisplay.zoom;
+			}
 		}			
-		else 
+		else {
 			view.renderView.cellRender.cellDisplay.zoom *= 1.1;
+			view.renderView.actorRender.actorDisplay.zoom = view.renderView.cellRender.cellDisplay.zoom;
+		}
 		trace(view.renderView.cellRender.cellDisplay.zoom);
 	}
 	// override function onMouseMoveRelative (x:Float, y:Float):Void {}

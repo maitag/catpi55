@@ -22,7 +22,7 @@ abstract ActorDisplay(Display) to Display
 	}
 	*/
 
-	public function new(x:Int, y:Int, w:Int, h:Int, bufferStatic:Buffer<ActorElemStatic>, bufferAnim:Buffer<ActorElemAnim>, texture:Texture)
+	public function new(x:Int, y:Int, w:Int, h:Int, bufferStatic:Buffer<ActorElemStatic>, bufferAnim:Buffer<ActorElemAnim>, textures:Array<Texture>)
 	{
 		this = new Display(x, y, w, h);
 
@@ -31,7 +31,8 @@ abstract ActorDisplay(Display) to Display
 		var programStatic = new Program(bufferStatic);
 		// programAnim = new Program(bufferAnim);
 
-		programStatic.setTexture(texture);
+		// programStatic.setTexture(texture);
+		programStatic.setMultiTexture(textures);
 		// texture.setSmooth(true, false);
 
 		programStatic.blendEnabled = true;

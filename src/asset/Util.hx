@@ -6,16 +6,15 @@ import peote.view.Texture;
 import peote.view.TextureConfig;
 
 class Util {
-	public static function loadTextures(sheets:Array<Sheet>, ?onLoad:Array<Texture>->Void, debug = true):Array<Texture> {
+	public static function loadTextures(sheets:Array<Sheet>, ?textureConfig:TextureConfig, ?onLoad:Array<Texture>->Void, debug = true):Array<Texture> {
 		var textures = new Array<Texture>();
 		var texFileNames = new Array<String>();
 
 		for (sheet in sheets) {
-			var textureConfig:TextureConfig = {
-				powerOfTwo: false,
-				tilesX: sheet.tilesX,
-				tilesY: sheet.tilesY
-			};
+			if (textureConfig == null) textureConfig = { powerOfTwo: false };
+			textureConfig.tilesX = sheet.tilesX;
+			textureConfig.tilesY = sheet.tilesY;
+			
 			textures.push(new Texture(sheet.width*sheet.tilesX, sheet.height*sheet.tilesY, 1, textureConfig));
 			texFileNames.push("assets/" + sheet.name);
 		}
