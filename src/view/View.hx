@@ -5,25 +5,16 @@ import haxe.ds.Vector;
 
 import peote.view.PeoteView;
 
-import automat.Grid;
-import automat.Cell;
-import automat.Cell.CellActor;
 import util.Pos;
 import util.Pos.xy as P;
 
+import automat.Grid;
+import automat.Cell;
+import automat.Cell.CellActor;
 import render.RenderView;
 
 
-class ViewActor {
-	public function new() {
-		
-	}
-	// TODO
-}
-
-
-
- // this will be later handled by Remote-Client in peote-net!
+// this will be later handled by Remote-Client in peote-net!
 class View {
 
 	public var peoteView:PeoteView;
@@ -45,35 +36,21 @@ class View {
 	public var xTo:Int = 0;
 	public var yFrom:Int = 0;
 	public var yTo:Int = 0;
-		
 	
-	// TODO
-	// public var actors = new Vector<ViewActor>(CellActor.MAX_ACTORS);
-
 	public function new(peoteView:PeoteView, x:Int, y:Int, width:Int, height:Int)
 	{
 		this.peoteView = peoteView;
 		renderView = new RenderView(x, y, width, height);
 	}
 
-
 	// ----------------------------------------------
 	// --------- Sync from MultiGridView ------------
 	// ----------------------------------------------
 
 	public function init(maxGrids:Int, maxWidth:Int, maxHeight:Int) {
-
 		trace("init", maxGrids, maxWidth, maxHeight);
-
-		// actors = new Vector<Vector<ViewActor>>(maxGridViews);
-
-
 		gridData = new Vector<Pos>(maxGrids);
-
 		renderView.initView(maxWidth, maxHeight);
-
-		// TODO: init the RenderView -> ElementCache with same size
-
 	}
 
 	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
@@ -85,7 +62,7 @@ class View {
 		trace("removeGridView", index);
 	}
 
-	// sync functions what called from automat->GridView->to here
+	// current gridViewIndex and position-offsets
 	var gridViewIndex:Int = -1;
 	var gridViewX:Int = 0;
 	var gridViewY:Int = 0;

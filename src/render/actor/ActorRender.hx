@@ -46,22 +46,22 @@ class ActorRender {
 
 	public var actorDisplay:ActorDisplay;
 
-	var actorBufferStatic:Buffer<ActorElemStatic>;
-	var actorBufferAnim:Buffer<ActorElemAnim>;
+	var bufferStatic:Buffer<ActorElemStatic>;
+	var bufferAnim:Buffer<ActorElemAnim>;
 
-	var elemViewMap:IntMap<ActorElemStatic>;
+	var elemViewBuffer:IntMap<ActorElemStatic>;
 
  	public function new(x:Int, y:Int, width:Int, height:Int)
 	{
-		actorBufferStatic = new Buffer<ActorElemStatic>(1024, 512);
-		actorBufferAnim = new Buffer<ActorElemAnim>(1024, 512);
+		bufferStatic = new Buffer<ActorElemStatic>(1024, 512);
+		bufferAnim = new Buffer<ActorElemAnim>(1024, 512);
 
-		actorDisplay = new ActorDisplay(x, y, width, height, actorBufferStatic, actorBufferAnim, textures);
+		actorDisplay = new ActorDisplay(x, y, width, height, bufferStatic, bufferAnim, textures);
 		peoteView.addDisplay(actorDisplay);
 	}
 
 	public function initView(maxWidth:Int, maxHeight:Int) {
-		elemViewMap = new IntMap<ActorElemStatic>();
+		elemViewBuffer = new IntMap<ActorElemStatic>();
 	}
 	// public function purgeView() {}
 
@@ -74,34 +74,32 @@ class ActorRender {
 				var tile = Actors.tile(TileID.STONE1x1);
 				var sheet = Actors.sheets[ tile.sheet ];
 				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewMap.set(mapkey, element);
-				actorBufferStatic.addElement(element);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
 
 			case STONE1x2:
 				var tile = Actors.tile(TileID.STONE1x2);
 				var sheet = Actors.sheets[ tile.sheet ];
 				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewMap.set(mapkey, element);
-				actorBufferStatic.addElement(element);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
 
 			case STONE2x2:
 				var tile = Actors.tile(TileID.STONE2x2);
 				var sheet = Actors.sheets[ tile.sheet ];
 				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewMap.set(mapkey, element);
-				actorBufferStatic.addElement(element);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
 
 			default: throw('ActorRender - actorType $actorType not implemented yet!');
 		}
 	}
 	
 	public inline function removeActor(mapkey:Int) {
-		var element = elemViewMap.get(mapkey);
+		var element = elemViewBuffer.get(mapkey);
 		// if (element!=null) {
-			actorBufferStatic.removeElement(element);
-			// TODO: is this need?
-			// elemViewMap.remove(mapkey);
-			// elemViewMap.set(mapkey, null);
+			bufferStatic.removeElement(element);
+			elemViewBuffer.remove(mapkey);
 		// }
 	}
 
@@ -120,56 +118,40 @@ class ActorRender {
 	public function scrollLeft() {
 		if (actorDisplay.xOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetX += RESET_AT_OFFSET;
-			// for (i in 0...(elemViewMap.sizeX * elemViewMap.sizeY)) {
-				// var element = elemViewMap.data.get(i);
-				// if (element!=null) element.x += RESET_AT_OFFSET;
-			// }
-			actorBufferStatic.update();
+			for (element in elemViewBuffer) element.x += RESET_AT_OFFSET;
+			bufferStatic.update();
 			actorDisplay.xOffset -= RESET_AT_OFFSET;
 		}
-
 		actorDisplay.xOffset += 32;		
 	}
 
 	public function scrollRight() {
 		if (actorDisplay.xOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetX -= RESET_AT_OFFSET;
-			// for (i in 0...(elemViewMap.sizeX * elemViewMap.sizeY)) {
-				// var element = elemViewMap.data.get(i);
-				// if (element!=null) element.x -= RESET_AT_OFFSET;
-			// }
-			actorBufferStatic.update();
+			for (element in elemViewBuffer) element.x -= RESET_AT_OFFSET;
+			bufferStatic.update();
 			actorDisplay.xOffset += RESET_AT_OFFSET;
 		}
-
 		actorDisplay.xOffset -= 32;	
 	}
 
 	public function scrollTop() {
 		if (actorDisplay.yOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetY += RESET_AT_OFFSET;
-			// for (i in 0...elemViewMap.data.length) {
-			// 	var element = elemViewMap.data.get(i);
-			// 	if (element!=null) element.y += RESET_AT_OFFSET;
-			// }
-			actorBufferStatic.update();
+			for (element in elemViewBuffer) element.y += RESET_AT_OFFSET;
+			bufferStatic.update();
 			actorDisplay.yOffset -= RESET_AT_OFFSET;
 		}
-
 		actorDisplay.yOffset += 32;		
 	}
 
 	public function scrollBottom() {
 		if (actorDisplay.yOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetY -= RESET_AT_OFFSET;
-			// for (i in 0...elemViewMap.data.length) {
-			// 	var element = elemViewMap.data.get(i);
-			// 	if (element!=null) element.y -= RESET_AT_OFFSET;
-			// }
-			actorBufferStatic.update();
+			for (element in elemViewBuffer) element.y -= RESET_AT_OFFSET;
+			bufferStatic.update();
 			actorDisplay.yOffset += RESET_AT_OFFSET;
 		}
-
 		actorDisplay.yOffset -= 32;
 	}
 	

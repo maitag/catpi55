@@ -1,11 +1,8 @@
 package automat;
 
-import automat.actor.IActor;
-import automat.Cell.CellActor;
-import automat.Cell.CellType;
-
 import util.Pos;
 import util.Pos.xy as P;
+import automat.actor.IActor;
 
 class GridView {
 

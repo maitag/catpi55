@@ -18,28 +18,20 @@ import asset.generated.cells.Cells;
 import asset.generated.cells.Cells.TileID;
 // import asset.generated.cells.Cells.AnimID;
 
-class ElemViewCache<T> {
-
+@:generic class ElemViewBuffer<T> {
 	public var data:Vector<T>;
 	public var sizeX:Int;
-	public var sizeY:Int;
-	
+	public var sizeY:Int;	
 	public inline function new(sizeX:Int, sizeY:Int) {	
 		this.sizeX = sizeX;	
 		this.sizeY = sizeY;
 		data = new Vector( sizeX * sizeY );
 	}
-
 	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
 	inline function modY(y:Int) return (y<0) ? sizeY+y : y % sizeY;
 	inline function index(x:Int, y:Int) return modY(y) * sizeX + modX(x);
-
-	public inline function get(x:Int, y:Int):T {
-		return data.get( index(x, y) );
-	}
-	public inline function set(x:Int, y:Int, value:T) {
-		data.set( index(x, y), value );
-	}
+	public inline function get(x:Int, y:Int):T return data.get( index(x, y) );
+	public inline function set(x:Int, y:Int, value:T) data.set( index(x, y), value );
 }
 
 class CellRender {
@@ -69,22 +61,22 @@ class CellRender {
 
 	public var cellDisplay:CellDisplay;
 
-	var cellBufferStatic:Buffer<CellElemStatic>;
-	var cellBufferAnim:Buffer<CellElemAnim>;
+	var bufferStatic:Buffer<CellElemStatic>;
+	var bufferAnim:Buffer<CellElemAnim>;
 
-	var elemViewCache:ElemViewCache<CellElemStatic>;
+	var elemViewBuffer:ElemViewBuffer<CellElemStatic>;
 
  	public function new(x:Int, y:Int, width:Int, height:Int)
 	{	
-		cellBufferStatic = new Buffer<CellElemStatic>(1024, 512);
-		cellBufferAnim = new Buffer<CellElemAnim>(1024, 512);
+		bufferStatic = new Buffer<CellElemStatic>(1024, 512);
+		bufferAnim = new Buffer<CellElemAnim>(1024, 512);
 
-		cellDisplay = new CellDisplay(x, y, width, height, cellBufferStatic, cellBufferAnim, texture);
+		cellDisplay = new CellDisplay(x, y, width, height, bufferStatic, bufferAnim, texture);
 		peoteView.addDisplay(cellDisplay);		
 	}
 
 	public function initView(maxWidth:Int, maxHeight:Int) {
-		elemViewCache = new ElemViewCache<CellElemStatic>(maxWidth, maxHeight);
+		elemViewBuffer = new ElemViewBuffer<CellElemStatic>(maxWidth, maxHeight);
 	}
 	// public function purgeView() {}
 	
@@ -112,29 +104,29 @@ class CellRender {
 				var tile = Cells.tile(TileID.EARTH);
 				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
 				// var element = new CellElemStatic(TileID.EARTH, px, py, 32, 32);
-				elemViewCache.set(x, y, element);
-				cellBufferStatic.addElement(element);
+				elemViewBuffer.set(x, y, element);
+				bufferStatic.addElement(element);
 
 			case WOOD:
 				var tile = Cells.tile(TileID.WOOD);
 				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
 				// var element = new CellElemStatic(TileID.WOOD, px, py, 32, 32);
-				elemViewCache.set(x, y, element);
-				cellBufferStatic.addElement(element);
+				elemViewBuffer.set(x, y, element);
+				bufferStatic.addElement(element);
 
 			case ROCK:
 				var tile = Cells.tile(TileID.ROCK);
 				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
 				// var element = new CellElemStatic(TileID.ROCK, px, py, 32, 32);
-				elemViewCache.set(x, y, element);
-				cellBufferStatic.addElement(element);
+				elemViewBuffer.set(x, y, element);
+				bufferStatic.addElement(element);
 
 			case METAL:
 				var tile = Cells.tile(TileID.METAL);
 				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
 				// var element = new CellElemStatic(TileID.METAL, px, py, 32, 32);
-				elemViewCache.set(x, y, element);
-				cellBufferStatic.addElement(element);
+				elemViewBuffer.set(x, y, element);
+				bufferStatic.addElement(element);
 
 			// for fluids and air later maybe different Program and Shader
 			case WATER:
@@ -159,10 +151,10 @@ class CellRender {
 	}
 
 	public inline function removeCell(x:Int, y:Int) {
-		var element = elemViewCache.get(x, y);
+		var element = elemViewBuffer.get(x, y);
 		if (element!=null) {
-			cellBufferStatic.removeElement(element);
-			elemViewCache.set(x, y, null);
+			bufferStatic.removeElement(element);
+			elemViewBuffer.set(x, y, null);
 		}
 	}
 
@@ -181,56 +173,52 @@ class CellRender {
 	public function scrollLeft() {
 		if (cellDisplay.xOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetX += RESET_AT_OFFSET;
-			for (i in 0...(elemViewCache.sizeX * elemViewCache.sizeY)) {
-				var element = elemViewCache.data.get(i);
+			for (i in 0...elemViewBuffer.data.length) {
+				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.x += RESET_AT_OFFSET;
 			}
-			cellBufferStatic.update();
+			bufferStatic.update();
 			cellDisplay.xOffset -= RESET_AT_OFFSET;
 		}
-
 		cellDisplay.xOffset += 32;		
 	}
 
 	public function scrollRight() {
 		if (cellDisplay.xOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetX -= RESET_AT_OFFSET;
-			for (i in 0...(elemViewCache.sizeX * elemViewCache.sizeY)) {
-				var element = elemViewCache.data.get(i);
+			for (i in 0...elemViewBuffer.data.length) {
+				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.x -= RESET_AT_OFFSET;
 			}
-			cellBufferStatic.update();
+			bufferStatic.update();
 			cellDisplay.xOffset += RESET_AT_OFFSET;
 		}
-
 		cellDisplay.xOffset -= 32;	
 	}
 
 	public function scrollTop() {
 		if (cellDisplay.yOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetY += RESET_AT_OFFSET;
-			for (i in 0...elemViewCache.data.length) {
-				var element = elemViewCache.data.get(i);
+			for (i in 0...elemViewBuffer.data.length) {
+				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.y += RESET_AT_OFFSET;
 			}
-			cellBufferStatic.update();
+			bufferStatic.update();
 			cellDisplay.yOffset -= RESET_AT_OFFSET;
 		}
-
 		cellDisplay.yOffset += 32;		
 	}
 
 	public function scrollBottom() {
 		if (cellDisplay.yOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetY -= RESET_AT_OFFSET;
-			for (i in 0...elemViewCache.data.length) {
-				var element = elemViewCache.data.get(i);
+			for (i in 0...elemViewBuffer.data.length) {
+				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.y -= RESET_AT_OFFSET;
 			}
-			cellBufferStatic.update();
+			bufferStatic.update();
 			cellDisplay.yOffset += RESET_AT_OFFSET;
 		}
-
 		cellDisplay.yOffset -= 32;
 	}
 
