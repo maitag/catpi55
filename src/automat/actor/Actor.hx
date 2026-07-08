@@ -10,19 +10,37 @@ class Actor {
 	{
 		var fields = Context.getBuildFields();
 		var bitGrid:util.BitGrid = shape;
+		
+		// ---- pos, grid and gridKeys ----
 
+		fields.push({ name: "pos", doc: "Position inside grid",
+			access: [APublic],
+			kind: FVar(macro:util.Pos),
+			pos: Context.currentPos()
+		});
 
+		fields.push({ name: "grid", doc: "The grid where the actor is inside",
+			access: [APublic],
+			kind: FVar(macro:automat.Grid, null),
+			pos: Context.currentPos()
+		});
+
+		for (name in ["gridKey","gridKeyR","gridKeyB","gridKeyRB"])
+			fields.push({ name: name,
+				access: [APublic],
+				kind: FVar(macro:Int, macro -1),
+				pos: Context.currentPos()
+			});
+
+		
 		// ---- width and height getters of the shape ----
 
-		fields.push({
-			name: "width",
-			doc: "shape width",
+		fields.push({ name: "width", doc: "shape width",
 			access: [APublic],
 			kind: FProp("get", "never", macro:Int, null),
 			pos: Context.currentPos()
 		});
-		fields.push({
-			name: "get_width",
+		fields.push({ name: "get_width",
 			access: [AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -32,15 +50,12 @@ class Actor {
 			})
 		});
 
-		fields.push({
-			name: "height",
-			doc: "shape height",
+		fields.push({ name: "height", doc: "shape height",
 			access: [APublic],
 			kind: FProp("get", "never", macro:Int, null),
 			pos: Context.currentPos()
 		});
-		fields.push({
-			name: "get_height",
+		fields.push({ name: "get_height",
 			access: [AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -52,67 +67,57 @@ class Actor {
 		});
 		
 
-
 		// ------------------------------------------------
 		// -------------- Shape functions -----------------
 		// ------------------------------------------------
 
-		if (unroll)
-		{
+		if (unroll) {
 			// builds the unrolled functions of Shape.hx
 			automat.actor.ShapeMacro.build(bitGrid, fields);
 		}
-		else 
-		{
+		else {
 			// delegates to the functions of Shape.hx
-			fields.push({
-				name: "shapeBitGrid",
+			fields.push({ name: "shapeBitGrid",
 				access: [APublic],
 				pos: Context.currentPos(),
 				kind: FVar(macro:Array<String>, macro $v{bitGrid.toArrayString()})
 			});
 
-			for (fname in ["addToGrid"])
-				fields.push({
-					name: fname,
-					access: [APublic, AInline],
-					pos: Context.currentPos(),
-					kind: FFun({
-						args: [
-							{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-							{name:"pos", opt:false, meta:[], type: macro:util.Pos}
-						],
-						expr: macro automat.actor.Shape.$fname(this, grid, pos, shapeBitGrid),
-						ret: null
-					})
-				});
+			fields.push({ name: "addToGrid",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [
+						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"pos", opt:false, meta:[], type: macro:util.Pos}
+					],
+					expr: macro automat.actor.Shape.addToGrid(this, grid, pos, shapeBitGrid),
+					ret: null
+				})
+			});
 
-			for (fname in ["removeFromGrid"])
-				fields.push({
-					name: fname,
-					access: [APublic, AInline],
-					pos: Context.currentPos(),
-					kind: FFun({
-						args: [],
-						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid),
-						ret: null
-					})
-				});
+			fields.push({ name: "removeFromGrid",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro automat.actor.Shape.removeFromGrid(this, shapeBitGrid),
+					ret: null
+				})
+			});
 
-			for (fname in ["isFitIntoGrid"])
-				fields.push({
-					name: fname,
-					access: [APublic, AInline],
-					pos: Context.currentPos(),
-					kind: FFun({
-						args: [
-							{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-							{name:"pos", opt:false, meta:[], type: macro:util.Pos}
-						],
-						expr: macro return automat.actor.Shape.$fname(grid, pos, blockedCellType, shapeBitGrid),
-						ret: macro:Bool
-					})
-				});
+			fields.push({ name: "isFitIntoGrid",
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [
+						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
+						{name:"pos", opt:false, meta:[], type: macro:util.Pos}
+					],
+					expr: macro return automat.actor.Shape.isFitIntoGrid(grid, pos, blockedCellType, shapeBitGrid),
+					ret: macro:Bool
+				})
+			});
 
 			for (fname in ["freeLeft","freeRight","freeUp","freeDown","freeLeftUp","freeLeftDown","freeRightUp","freeRightDown"])
 				fields.push({
@@ -126,8 +131,7 @@ class Actor {
 					})
 				});
 
-			for (fname in ["goLeft","goRight","goUp","goDown","goLeftUp","goLeftDown","goRightUp","goRightDown"
-				])
+			for (fname in ["goLeft","goRight","goUp","goDown","goLeftUp","goLeftDown","goRightUp","goRightDown"])
 				fields.push({
 					name: fname,
 					access: [APublic, AInline],
