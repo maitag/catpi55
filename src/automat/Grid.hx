@@ -4,6 +4,8 @@ import haxe.ds.Vector;
 
 import automat.Cell.CellActor;
 import automat.actor.IActor;
+import automat.sim.Sim;
+import automat.sim.SimEvent;
 import util.Pos;
 import util.Pos.xy as P;
 
@@ -177,48 +179,48 @@ class Grid {
 	// ---------------- SIMMULATION --------------------
 	// -------------------------------------------------
 	public static inline var MAX_STEPS:Int = 10;
-	public static inline var MAX_ACTIONS:Int = 9;
-	public static inline var STEP_SIZE:Int = MAX_ACTIONS + 1;
+	public static inline var MAX_EVENTS_PER_STEP:Int = 9;
+	public static inline var STEP_SIZE:Int = MAX_EVENTS_PER_STEP + 1;
 
 	public var timeSlicer = new Vector<Int>(MAX_STEPS * STEP_SIZE);
 
 	public var timeStep:Int = 0;
 
-	public inline function getActionLength() return timeSlicer.get(timeStep);
-	public inline function getAction(i:Int) return timeSlicer.get(timeStep + 1 + i);
+	inline function simEventsLength() return timeSlicer.get(timeStep);
+	inline function getSimEvent(i:Int) return timeSlicer.get(timeStep + 1 + i);
 
-	// todo: maybe needs a "lock" if setAction called from outwards!
+	// todo: maybe needs a "lock" if setSimEvent called from outwards!
 	public function step()
 	{		
-		// get all actions to the actual time
-		for (i in 0...getActionLength()) {
-			Sim.step(this, getAction(i));
+		// get all events to the actual time
+		for (i in 0...simEventsLength()) {
+			Sim.step(this, getSimEvent(i));
 		}
 		
 		// ready for the next timestep
-		timeSlicer.set(timeStep, 0); // resets all actions at timeStep;
+		timeSlicer.set(timeStep, 0); // resets all events at timeStep;
 		timeStep += STEP_SIZE;
 		if (timeStep >= MAX_STEPS * STEP_SIZE) timeStep = 0;
 	}
 
-	public inline function setAction(action:Action, delayStep:Int)
+	public inline function setSimEvent(event:SimEvent, delayStep:Int)
 	{
-		if (delayStep >= MAX_STEPS) throw("delayStep into setAction is greater then timeslicers MAX_STEPS");
+		if (delayStep >= MAX_STEPS) throw("delayStep into setSimEvent is greater then timeslicers MAX_STEPS");
 
-		var actionTimeStep:Int = timeStep + delayStep * STEP_SIZE;
-		if (actionTimeStep >= MAX_STEPS * STEP_SIZE) actionTimeStep -= MAX_STEPS * STEP_SIZE;
+		var eventTimeStep:Int = timeStep + delayStep * STEP_SIZE;
+		if (eventTimeStep >= MAX_STEPS * STEP_SIZE) eventTimeStep -= MAX_STEPS * STEP_SIZE;
 		
-		// get the actions-amount at this time
-		var actionsPerStep:Int = timeSlicer.get(actionTimeStep);
-		if (actionsPerStep >= MAX_ACTIONS) throw("grid-timeslicer actions OVERFLOW");
+		// get the events-amount at this time
+		var eventsPerStep:Int = timeSlicer.get(eventTimeStep);
+		if (eventsPerStep >= MAX_EVENTS_PER_STEP) throw("grid-timeslicer events OVERFLOW");
 
-		trace(actionTimeStep , actionsPerStep); // TODO: in neko the actionsPerStep is null!
+		trace(eventTimeStep , eventsPerStep); // TODO: in neko the eventsPerStep is null!
 
-		timeSlicer.set(actionTimeStep + 1 + actionsPerStep, action);
+		timeSlicer.set(eventTimeStep + 1 + eventsPerStep, event);
 
-		// increase the actions-amount for this time
-		actionsPerStep++;
-		timeSlicer.set(actionTimeStep, actionsPerStep);
+		// increase the events-amount for this time
+		eventsPerStep++;
+		timeSlicer.set(eventTimeStep, eventsPerStep);
 	}
 
 

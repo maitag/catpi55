@@ -8,7 +8,6 @@ import peote.view.Buffer;
 import peote.view.Texture;
 import peote.view.TextureFormat;
 import peote.view.TextureConfig;
-import peote.view.Load;
 
 import automat.actor.ActorType;
 

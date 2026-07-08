@@ -12,6 +12,8 @@ import automat.Grid;
 import automat.GridView;
 import automat.MultiGridView;
 import automat.actor.*;
+import automat.sim.SimEvent;
+import automat.sim.SimEvent.SimEventType;
 
 import util.Pos.xy as P;
 
@@ -78,6 +80,19 @@ class TestView extends Application
 		view.renderView.actorRender.actorDisplay.zoom = 0.620921323059155;
 		// trace(multiGridView.gridViewCache);
 		// trace(new Maze(10,10).toString());
+
+
+		// -------- grid simmulation ----------
+		grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
+		grid.setSimEvent(new SimEvent(CELL_EMPTY, P(3,4)), Grid.MAX_STEPS-1); // max delay time 
+
+		// simmulate 10 timesteps
+		for (i in 0...10) {
+			trace('step $i');
+			grid.step();
+		}
+		
+
 	}
 	
 	// ------------------------------------------------------------

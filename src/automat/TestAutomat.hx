@@ -9,6 +9,10 @@ import automat.actor.Actor;
 import automat.actor.Haxe;
 import automat.actor.Live;//<-
 
+import automat.sim.Sim;
+import automat.sim.SimEvent;
+import automat.sim.SimEvent.SimEventType;
+
 import automat.GridTestData;
 
 import util.Pos.xy as P;
@@ -48,12 +52,12 @@ class TestAutomat extends Application {
 
 
 		/*
-		// -------- grid testdata ----------
+		// -------- grid simmulation ----------
 		var grid = GridTestData.create(GridTestData.TESTGRID);
 		// trace(grid.get(new Pos(1,1)));
 
-		grid.setAction(new Action(CELL_MOVE, new Pos(1,1)), 0); // immediadly
-		grid.setAction(new Action(CELL_EMPTY, new Pos(3,4)), Grid.MAX_STEPS-1); // max delay time 
+		grid.setSimEvent(new SimEvent(CELL_MOVE, new Pos(1,1)), 0); // immediadly
+		grid.setSimEvent(new SimEvent(CELL_EMPTY, new Pos(3,4)), Grid.MAX_STEPS-1); // max delay time 
 
 		// simmulate 10 timesteps
 		for (i in 0...10) {
