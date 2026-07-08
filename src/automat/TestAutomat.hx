@@ -5,7 +5,7 @@ import lime.app.Application;
 
 import automat.Cell.CellActor;
 
-import automat.actor.Actor;
+import automat.actor.Cross;
 import automat.actor.Haxe;
 import automat.actor.Live;//<-
 
@@ -91,7 +91,7 @@ E                              #
 		trace("CellActor.MAX_ACTORS " + CellActor.MAX_ACTORS,"CellActor.bits " + CellActor.bits);
 		/*
 		trace("---adding Alice---");
-		var alice = new Actor("Alice");
+		var alice = new Cross("Alice");
 		var p = P(1,1);
 		if (alice.isFitIntoGrid(grid, p)) {
 			alice.addToGrid(grid, p);
@@ -102,7 +102,7 @@ E                              #
 		}
 
 		trace("---adding Bob---");
-		var bob = new Actor("Bob");
+		var bob = new Cross("Bob");
 		var p = P(2,3);
 		if (bob.isFitIntoGrid(grid, p)) {
 			bob.addToGrid(grid, p);

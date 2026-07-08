@@ -3,9 +3,8 @@ package automat.actor;
 import automat.Cell.CellType;
 
 import util.Pos;
-import util.BitGrid;
 
-@:build(automat.actor.Shape.ShapeMacro.build("
+@:build(automat.actor.Actor.build("
 |#|
 ")) class Stone1x2 implements IActor {
 
