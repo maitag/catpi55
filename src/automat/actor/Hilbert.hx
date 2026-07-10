@@ -14,7 +14,7 @@ import util.Pos;
 |###   ###|
 ")) class Hilbert extends ActorSim implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return HILBERT;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.HILBERT;
 
 	public var name:String;
 

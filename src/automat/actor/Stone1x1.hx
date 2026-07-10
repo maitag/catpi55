@@ -8,7 +8,7 @@ import util.Pos;
 |#|
 ")) class Stone1x1 implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return STONE1x1;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.STONE1x1;
 
 	public var name:String;
 

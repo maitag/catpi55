@@ -9,7 +9,7 @@ import util.Pos;
 |##|
 ")) class Stone2x2 implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return STONE2x2;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.STONE2x2;
 
 	public var name:String;
 

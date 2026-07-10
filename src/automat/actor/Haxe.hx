@@ -12,7 +12,7 @@ import util.Pos;
 |#  #  #  #  #   #  ####|
 ")) class Haxe implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return HAXE;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.HAXE;
 
 	public var name:String;
 

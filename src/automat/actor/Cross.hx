@@ -10,7 +10,7 @@ import util.Pos;
 | # |
 ")) class Cross implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ACTOR;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.CROSS;
 
 	public var name:String;
 	
