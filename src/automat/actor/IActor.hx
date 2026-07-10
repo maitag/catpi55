@@ -39,5 +39,11 @@ interface IActor {
 	public function goLeftDown():Void;
 	public function goRightUp():Void;
 	public function goRightDown():Void;
+	
+	// SIM:
+	public function tryFallDown():Bool;
+
+	public function onAddToGrid():Void;
+	public function onAfterMove():Void;
 
 }

@@ -36,7 +36,13 @@ class View {
 	public var xTo:Int = 0;
 	public var yFrom:Int = 0;
 	public var yTo:Int = 0;
-	
+
+	public var zoom(get,set):Float;
+	inline function get_zoom():Float return (renderView==null) ? 0.0 : renderView.zoom;
+	inline function set_zoom(z:Float):Float return (renderView==null) ? 0.0 : renderView.zoom = z;
+
+	// ----------------------------------------------
+
 	public function new(peoteView:PeoteView, x:Int, y:Int, width:Int, height:Int)
 	{
 		this.peoteView = peoteView;

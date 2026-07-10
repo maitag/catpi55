@@ -22,6 +22,7 @@ import util.Pos;
 
 	public function new(name:String) {
 		this.name = name;
+		// super();
 	}
 
   

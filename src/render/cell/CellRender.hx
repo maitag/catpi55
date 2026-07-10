@@ -55,23 +55,28 @@ class CellRender {
 
 		texture = Util.loadTextures(Cells.sheets, textureConfig, false)[0];
 	}
+	// -------------------------------------------------
 
-	//----------------------------------------------------
-
-	public var cellDisplay:CellDisplay;
+	var display:CellDisplay;
 
 	var bufferStatic:Buffer<CellElemStatic>;
 	var bufferAnim:Buffer<CellElemAnim>;
 
 	var elemViewBuffer:ElemViewBuffer<CellElemStatic>;
 
+	public var zoom(get,set):Float;
+	inline function get_zoom():Float return display.zoom;
+	inline function set_zoom(z:Float):Float return display.zoom = z;
+
+	// -------------------------------------------------
+
  	public function new(x:Int, y:Int, width:Int, height:Int)
 	{	
 		bufferStatic = new Buffer<CellElemStatic>(1024, 512);
 		bufferAnim = new Buffer<CellElemAnim>(1024, 512);
 
-		cellDisplay = new CellDisplay(x, y, width, height, bufferStatic, bufferAnim, texture);
-		peoteView.addDisplay(cellDisplay);		
+		display = new CellDisplay(x, y, width, height, bufferStatic, bufferAnim, texture);
+		peoteView.addDisplay(display);		
 	}
 
 	public function initView(maxWidth:Int, maxHeight:Int) {
@@ -170,55 +175,55 @@ class CellRender {
 	static inline var RESET_AT_OFFSET:Int = 16384;
 	
 	public function scrollLeft() {
-		if (cellDisplay.xOffset >= RESET_AT_OFFSET) {			
+		if (display.xOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetX += RESET_AT_OFFSET;
 			for (i in 0...elemViewBuffer.data.length) {
 				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.x += RESET_AT_OFFSET;
 			}
 			bufferStatic.update();
-			cellDisplay.xOffset -= RESET_AT_OFFSET;
+			display.xOffset -= RESET_AT_OFFSET;
 		}
-		cellDisplay.xOffset += 32;		
+		display.xOffset += 32;		
 	}
 
 	public function scrollRight() {
-		if (cellDisplay.xOffset <= -RESET_AT_OFFSET) {			
+		if (display.xOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetX -= RESET_AT_OFFSET;
 			for (i in 0...elemViewBuffer.data.length) {
 				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.x -= RESET_AT_OFFSET;
 			}
 			bufferStatic.update();
-			cellDisplay.xOffset += RESET_AT_OFFSET;
+			display.xOffset += RESET_AT_OFFSET;
 		}
-		cellDisplay.xOffset -= 32;	
+		display.xOffset -= 32;	
 	}
 
 	public function scrollTop() {
-		if (cellDisplay.yOffset >= RESET_AT_OFFSET) {			
+		if (display.yOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetY += RESET_AT_OFFSET;
 			for (i in 0...elemViewBuffer.data.length) {
 				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.y += RESET_AT_OFFSET;
 			}
 			bufferStatic.update();
-			cellDisplay.yOffset -= RESET_AT_OFFSET;
+			display.yOffset -= RESET_AT_OFFSET;
 		}
-		cellDisplay.yOffset += 32;		
+		display.yOffset += 32;		
 	}
 
 	public function scrollBottom() {
-		if (cellDisplay.yOffset <= -RESET_AT_OFFSET) {			
+		if (display.yOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetY -= RESET_AT_OFFSET;
 			for (i in 0...elemViewBuffer.data.length) {
 				var element = elemViewBuffer.data.get(i);
 				if (element!=null) element.y -= RESET_AT_OFFSET;
 			}
 			bufferStatic.update();
-			cellDisplay.yOffset += RESET_AT_OFFSET;
+			display.yOffset += RESET_AT_OFFSET;
 		}
-		cellDisplay.yOffset -= 32;
+		display.yOffset -= 32;
 	}
 
 

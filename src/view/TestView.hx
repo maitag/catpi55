@@ -76,21 +76,24 @@ class TestView extends Application
 		view = new View(peoteView, 0, 0, 1280, 640);
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 
-		view.renderView.cellRender.cellDisplay.zoom = 0.620921323059155;
-		view.renderView.actorRender.actorDisplay.zoom = 0.620921323059155;
+		view.zoom = 0.620921323059155;
 		// trace(multiGridView.gridViewCache);
 		// trace(new Maze(10,10).toString());
 
+
+		actor1.tryFallDown();
 
 		// -------- grid simmulation ----------
 		grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
 		grid.setSimEvent(new SimEvent(CELL_EMPTY, P(3,4)), Grid.MAX_STEPS-1); // max delay time 
 
 		// simmulate 10 timesteps
+		/*
 		for (i in 0...10) {
 			trace('step $i');
 			grid.step();
 		}
+		*/
 		
 
 	}
@@ -113,21 +116,17 @@ class TestView extends Application
 	// ----------------- MOUSE EVENTS ------------------------------
 	// override function onMouseMove (x:Float, y:Float):Void {}	
 	// override function onMouseDown (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
-	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
+	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}
+	
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
 		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
 		if (deltaY<0) {
-			if (view.renderView.cellRender.cellDisplay.zoom > 0.63) {
-				view.renderView.cellRender.cellDisplay.zoom /= 1.1;
-				view.renderView.actorRender.actorDisplay.zoom = view.renderView.cellRender.cellDisplay.zoom;
-			}
+			if (view.zoom > 0.63) view.zoom /= 1.1;
 		}			
-		else {
-			view.renderView.cellRender.cellDisplay.zoom *= 1.1;
-			view.renderView.actorRender.actorDisplay.zoom = view.renderView.cellRender.cellDisplay.zoom;
-		}
-		trace(view.renderView.cellRender.cellDisplay.zoom);
+		else view.zoom *= 1.1;
+		// trace(view.zoom);
 	}
+
 	// override function onMouseMoveRelative (x:Float, y:Float):Void {}
 
 	// ----------------- TOUCH EVENTS ------------------------------

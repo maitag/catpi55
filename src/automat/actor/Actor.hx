@@ -68,6 +68,34 @@ class Actor {
 		
 
 		// ------------------------------------------------
+		// --------------- SIM functions ------------------
+		// ------------------------------------------------
+
+		// delegates to the functions of ActorSim.hx
+
+		fields.push({ name: "tryFallDown",
+			access: [APublic, AInline],
+			pos: Context.currentPos(),
+			kind: FFun({
+				args: [],
+				expr: macro return automat.actor.ActorSim.tryFallDown(this),
+				ret: macro:Bool
+			})
+		});
+
+		for (fname in ["onAddToGrid", "onAfterMove"])
+			fields.push({ name: fname,
+				access: [APublic, AInline],
+				pos: Context.currentPos(),
+				kind: FFun({
+					args: [],
+					expr: macro automat.actor.ActorSim.$fname(this),
+					ret: null
+				})
+			});
+		
+
+		// ------------------------------------------------
 		// -------------- Shape functions -----------------
 		// ------------------------------------------------
 

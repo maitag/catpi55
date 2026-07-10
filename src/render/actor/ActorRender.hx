@@ -40,23 +40,28 @@ class ActorRender {
 
 		textures = Util.loadTextures(Actors.sheets, textureConfig, false);
 	}
+	//--------------------------------------------------
 
-	//----------------------------------------------------
-
-	public var actorDisplay:ActorDisplay;
+	var display:ActorDisplay;
 
 	var bufferStatic:Buffer<ActorElemStatic>;
 	var bufferAnim:Buffer<ActorElemAnim>;
 
 	var elemViewBuffer:IntMap<ActorElemStatic>;
 
+	public var zoom(get,set):Float;
+	inline function get_zoom():Float return display.zoom;
+	inline function set_zoom(z:Float):Float return display.zoom = z;
+
+	// -------------------------------------------------
+
  	public function new(x:Int, y:Int, width:Int, height:Int)
 	{
 		bufferStatic = new Buffer<ActorElemStatic>(1024, 512);
 		bufferAnim = new Buffer<ActorElemAnim>(1024, 512);
 
-		actorDisplay = new ActorDisplay(x, y, width, height, bufferStatic, bufferAnim, textures);
-		peoteView.addDisplay(actorDisplay);
+		display = new ActorDisplay(x, y, width, height, bufferStatic, bufferAnim, textures);
+		peoteView.addDisplay(display);
 	}
 
 	public function initView(maxWidth:Int, maxHeight:Int) {
@@ -115,43 +120,43 @@ class ActorRender {
 	static inline var RESET_AT_OFFSET:Int = 16384;
 	
 	public function scrollLeft() {
-		if (actorDisplay.xOffset >= RESET_AT_OFFSET) {			
+		if (display.xOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetX += RESET_AT_OFFSET;
 			for (element in elemViewBuffer) element.x += RESET_AT_OFFSET;
 			bufferStatic.update();
-			actorDisplay.xOffset -= RESET_AT_OFFSET;
+			display.xOffset -= RESET_AT_OFFSET;
 		}
-		actorDisplay.xOffset += 32;		
+		display.xOffset += 32;		
 	}
 
 	public function scrollRight() {
-		if (actorDisplay.xOffset <= -RESET_AT_OFFSET) {			
+		if (display.xOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetX -= RESET_AT_OFFSET;
 			for (element in elemViewBuffer) element.x -= RESET_AT_OFFSET;
 			bufferStatic.update();
-			actorDisplay.xOffset += RESET_AT_OFFSET;
+			display.xOffset += RESET_AT_OFFSET;
 		}
-		actorDisplay.xOffset -= 32;	
+		display.xOffset -= 32;	
 	}
 
 	public function scrollTop() {
-		if (actorDisplay.yOffset >= RESET_AT_OFFSET) {			
+		if (display.yOffset >= RESET_AT_OFFSET) {			
 			scrollOffsetY += RESET_AT_OFFSET;
 			for (element in elemViewBuffer) element.y += RESET_AT_OFFSET;
 			bufferStatic.update();
-			actorDisplay.yOffset -= RESET_AT_OFFSET;
+			display.yOffset -= RESET_AT_OFFSET;
 		}
-		actorDisplay.yOffset += 32;		
+		display.yOffset += 32;		
 	}
 
 	public function scrollBottom() {
-		if (actorDisplay.yOffset <= -RESET_AT_OFFSET) {			
+		if (display.yOffset <= -RESET_AT_OFFSET) {			
 			scrollOffsetY -= RESET_AT_OFFSET;
 			for (element in elemViewBuffer) element.y -= RESET_AT_OFFSET;
 			bufferStatic.update();
-			actorDisplay.yOffset += RESET_AT_OFFSET;
+			display.yOffset += RESET_AT_OFFSET;
 		}
-		actorDisplay.yOffset -= 32;
+		display.yOffset -= 32;
 	}
 	
 }

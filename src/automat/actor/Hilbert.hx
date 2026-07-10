@@ -12,7 +12,7 @@ import util.Pos;
 |###   ###|
 |  #   #  |
 |###   ###|
-")) class Hilbert implements IActor {
+")) class Hilbert extends ActorSim implements IActor {
 
 	public var type(get, never):ActorType; inline function get_type() return HILBERT;
 

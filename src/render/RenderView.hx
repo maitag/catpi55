@@ -8,6 +8,10 @@ class RenderView {
 	public var cellRender:CellRender;
 	public var actorRender:ActorRender;
 
+	public var zoom(get,set):Float;
+	inline function get_zoom():Float return cellRender.zoom;
+	inline function set_zoom(z:Float):Float return cellRender.zoom = actorRender.zoom = z;
+	
 	//----------------------------------------------------
 
  	public function new(x:Int, y:Int, width:Int, height:Int)
