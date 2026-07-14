@@ -68,24 +68,28 @@ class Grid {
 		return (actorID == CellActor.EMPTY) ? null : actors.get( actorID );
 	}
 
-	inline function setCellActorAt(pos:Pos, cellActor:CellActor, isOrigin:Bool) {
+	inline function setCellActorAt(pos:Pos, cellActor:CellActor, isOrigin:Bool, actor:IActor = null) {
 		var cell = get(pos);
 		// cell.actor = cellActor;
 		cell.setActor(cellActor, isOrigin);
 		set(pos, cell);
+
+		// add actor to views -> GridView->View
+		if (actor != null && isOrigin)
+			for (view in views) view.addActor(actor, cellActor);
 	}
 	
 	// only used by macro-unroll-mode
 	inline function setCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid,
-		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor, isOrigin:Bool)
+		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor, isOrigin:Bool, actor:IActor = null)
 	{
 		if (gR==null || gRB==null || x < WIDTH) {
-			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a, isOrigin);
-			else gB.setCellActorAt(P(x, y - HEIGHT), aB, isOrigin);
+			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a, isOrigin, actor);
+			else gB.setCellActorAt(P(x, y - HEIGHT), aB, isOrigin, actor);
 		}
 		else {
-			if (gRB==null || y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR, isOrigin);
-			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB, isOrigin);
+			if (gRB==null || y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR, isOrigin, actor);
+			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB, isOrigin, actor);
 		}
 	}
 
@@ -100,6 +104,7 @@ class Grid {
 		set(pos, cell);
 	}
 	
+	// removes also the "origin" bit
 	inline function delCellActorAt(pos:Pos) {
 		var cell = get(pos);
 		// cell.actor = CellActor.EMPTY;

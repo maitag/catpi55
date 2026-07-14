@@ -64,6 +64,13 @@ class GridView {
 		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
 	}
 
+	// add and update
+	public function addActor(actor:IActor, actorKey:Int) {
+		multiGridView.switchGridViewIndex(index);
+		multiGridView.addActor(actor, actorKey);
+	}
+
+
 
 	// ------------------------------------------
 	// ---------- SHRINK AND GROW ---------------

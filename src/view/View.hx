@@ -130,6 +130,13 @@ class View {
 		renderView.actorRender.removeActor(mapkey);
 	}
 
+	// if actors origin moved to a side-grid
+	public inline function actorSwitchGrid(oldGridViewIndex:Int, oldoldActorKey:CellActor, newGridViewIndex:Int, newActorKey:CellActor) {
+		var oldMapkey = ( oldGridViewIndex << (CellActor.bits-1)) | oldoldActorKey;
+		var newMapkey = ( newGridViewIndex << (CellActor.bits-1)) | newActorKey;
+		// renderView.actorRender.actorSwitchGrid(oldMapkey, newMapkey);
+	}
+	
 	// ------- update --------
 
 	public function updateCell(pos:Pos, cell:CellType) { // CellParam!

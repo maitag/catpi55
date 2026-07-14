@@ -17,7 +17,7 @@ class ShapeMacro {
 		for (y in 0...bitGrid.height)
 			for (x in 0...bitGrid.width)
 				if ( bitGrid.get(x,y) ) {
-					e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB, $v{(y == 0 && x == originXOffset)}));
+					e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB, $v{(y == 0 && x == originXOffset)}, this));
 				}			
 		fields.push({
 			name: "_addToGrid",
@@ -64,6 +64,7 @@ class ShapeMacro {
 					_addToGrid(grid.right, grid.bottom, grid.rightBottom, gridKey, gridKeyR, gridKeyB, gridKeyRB);
 				}
 			}
+			// TODO: better call a grids "addActorToView()" from here at where origin is and not while grid.setCellActorAt!
 		);
 
 		fields.push({
@@ -343,8 +344,11 @@ class ShapeMacro {
 						$b{f(-1,0)};
 					else {
 						// Optimization: keep the actor key while remove and adding again
+						
+						// TODO: param to not remove it from the View
 						var g = grid; removeFromGrid();
-						// if (pos.x == 0) addToGrid(g.left, util.Pos.xy($v{bitGrid.width - 1},pos.y));
+						
+						// TODO: param to not add it to the View again!
 						if (pos.x == 0) addToGrid(g.left, util.Pos.xy(Grid.WIDTH-1,pos.y));
 						else addToGrid(g, util.Pos.xy(pos.x-1, pos.y));
 					}
@@ -404,7 +408,6 @@ class ShapeMacro {
 					else {
 						var g = grid;
 						removeFromGrid();
-						// if (pos.x == $v{bitGrid.width - 1}) addToGrid(g.right, util.Pos.xy(0, pos.y));
 						if (pos.x == Grid.WIDTH-1) addToGrid(g.right, util.Pos.xy(0, pos.y));
 						else addToGrid(g, util.Pos.xy(pos.x+1, pos.y));
 					},

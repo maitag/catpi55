@@ -37,6 +37,7 @@ class Actor {
 
 		fields.push({ name: "width", doc: "shape width",
 			access: [APublic],
+			// kind: FProp("get", "never", macro:Int, null),
 			kind: FProp("get", "never", macro:Int, null),
 			pos: Context.currentPos()
 		});
@@ -52,6 +53,7 @@ class Actor {
 
 		fields.push({ name: "height", doc: "shape height",
 			access: [APublic],
+			// kind: FProp("get", "never", macro:Int, null),
 			kind: FProp("get", "never", macro:Int, null),
 			pos: Context.currentPos()
 		});
@@ -66,6 +68,11 @@ class Actor {
 			})
 		});
 		
+		fields.push({ name: "isMove",
+			access: [APublic],
+			kind: FProp("default", "null", macro:Bool, macro false),
+			pos: Context.currentPos()
+		});
 
 		// ------------------------------------------------
 		// --------------- SIM functions ------------------

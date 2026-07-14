@@ -1,5 +1,6 @@
 package view;
 
+import haxe.Timer;
 import util.Maze;
 import haxe.CallStack;
 import lime.app.Application;
@@ -95,7 +96,11 @@ class TestView extends Application
 		}
 		*/
 		
-
+		Timer.delay(()->{
+			var actor5= new Stone2x2("Stone2x2");
+			actor5.addToGrid(grid, P(4,4));	
+		},1000);
+		
 	}
 	
 	// ------------------------------------------------------------

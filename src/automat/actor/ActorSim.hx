@@ -7,7 +7,7 @@ class ActorSim {
 		if ( a.freeDown() ) {
 			// TODO: update View !
 			a.goDown();
-			// isMoving=true;
+			// isMove = true;
 			// TODO: set Sim Event -> ACTOR_AFTER_MOVE
 
 			return true;
@@ -31,7 +31,7 @@ class ActorSim {
 
 	public static inline function onAfterMove(a:IActor) {
 		trace("onAfterMove");
-		// isMoving=false;
+		// isMove = false;
 
 		// TODO: check the cells that was getting empty after move
 		// loop throught them and check:
