@@ -222,14 +222,26 @@ class MultiGridView {
 		view.removeActor(actorKey);
 	}
 
-	// TODO: move actors (together with gridswitching!)
-
-	// if actors origin moved to a side-grid
-	public inline function actorSwitchGridLeft(index:Int, oldActorKey:CellActor, newActorKey:CellActor) {
-		view.actorSwitchGrid(index, gridViewCache.leftIndex(index), oldActorKey, newActorKey);
+	// if actors origin moved to a side-grid it is need a key-exchange at view-side
+	public inline function actorSwitchGridLeft(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorSwitchGrid(index, gridViewCache.leftIndex(index), oldKey, newKey);
+	}
+	public inline function actorSwitchGridRight(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorSwitchGrid(index, gridViewCache.rightIndex(index), oldKey, newKey);
+	}
+	public inline function actorSwitchGridTop(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorSwitchGrid(index, gridViewCache.topIndex(index), oldKey, newKey);
+	}
+	public inline function actorSwitchGridBottom(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorSwitchGrid(index, gridViewCache.bottomIndex(index), oldKey, newKey);
 	}
 
-	
+	// actor MOVES
+	public function actorGoLeft(actorKey:Int, time:Int) {
+		view.actorGoLeft(actorKey, time);
+	}
+
+
 	// ------- update --------
 
 	public inline function updateCell(pos:Pos, cell:CellType) { // CellParam!

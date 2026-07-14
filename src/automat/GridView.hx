@@ -66,9 +66,9 @@ class GridView {
 
 
 
-	// ------------------------------------------
-	// -- actor: add, update and switch grid ----
-	// ------------------------------------------
+	// ------------------------------------------------------
+	// -- actor: add, remove, move/update and switch grid ---
+	// ------------------------------------------------------
 	public function addActor(actor:IActor, actorKey:Int) {
 		// TODO: only if is "inside" !
 		multiGridView.switchGridViewIndex(index);
@@ -81,11 +81,18 @@ class GridView {
 		multiGridView.removeActor(actorKey);
 	}
 
-	// TODO: for each direction
-	public function actorSwitchGridLeft(oldActorKey:Int, newActorKey:Int) {
-		multiGridView.actorSwitchGridLeft(index, oldActorKey, newActorKey);
-	}
+	// if actors origin moved to a side-grid
+	// -> TODO: only if is "inside" !
+	public function actorSwitchGridLeft  (oldKey:Int, newKey:Int) multiGridView.actorSwitchGridLeft  (index, oldKey, newKey);
+	public function actorSwitchGridRight (oldKey:Int, newKey:Int) multiGridView.actorSwitchGridRight (index, oldKey, newKey);
+	public function actorSwitchGridTop   (oldKey:Int, newKey:Int) multiGridView.actorSwitchGridTop   (index, oldKey, newKey);
+	public function actorSwitchGridBottom(oldKey:Int, newKey:Int) multiGridView.actorSwitchGridBottom(index, oldKey, newKey);
 
+	// actor MOVES -> TODO: only if is "inside" !
+	public function actorGoLeft(actorKey:Int, time:Int) {
+		multiGridView.switchGridViewIndex(index);
+		multiGridView.actorGoLeft(actorKey, time);
+	}
 
 
 	// ------------------------------------------

@@ -134,15 +134,25 @@ class View {
 	public inline function actorSwitchGrid(index:Int, newIndex:Int, oldActorKey:CellActor, newActorKey:CellActor) {
 		var oldMapkey = ( index << (CellActor.bits-1)) | oldActorKey;
 		var newMapkey = ( newIndex << (CellActor.bits-1)) | newActorKey;
+		trace("actorSwitchGrid", 'index:$index newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey');		
+		// TODO:
 		// renderView.actorRender.actorSwitchGrid(oldMapkey, newMapkey);
 	}
-	
-	// ------- update --------
 
+	// actor MOVES
+	public function actorGoLeft(actorKey:Int, time:Int) {
+		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
+		trace("actorGoLeft", actorKey, time);
+		// TODO:
+		// renderView.actorRender.actorGoLeft(mapkey, time);
+	}
+	
+
+	// TODO:
+	// ------- update --------
 	public function updateCell(pos:Pos, cell:CellType) { // CellParam!
 		trace("updateCell", pos, cell);
 	}
-
 	public function updateActor(actorKey:CellActor, action:Int) { // TODO: action!
 		trace("updateActor", actorKey, action);
 	}

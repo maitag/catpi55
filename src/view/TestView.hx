@@ -43,6 +43,8 @@ class TestView extends Application
 	var multiGridView:MultiGridView;
 	var view:View;
 
+	var actor = new Stone2x2("player");
+
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
@@ -53,6 +55,9 @@ class TestView extends Application
 		// var grid:Grid = GridTestData.createMaze(2,2);
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
+		// controllable actor
+		actor.addToGrid(grid, P(5,5));
+
 		var actor1 = new Stone1x1("Stone1x1");
 		actor1.addToGrid(grid, P(1,1));
 
@@ -82,7 +87,8 @@ class TestView extends Application
 		// trace(new Maze(10,10).toString());
 
 
-		actor1.tryFallDown();
+		// TODO:
+		// actor1.tryFallDown();
 
 		// -------- grid simmulation ----------
 		grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
@@ -96,11 +102,6 @@ class TestView extends Application
 		}
 		*/
 		
-		Timer.delay(()->{
-			var actor5= new Stone2x2("Stone2x2");
-			actor5.addToGrid(grid, P(4,4));	
-		},1000);
-
 		
 	}
 	
@@ -143,27 +144,49 @@ class TestView extends Application
 	// ----------------- KEYBOARD EVENTS ---------------------------
 	override function onKeyDown (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {
 		switch(keyCode) {
-			case RIGHT:
-				if (multiGridView.canGrowRight(false)) {
-					multiGridView.scrollRight();
-					view.scrollRight();
-				}
+
+			// scroll the view
 			case LEFT:
 				if (multiGridView.canGrowLeft(false)) {
 					multiGridView.scrollLeft();
 					view.scrollLeft();
 				}
-				case UP:
+			case RIGHT:
+				if (multiGridView.canGrowRight(false)) {
+					multiGridView.scrollRight();
+					view.scrollRight();
+				}
+			case UP:
 				if (multiGridView.canGrowTop(false)) {
 					multiGridView.scrollTop();
 					view.scrollTop();
 				}
-				case DOWN:
+			case DOWN:
 				if (multiGridView.canGrowBottom(false)) {
 					multiGridView.scrollBottom();
 					view.scrollBottom();
 				}
-				default:
+			
+			// move the actor
+			case A:
+				if (actor.freeLeft()) {
+					actor.goLeft();
+				}
+			case D:
+				if (actor.freeRight()) {
+					actor.goRight();
+				}
+			case W:
+				if (actor.freeUp()) {
+					actor.goUp();
+				}
+			case S:
+				if (actor.freeDown()) {
+					actor.goDown();
+				}
+	
+
+			default:
 		}
 	}	
 	// override function onKeyUp (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {}

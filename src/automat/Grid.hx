@@ -182,12 +182,12 @@ class Grid {
 	}
 
 	// TODO: for each direction
-	inline function actorSwitchGridLeft(oldoldActorKey:CellActor, newActorKey:CellActor) {
-		// for (view in views) view.actorSwitchGridLeft( oldoldActorKey, newActorKey);
+	inline function viewsActorToGridLeft(oldoldActorKey:CellActor, newActorKey:CellActor) {
+		for (view in views) view.actorSwitchGridLeft( oldoldActorKey, newActorKey);
 	}
-	// inline function actorSwitchGrid(oldoldActorKey:CellActor, newActorKey:CellActor) {
-		// for (view in views) view.actorSwitchGrid( direction, oldoldActorKey, newActorKey);
-	// }
+	inline function viewsActorGoLeft(actorKey:CellActor, time:Int = 0) {
+		for (view in views) view.actorGoLeft( actorKey, time);
+	}
 
 
 	// -------------------------------------------------
