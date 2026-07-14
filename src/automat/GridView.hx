@@ -64,10 +64,26 @@ class GridView {
 		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
 	}
 
-	// add and update
+
+
+	// ------------------------------------------
+	// -- actor: add, update and switch grid ----
+	// ------------------------------------------
 	public function addActor(actor:IActor, actorKey:Int) {
+		// TODO: only if is "inside" !
 		multiGridView.switchGridViewIndex(index);
 		multiGridView.addActor(actor, actorKey);
+	}
+
+	public function removeActor(actorKey:Int) {
+		// TODO: only if is "inside" !
+		multiGridView.switchGridViewIndex(index);
+		multiGridView.removeActor(actorKey);
+	}
+
+	// TODO: for each direction
+	public function actorSwitchGridLeft(oldActorKey:Int, newActorKey:Int) {
+		multiGridView.actorSwitchGridLeft(index, oldActorKey, newActorKey);
 	}
 
 

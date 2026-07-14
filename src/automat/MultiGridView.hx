@@ -225,8 +225,8 @@ class MultiGridView {
 	// TODO: move actors (together with gridswitching!)
 
 	// if actors origin moved to a side-grid
-	public inline function actorSwitchGrid(oldGridViewIndex:Int, oldoldActorKey:CellActor, newGridViewIndex:Int, newActorKey:CellActor) {
-		view.actorSwitchGrid(oldGridViewIndex, oldoldActorKey, newGridViewIndex, newActorKey);
+	public inline function actorSwitchGridLeft(index:Int, oldActorKey:CellActor, newActorKey:CellActor) {
+		view.actorSwitchGrid(index, gridViewCache.leftIndex(index), oldActorKey, newActorKey);
 	}
 
 	

@@ -100,6 +100,7 @@ class TestView extends Application
 			var actor5= new Stone2x2("Stone2x2");
 			actor5.addToGrid(grid, P(4,4));	
 		},1000);
+
 		
 	}
 	

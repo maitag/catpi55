@@ -75,10 +75,6 @@ class Grid {
 		set(pos, cell);
 	}
 
-	inline function addActorToView(actor:IActor, cellActor:CellActor) {
-		for (view in views) view.addActor(actor, cellActor);
-	}
-	
 	// only used by macro-unroll-mode
 	inline function setCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid,
 		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor, isOrigin:Bool)
@@ -176,8 +172,22 @@ class Grid {
 		else return 0;
 	}
 	
+	// --------------- SYNC TO VIEWS -------------------
+	inline function addActorToView(actor:IActor, cellActor:CellActor) {
+		for (view in views) view.addActor(actor, cellActor);
+	}
+	
+	inline function removeActorFromView(actor:IActor, cellActor:CellActor) {
+		for (view in views) view.removeActor(cellActor);
+	}
 
-
+	// TODO: for each direction
+	inline function actorSwitchGridLeft(oldoldActorKey:CellActor, newActorKey:CellActor) {
+		// for (view in views) view.actorSwitchGridLeft( oldoldActorKey, newActorKey);
+	}
+	// inline function actorSwitchGrid(oldoldActorKey:CellActor, newActorKey:CellActor) {
+		// for (view in views) view.actorSwitchGrid( direction, oldoldActorKey, newActorKey);
+	// }
 
 
 	// -------------------------------------------------

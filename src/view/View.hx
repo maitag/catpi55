@@ -131,9 +131,9 @@ class View {
 	}
 
 	// if actors origin moved to a side-grid
-	public inline function actorSwitchGrid(oldGridViewIndex:Int, oldoldActorKey:CellActor, newGridViewIndex:Int, newActorKey:CellActor) {
-		var oldMapkey = ( oldGridViewIndex << (CellActor.bits-1)) | oldoldActorKey;
-		var newMapkey = ( newGridViewIndex << (CellActor.bits-1)) | newActorKey;
+	public inline function actorSwitchGrid(index:Int, newIndex:Int, oldActorKey:CellActor, newActorKey:CellActor) {
+		var oldMapkey = ( index << (CellActor.bits-1)) | oldActorKey;
+		var newMapkey = ( newIndex << (CellActor.bits-1)) | newActorKey;
 		// renderView.actorRender.actorSwitchGrid(oldMapkey, newMapkey);
 	}
 	
