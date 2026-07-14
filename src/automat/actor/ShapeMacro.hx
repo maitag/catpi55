@@ -17,7 +17,7 @@ class ShapeMacro {
 		for (y in 0...bitGrid.height)
 			for (x in 0...bitGrid.width)
 				if ( bitGrid.get(x,y) ) {
-					e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB, $v{(y == 0 && x == originXOffset)}, this));
+					e.push(macro grid.setCellActorAtOffset(pos.x + $v{x}, pos.y + $v{y}, gR, gB, gRB, a, aR, aB, aRB, $v{(y == 0 && x == originXOffset)}));
 				}			
 		fields.push({
 			name: "_addToGrid",
@@ -44,7 +44,7 @@ class ShapeMacro {
 		e.push(macro this.pos = pos);	
 		e.push(macro gridKey = grid.actors.add(this));	
 		e.push(macro 
-			if ( pos.x + $v{bitGrid.width} < automat.Grid.WIDTH ) {					
+			if (pos.x + $v{bitGrid.width} < automat.Grid.WIDTH) {					
 				if ( pos.y + $v{bitGrid.height} < automat.Grid.HEIGHT) {
 					_addToGrid(null, null, null, gridKey, 0, 0, 0);
 				}
@@ -64,9 +64,17 @@ class ShapeMacro {
 					_addToGrid(grid.right, grid.bottom, grid.rightBottom, gridKey, gridKeyR, gridKeyB, gridKeyRB);
 				}
 			}
-			// TODO: better call a grids "addActorToView()" from here at where origin is and not while grid.setCellActorAt!
 		);
-
+		e.push(macro 
+			// add actor to the views
+			if (pos.x + $v{originXOffset} < automat.Grid.WIDTH) {
+				grid.addActorToView(this, gridKey);
+			}
+			else {
+				grid.right.addActorToView(this, gridKeyR);
+			}
+		);
+		
 		fields.push({
 			name: "addToGrid",
 			access: [APublic, AInline],
