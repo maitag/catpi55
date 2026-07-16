@@ -131,7 +131,7 @@ class View {
 	}
 
 	// if actors origin moved to a side-grid
-	public inline function actorSwitchGrid(index:Int, newIndex:Int, oldActorKey:CellActor, newActorKey:CellActor) {
+	public inline function actorToSideGrid(index:Int, newIndex:Int, oldActorKey:CellActor, newActorKey:CellActor) {
 		var oldMapkey = ( index << (CellActor.bits-1)) | oldActorKey;
 		var newMapkey = ( newIndex << (CellActor.bits-1)) | newActorKey;
 		trace("actorSwitchGrid", 'index:$index newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey');		

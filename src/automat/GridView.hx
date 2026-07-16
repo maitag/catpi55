@@ -70,26 +70,31 @@ class GridView {
 	// -- actor: add, remove, move/update and switch grid ---
 	// ------------------------------------------------------
 	public function addActor(actor:IActor, actorKey:Int) {
+		// TODO: handle origin here!
 		// TODO: only if is "inside" !
 		multiGridView.switchGridViewIndex(index);
 		multiGridView.addActor(actor, actorKey);
 	}
 
-	public function removeActor(actorKey:Int) {
+	public function removeActor(actor:IActor, actorKey:Int) {
+		// TODO: handle origin here!
 		// TODO: only if is "inside" !
 		multiGridView.switchGridViewIndex(index);
 		multiGridView.removeActor(actorKey);
 	}
 
 	// if actors origin moved to a side-grid
-	// -> TODO: only if is "inside" !
-	public function actorSwitchGridLeft  (oldKey:Int, newKey:Int) multiGridView.actorSwitchGridLeft  (index, oldKey, newKey);
-	public function actorSwitchGridRight (oldKey:Int, newKey:Int) multiGridView.actorSwitchGridRight (index, oldKey, newKey);
-	public function actorSwitchGridTop   (oldKey:Int, newKey:Int) multiGridView.actorSwitchGridTop   (index, oldKey, newKey);
-	public function actorSwitchGridBottom(oldKey:Int, newKey:Int) multiGridView.actorSwitchGridBottom(index, oldKey, newKey);
+	// -> TODO: handle this inside the "go"-functions below !
+	public function actorToGridLeft  (oldKey:Int, newKey:Int) multiGridView.actorToGridLeft  (index, oldKey, newKey);
+	public function actorToGridRight (oldKey:Int, newKey:Int) multiGridView.actorToGridRight (index, oldKey, newKey);
+	public function actorToGridTop   (oldKey:Int, newKey:Int) multiGridView.actorToGridTop   (index, oldKey, newKey);
+	public function actorToGridBottom(oldKey:Int, newKey:Int) multiGridView.actorToGridBottom(index, oldKey, newKey);
 
-	// actor MOVES -> TODO: only if is "inside" !
 	public function actorGoLeft(actorKey:Int, time:Int) {
+		// actor MOVES -> TODO: only if is "inside" !
+		// TODO: do the condition to call "actorToGridLeft" from here!
+		// TODO: handle origin here!
+		// TODO: check also if add/remove is need
 		multiGridView.switchGridViewIndex(index);
 		multiGridView.actorGoLeft(actorKey, time);
 	}

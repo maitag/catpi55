@@ -57,6 +57,7 @@ class Shape {
 
 		// trigger actor-add to the gridViews
 		if (syncToView) {
+			// TODO: grid.viewsActorAdd(a, shape.originXOffset) and do this check inside GridView.hx
 			if (pos.x + shape.originXOffset < Grid.WIDTH) grid.viewsActorAdd(a, a.gridKey);
 			else grid.right.viewsActorAdd(a, a.gridKeyR);
 		}
@@ -99,7 +100,7 @@ class Shape {
 
 		// trigger actor-remove to the gridViews
 		if (syncToView) {
-			// TODO: check 
+			// TODO: grid.viewsActorRemove(a, shape.originXOffset) and do this check inside GridView.hx
 			if (a.pos.x + shape.originXOffset < Grid.WIDTH) a.grid.viewsActorRemove(a, a.gridKey);
 			else a.grid.right.viewsActorRemove(a, a.gridKeyR);
 		}

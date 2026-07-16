@@ -223,17 +223,17 @@ class MultiGridView {
 	}
 
 	// if actors origin moved to a side-grid it is need a key-exchange at view-side
-	public inline function actorSwitchGridLeft(index:Int, oldKey:CellActor, newKey:CellActor) {
-		view.actorSwitchGrid(index, gridViewCache.leftIndex(index), oldKey, newKey);
+	public inline function actorToGridLeft(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorToSideGrid(index, gridViewCache.leftIndex(index), oldKey, newKey);
 	}
-	public inline function actorSwitchGridRight(index:Int, oldKey:CellActor, newKey:CellActor) {
-		view.actorSwitchGrid(index, gridViewCache.rightIndex(index), oldKey, newKey);
+	public inline function actorToGridRight(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorToSideGrid(index, gridViewCache.rightIndex(index), oldKey, newKey);
 	}
-	public inline function actorSwitchGridTop(index:Int, oldKey:CellActor, newKey:CellActor) {
-		view.actorSwitchGrid(index, gridViewCache.topIndex(index), oldKey, newKey);
+	public inline function actorToGridTop(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorToSideGrid(index, gridViewCache.topIndex(index), oldKey, newKey);
 	}
-	public inline function actorSwitchGridBottom(index:Int, oldKey:CellActor, newKey:CellActor) {
-		view.actorSwitchGrid(index, gridViewCache.bottomIndex(index), oldKey, newKey);
+	public inline function actorToGridBottom(index:Int, oldKey:CellActor, newKey:CellActor) {
+		view.actorToSideGrid(index, gridViewCache.bottomIndex(index), oldKey, newKey);
 	}
 
 	// actor MOVES
