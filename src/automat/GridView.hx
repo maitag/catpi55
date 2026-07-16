@@ -60,8 +60,8 @@ class GridView {
 		multiGridView.removeGridView(index);
 	}
 
-	public function isInside(pos:Pos):Bool {
-		return pos.x >= xFrom && pos.x < xTo && pos.y >= yFrom && pos.y < yTo;
+	public function isInside(x:Int, y:Int):Bool {
+		return x >= xFrom && x < xTo && y >= yFrom && y < yTo;
 	}
 
 
@@ -69,18 +69,18 @@ class GridView {
 	// ------------------------------------------------------
 	// -- actor: add, remove, move/update and switch grid ---
 	// ------------------------------------------------------
-	public function addActor(actor:IActor, actorKey:Int) {
-		// TODO: handle origin here!
-		// TODO: only if is "inside" !
-		multiGridView.switchGridViewIndex(index);
-		multiGridView.addActor(actor, actorKey);
+	public function addActor(actor:IActor, actorKey:Int, actor_pos_x:Int) {
+		if (isInside(actor_pos_x, actor.pos.y)) {
+			multiGridView.switchGridViewIndex(index);
+			multiGridView.addActor(actor, actorKey);
+		}
 	}
 
-	public function removeActor(actor:IActor, actorKey:Int) {
-		// TODO: handle origin here!
-		// TODO: only if is "inside" !
-		multiGridView.switchGridViewIndex(index);
-		multiGridView.removeActor(actorKey);
+	public function removeActor(actor:IActor, actorKey:Int, actor_pos_x:Int) {
+		if (isInside(actor_pos_x, actor.pos.y)) {
+			multiGridView.switchGridViewIndex(index);
+			multiGridView.removeActor(actorKey);
+		}
 	}
 
 	// if actors origin moved to a side-grid
@@ -92,6 +92,7 @@ class GridView {
 
 	public function actorGoLeft(actorKey:Int, time:Int) {
 		// actor MOVES -> TODO: only if is "inside" !
+		// if (isInside())
 		// TODO: do the condition to call "actorToGridLeft" from here!
 		// TODO: handle origin here!
 		// TODO: check also if add/remove is need

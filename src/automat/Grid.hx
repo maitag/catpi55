@@ -173,12 +173,12 @@ class Grid {
 	}
 	
 	// --------------- SYNC ACTOR TO VIEWS -------------------
-	inline function viewsActorAdd(actor:IActor, cellActor:CellActor) {
-		for (view in views) view.addActor(actor, cellActor);
+	inline function viewsActorAdd(actor:IActor, actorKey:Int, actor_pos_x:Int) {
+		for (view in views) view.addActor(actor, actorKey, actor_pos_x);
 	}
 	
-	inline function viewsActorRemove(actor:IActor, cellActor:CellActor) {
-		for (view in views) view.removeActor(actor, cellActor);
+	inline function viewsActorRemove(actor:IActor, actorKey:Int, actor_pos_x:Int) {
+		for (view in views) view.removeActor(actor, actorKey, actor_pos_x);
 	}
 
 	// TODO: handle this delegation FULLY into Gridview.hx and actorGo... functions

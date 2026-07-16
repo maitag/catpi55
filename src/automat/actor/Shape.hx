@@ -55,11 +55,10 @@ class Shape {
 			}
 		}
 
-		// trigger actor-add to the gridViews
+		// trigger actor-add to the origin corresponding grid and its views
 		if (syncToView) {
-			// TODO: grid.viewsActorAdd(a, shape.originXOffset) and do this check inside GridView.hx
-			if (pos.x + shape.originXOffset < Grid.WIDTH) grid.viewsActorAdd(a, a.gridKey);
-			else grid.right.viewsActorAdd(a, a.gridKeyR);
+			if (pos.x + shape.originXOffset < Grid.WIDTH) grid.viewsActorAdd(a, a.gridKey, a.pos.x + shape.originXOffset);
+			else grid.right.viewsActorAdd(a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
 		}
 	}
 
@@ -98,11 +97,10 @@ class Shape {
 		a.grid.actors.del(a.gridKey); a.gridKey = -1;
 		a.grid = null;
 
-		// trigger actor-remove to the gridViews
+		// trigger actor-remove to the origin corresponding grid and its views
 		if (syncToView) {
-			// TODO: grid.viewsActorRemove(a, shape.originXOffset) and do this check inside GridView.hx
-			if (a.pos.x + shape.originXOffset < Grid.WIDTH) a.grid.viewsActorRemove(a, a.gridKey);
-			else a.grid.right.viewsActorRemove(a, a.gridKeyR);
+			if (a.pos.x + shape.originXOffset < Grid.WIDTH) a.grid.viewsActorRemove(a, a.gridKey, a.pos.x + shape.originXOffset);
+			else a.grid.right.viewsActorRemove(a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
 		}
 	}
 
