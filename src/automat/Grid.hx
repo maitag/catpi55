@@ -172,12 +172,12 @@ class Grid {
 		else return 0;
 	}
 	
-	// --------------- SYNC TO VIEWS -------------------
-	inline function addActorToView(actor:IActor, cellActor:CellActor) {
+	// --------------- SYNC ACTOR TO VIEWS -------------------
+	inline function viewsActorAdd(actor:IActor, cellActor:CellActor) {
 		for (view in views) view.addActor(actor, cellActor);
 	}
 	
-	inline function removeActorFromView(actor:IActor, cellActor:CellActor) {
+	inline function viewsActorRemove(actor:IActor, cellActor:CellActor) {
 		for (view in views) view.removeActor(cellActor);
 	}
 

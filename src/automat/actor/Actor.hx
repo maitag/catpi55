@@ -124,9 +124,10 @@ class Actor {
 				kind: FFun({
 					args: [
 						{name:"grid", opt:false, meta:[], type: macro:automat.Grid},
-						{name:"pos", opt:false, meta:[], type: macro:util.Pos}
+						{name:"pos", opt:false, meta:[], type: macro:util.Pos},
+						{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
 					],
-					expr: macro automat.actor.Shape.addToGrid(this, grid, pos, shapeBitGrid),
+					expr: macro automat.actor.Shape.addToGrid(this, grid, pos, shapeBitGrid, syncToView),
 					ret: null
 				})
 			});
@@ -135,7 +136,7 @@ class Actor {
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
-					args: [],
+					args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
 					expr: macro automat.actor.Shape.removeFromGrid(this, shapeBitGrid),
 					ret: null
 				})

@@ -15,8 +15,8 @@ interface IActor {
 	public var gridKeyB:Int;
 	public var gridKeyRB:Int;
 
-	public function addToGrid(grid:Grid, pos:Int):Void;
-	public function removeFromGrid():Void;
+	public function addToGrid(grid:Grid, pos:Int, syncToView:Bool=true):Void;
+	public function removeFromGrid(syncToView:Bool=true):Void;
 
 	public function isFitIntoGrid(grid:Grid, pos:Int):Bool;
 
