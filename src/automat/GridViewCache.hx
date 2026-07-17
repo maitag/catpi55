@@ -40,7 +40,14 @@ class GridViewCache {
 	public inline function bottomIndex(i:Int):Int return index( (i % sizeX)  , Std.int(i/sizeX)+1 ); 
 
 	public inline function get(x:Int, y:Int):GridView return data.get( index(x, y) );
-
+	
+	public inline function getByIndex(i:Int):GridView return data.get(i);
+	/*
+	public inline function getByIndexLeft(i:Int):GridView return data.get(leftIndex(i));
+	public inline function getByIndexRight(i:Int):GridView return data.get(rightIndex(i));
+	public inline function getByIndexTop(i:Int):GridView return data.get(topIndex(i));
+	public inline function getByIndexBottom(i:Int):GridView return data.get(bottomIndex(i));
+	*/
 	inline function addToGrid(x:Int, y:Int, grid:Grid, offsetX:Int, offsetY:Int, _xFrom:Int, _xTo:Int, _yFrom:Int, _yTo:Int) {
 		if (grid != null) get(x, y).addToGrid( grid, offsetX, offsetY, _xFrom, _xTo, _yFrom, _yTo);
 	}

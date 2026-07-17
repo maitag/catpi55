@@ -149,17 +149,44 @@ class Shape {
 
 
 	// Optimization: keep the actor key while remove and adding again
-	public static function goLeft(a:IActor, shape:BitGrid) {
-		var g = a.grid; removeFromGrid(a, shape, false);
+	public static function goLeft(a:IActor, shape:BitGrid, syncToView:Bool = true) {
+		var g = a.grid;
+		// store old values to sync the views afterwards
+		var oldGrid:Grid = g;
+		var oldActorKey:Int = a.gridKey;
+		var old_actor_pos_x:Int = a.pos.x + shape.originXOffset;
+		if (syncToView && a.pos.x + shape.originXOffset >= Grid.WIDTH) {
+			oldGrid = oldGrid.right;
+			oldActorKey = a.gridKeyR;
+			old_actor_pos_x %= Grid.WIDTH; 
+		}
+
+		removeFromGrid(a, shape, false);
+
 		if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape, false);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape, false);
 
-		// sync to view after move
-		// TODO: only if actor is "inside", so handle this case (or if it "goes in/out") into GridView.hx
-		if (a.pos.x + shape.originXOffset == Grid.WIDTH) g.viewsActorToGridLeft(a.gridKeyR, a.gridKey);
-		g.viewsActorGoLeft(a.gridKey);
-		
+		// sync views
+		if (syncToView) {
+			if (a.pos.x + shape.originXOffset >= Grid.WIDTH) {
+				if (a.grid.right == oldGrid)
+					a.grid.right.viewsActorToLeft(old_actor_pos_x, a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
+				else {
+					oldGrid.right.viewsActorToLeftOut(a.grid.right, oldActorKey, old_actor_pos_x, a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
+					a.grid.right.viewsActorToLeftIn(oldGrid, oldActorKey, old_actor_pos_x, a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
+				}
+			}
+			else {
+				if (a.grid == oldGrid)
+					a.grid.viewsActorToLeft(old_actor_pos_x, a, a.gridKey, a.pos.x + shape.originXOffset);
+				else {
+					oldGrid.viewsActorToLeftOut(a.grid, oldActorKey, old_actor_pos_x, a, a.gridKey, a.pos.x + shape.originXOffset);
+					a.grid.viewsActorToLeftIn(oldGrid, oldActorKey, old_actor_pos_x, a, a.gridKey, a.pos.x + shape.originXOffset);
+				}
+			}
+		}	
 	}
+	
 	public static function goRight(a:IActor, shape:BitGrid) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.right, P(0, a.pos.y), shape, false);

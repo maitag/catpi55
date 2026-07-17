@@ -181,13 +181,15 @@ class Grid {
 		for (view in views) view.removeActor(actor, actorKey, actor_pos_x);
 	}
 
-	// TODO: handle this delegation FULLY into Gridview.hx and actorGo... functions
-	inline function viewsActorToGridLeft(oldoldActorKey:CellActor, newActorKey:CellActor) {
-		for (view in views) view.actorToGridLeft( oldoldActorKey, newActorKey);
-	}
 	// TODO: for each direction
-	inline function viewsActorGoLeft(actorKey:CellActor, time:Int = 0) {
-		for (view in views) view.actorGoLeft( actorKey, time);
+	inline function viewsActorToLeft(old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToLeft(old_actor_pos_x, actor, actorKey, actor_pos_x, time);
+	}
+	inline function viewsActorToLeftOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToLeftOut(newGrid, oldActorKey, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
+	}
+	inline function viewsActorToLeftIn(oldGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToLeftIn(oldGrid, oldActorKey, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
 	}
 
 

@@ -107,6 +107,20 @@ class ActorRender {
 		// }
 	}
 
+	// swaps the mapkeys if actor enters a new gridView
+	public function actorToSideGrid(oldMapkey:Int, newMapkey:Int) {
+		var element = elemViewBuffer.get(oldMapkey);
+		elemViewBuffer.remove(oldMapkey);
+		elemViewBuffer.set(newMapkey, element);
+	}
+
+	public function actorGoLeft(mapkey:Int, time:Int) {
+		var element = elemViewBuffer.get(mapkey);
+		// var px = x*32 + scrollOffsetX;
+		element.x -= 32;
+		bufferStatic.updateElement(element);
+	}
+
 	public function updateActor(mapkey:Int, action:Int) { // TODO: action!
 		// TODO
 	}

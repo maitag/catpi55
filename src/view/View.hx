@@ -131,20 +131,19 @@ class View {
 	}
 
 	// if actors origin moved to a side-grid
-	public inline function actorToSideGrid(index:Int, newIndex:Int, oldActorKey:CellActor, newActorKey:CellActor) {
-		var oldMapkey = ( index << (CellActor.bits-1)) | oldActorKey;
+	public inline function actorToSideGrid(newIndex:Int, oldActorKey:CellActor, newActorKey:CellActor) {
+		var oldMapkey = ( gridViewIndex << (CellActor.bits-1)) | oldActorKey;
 		var newMapkey = ( newIndex << (CellActor.bits-1)) | newActorKey;
-		trace("actorSwitchGrid", 'index:$index newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey');		
+		trace("actorSwitchGrid", 'index:$gridViewIndex newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey');		
 		// TODO:
-		// renderView.actorRender.actorSwitchGrid(oldMapkey, newMapkey);
+		renderView.actorRender.actorToSideGrid(oldMapkey, newMapkey);
 	}
 
 	// actor MOVES
 	public function actorGoLeft(actorKey:Int, time:Int) {
 		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
 		trace("actorGoLeft", actorKey, time);
-		// TODO:
-		// renderView.actorRender.actorGoLeft(mapkey, time);
+		renderView.actorRender.actorGoLeft(mapkey, time);
 	}
 	
 
