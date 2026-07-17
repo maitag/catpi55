@@ -367,7 +367,7 @@ class ShapeMacro {
 						var old_actor_pos_x:Int = pos.x + $v{originXOffset};
 						if (syncToView && pos.x + $v{originXOffset} >= Grid.WIDTH) {
 							oldGrid = oldGrid.right; oldActorKey = gridKeyR; old_actor_pos_x %= Grid.WIDTH; 
-						}						
+						}
 						
 						removeFromGrid(false);						
 						if (pos.x == 0) addToGrid(g.left, util.Pos.xy(Grid.WIDTH-1,pos.y), false);
@@ -403,13 +403,38 @@ class ShapeMacro {
 					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
 				],
 				expr: macro 
-					if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
+					if (pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y + $v{bitGrid.height} <= Grid.HEIGHT) { // fully keep inside
 						$b{f(1,0)};
+						if (syncToView) grid.viewsActorToRight(pos.x + $v{originXOffset}-1, this, gridKey, pos.x + $v{originXOffset});
+					}
 					else {
-						var g = grid;
+						var g:automat.Grid = grid;
+						// store old values to sync the views afterwards
+						var oldGrid:automat.Grid = g; var oldActorKey:Int = gridKey;
+						var old_actor_pos_x:Int = pos.x + $v{originXOffset};
+						if (syncToView && pos.x + $v{originXOffset} >= Grid.WIDTH) {
+							oldGrid = oldGrid.right; oldActorKey = gridKeyR; old_actor_pos_x %= Grid.WIDTH; 
+						}
+
 						removeFromGrid(false);
 						if (pos.x == Grid.WIDTH-1) addToGrid(g.right, util.Pos.xy(0, pos.y), false);
 						else addToGrid(g, util.Pos.xy(pos.x+1, pos.y), false);
+
+						if (syncToView) { // sync views
+							if (pos.x + $v{originXOffset} >= Grid.WIDTH) {
+								if (grid.right == oldGrid) grid.right.viewsActorToRight(old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
+								else {
+									oldGrid.right.viewsActorToRightOut(grid.right, oldActorKey, old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
+									grid.right.viewsActorToRightIn(oldGrid, old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
+								}
+							} else {
+								if (grid == oldGrid) grid.viewsActorToRight(old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
+								else {
+									oldGrid.viewsActorToRightOut(grid, oldActorKey, old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
+									grid.viewsActorToRightIn(oldGrid, old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
+								}
+							}
+						}
 					},
 				ret: null
 			})

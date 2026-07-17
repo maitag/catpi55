@@ -163,7 +163,7 @@ class Shape {
 		var oldGrid:Grid = g; var oldActorKey:Int = a.gridKey;
 		var old_actor_pos_x:Int = a.pos.x + shape.originXOffset;
 		if (syncToView && a.pos.x + shape.originXOffset >= Grid.WIDTH) {
-			oldGrid = oldGrid.right; oldActorKey = a.gridKeyR; old_actor_pos_x %= Grid.WIDTH; 
+			oldGrid = oldGrid.right; oldActorKey = a.gridKeyR; old_actor_pos_x %= Grid.WIDTH;
 		}
 		
 		removeFromGrid(a, shape, false);		
@@ -186,11 +186,34 @@ class Shape {
 			}
 		}	
 	}
-
 	public static function goRight(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
-		var g = a.grid; removeFromGrid(a, shape, false);
+		var g:Grid = a.grid;
+		// store old values to sync the views afterwards
+		var oldGrid:Grid = g; var oldActorKey:Int = a.gridKey;
+		var old_actor_pos_x:Int = a.pos.x + shape.originXOffset;
+		if (syncToView && a.pos.x + shape.originXOffset >= Grid.WIDTH) {
+			oldGrid = oldGrid.right; oldActorKey = a.gridKeyR; old_actor_pos_x %= Grid.WIDTH;
+		}
+		
+		removeFromGrid(a, shape, false);
 		if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.right, P(0, a.pos.y), shape, false);
 		else addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape, false);
+
+		if (syncToView) { // sync views
+			if (a.pos.x + shape.originXOffset >= Grid.WIDTH) {
+				if (a.grid.right == oldGrid) a.grid.right.viewsActorToRight(old_actor_pos_x, a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
+				else {
+					oldGrid.right.viewsActorToRightOut(a.grid.right, oldActorKey, old_actor_pos_x, a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
+					a.grid.right.viewsActorToRightIn(oldGrid, old_actor_pos_x, a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
+				}
+			} else {
+				if (a.grid == oldGrid) a.grid.viewsActorToRight(old_actor_pos_x, a, a.gridKey, a.pos.x + shape.originXOffset);
+				else {
+					oldGrid.viewsActorToRightOut(a.grid, oldActorKey, old_actor_pos_x, a, a.gridKey, a.pos.x + shape.originXOffset);
+					a.grid.viewsActorToRightIn(oldGrid, old_actor_pos_x, a, a.gridKey, a.pos.x + shape.originXOffset);
+				}
+			}
+		}
 	}
 	public static function goUp(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g = a.grid; removeFromGrid(a, shape, false);

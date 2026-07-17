@@ -181,7 +181,7 @@ class Grid {
 		for (view in views) view.removeActor(actor, actorKey, actor_pos_x);
 	}
 
-	// TODO: for each direction
+	// ------- left -------
 	inline function viewsActorToLeft(old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
 		for (view in views) view.actorToLeft(old_actor_pos_x, actor, actorKey, actor_pos_x, time);
 	}
@@ -190,6 +190,16 @@ class Grid {
 	}
 	inline function viewsActorToLeftIn(oldGrid:Grid, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
 		for (view in views) view.actorToLeftIn(oldGrid, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
+	}
+	// ------- right -------
+	inline function viewsActorToRight(old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToRight(old_actor_pos_x, actor, actorKey, actor_pos_x, time);
+	}
+	inline function viewsActorToRightOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToRightOut(newGrid, oldActorKey, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
+	}
+	inline function viewsActorToRightIn(oldGrid:Grid, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToRightIn(oldGrid, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
 	}
 
 
