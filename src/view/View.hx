@@ -116,35 +116,44 @@ class View {
 	}
 
 
-	// ------ actor --------
+	// ------ ACTOR --------
+
+	public inline function mapKey(index:Int, actorKey:Int) return (index << (CellActor.bits-1)) | actorKey;
 
 	public function addActor(pos:Pos, actorKey:Int, actorType:ActorType) {
-		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
-		trace("addActor", 'x:${pos.x+gridViewX} y:${pos.y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:$mapkey');		
-		renderView.actorRender.addActor(pos.x+gridViewX, pos.y+gridViewY, mapkey, actorType);
+		trace("addActor", 'x:${pos.x+gridViewX} y:${pos.y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.addActor(pos.x+gridViewX, pos.y+gridViewY, mapKey(gridViewIndex, actorKey), actorType);
 	}
 
 	public function removeActor(actorKey:Int) {
-		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
-		trace("removeActor", mapkey);
-		renderView.actorRender.removeActor(mapkey);
+		trace("removeActor", 'actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.removeActor(mapKey(gridViewIndex, actorKey));
 	}
 
-	// if actors origin moved to a side-grid
+	// if actors origin moved to a side-grid -> switch the mapkeys
 	public inline function actorToSideGrid(newIndex:Int, oldActorKey:Int, newActorKey:Int) {
-		var oldMapkey = ( gridViewIndex << (CellActor.bits-1)) | oldActorKey;
-		var newMapkey = ( newIndex << (CellActor.bits-1)) | newActorKey;
-		trace("actorToSideGrid", 'index:$gridViewIndex newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey, oldMapkey:$oldMapkey, newMapkey:$newMapkey');		
-		// TODO:
-		renderView.actorRender.actorToSideGrid(oldMapkey, newMapkey);
+		trace("actorToSideGrid", 'index:$gridViewIndex newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey, oldMapkey:${mapKey(gridViewIndex, oldActorKey)}, newMapkey:${mapKey(newIndex, newActorKey)}');		
+		renderView.actorRender.actorChangeMapkey(mapKey(gridViewIndex, oldActorKey), mapKey(newIndex, newActorKey));
 	}
 
 	// actor MOVES
 	public function actorGoLeft(actorKey:Int, time:Int) {
-		var mapkey = ( gridViewIndex << (CellActor.bits-1)) | actorKey;
-		trace("actorGoLeft", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:$mapkey');		
-		renderView.actorRender.actorGoLeft(mapkey, time);
+		trace("actorGoLeft", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.actorGoLeft(mapKey(gridViewIndex, actorKey), time);
 	}
+	public function actorGoRight(actorKey:Int, time:Int) {
+		trace("actorGoRight", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.actorGoRight(mapKey(gridViewIndex, actorKey), time);
+	}
+	public function actorGoTop(actorKey:Int, time:Int) {
+		trace("actorGoTop", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.actorGoTop(mapKey(gridViewIndex, actorKey), time);
+	}
+	public function actorGoDown(actorKey:Int, time:Int) {
+		trace("actorGoDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.actorGoDown(mapKey(gridViewIndex, actorKey), time);
+	}
+
 	
 
 	// TODO:

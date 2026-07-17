@@ -116,8 +116,9 @@ class GridView {
 		}		
 	}
 	public function actorToLeftIn(oldGrid:Grid, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
-		var indexRight = multiGridView.gridViewCache.rightIndex(index);
-		var gridViewRight = multiGridView.gridViewCache.getByIndex(indexRight);
+		// var indexRight = multiGridView.gridViewCache.rightIndex(index);
+		// var gridViewRight = multiGridView.gridViewCache.getByIndex(indexRight);
+		var gridViewRight = multiGridView.gridViewCache.getByIndexRight(index);
 		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(old_actor_pos_x, actor.pos.y)) { // not inside before		
 			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside after -> add
 				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);				
