@@ -129,7 +129,7 @@ class ActorRender {
 		element.x += 32;
 		bufferStatic.updateElement(element);
 	}
-	public function actorGoTop(mapkey:Int, time:Int) {
+	public function actorGoUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.y -= 32;
 		bufferStatic.updateElement(element);

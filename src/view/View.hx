@@ -145,9 +145,9 @@ class View {
 		trace("actorGoRight", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
 		renderView.actorRender.actorGoRight(mapKey(gridViewIndex, actorKey), time);
 	}
-	public function actorGoTop(actorKey:Int, time:Int) {
+	public function actorGoUp(actorKey:Int, time:Int) {
 		trace("actorGoTop", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
-		renderView.actorRender.actorGoTop(mapKey(gridViewIndex, actorKey), time);
+		renderView.actorRender.actorGoUp(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoDown(actorKey:Int, time:Int) {
 		trace("actorGoDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		

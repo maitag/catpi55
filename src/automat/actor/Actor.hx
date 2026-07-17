@@ -6,7 +6,7 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class Actor {
-	static public function build(shape:String, unroll = false):Array<Field>
+	static public function build(shape:String, unroll = true):Array<Field>
 	{
 		var fields = Context.getBuildFields();
 		var bitGrid:util.BitGrid = shape;
