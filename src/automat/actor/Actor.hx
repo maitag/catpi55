@@ -137,7 +137,7 @@ class Actor {
 				pos: Context.currentPos(),
 				kind: FFun({
 					args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
-					expr: macro automat.actor.Shape.removeFromGrid(this, shapeBitGrid),
+					expr: macro automat.actor.Shape.removeFromGrid(this, shapeBitGrid, syncToView),
 					ret: null
 				})
 			});
@@ -173,8 +173,11 @@ class Actor {
 					access: [APublic, AInline],
 					pos: Context.currentPos(),
 					kind: FFun({
-						args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
-						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid, syncToView),
+						args: [
+							{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+							{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+						],
+						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid, time, syncToView),
 						ret: null
 					})
 				});

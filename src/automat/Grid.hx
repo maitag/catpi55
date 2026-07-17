@@ -188,8 +188,8 @@ class Grid {
 	inline function viewsActorToLeftOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
 		for (view in views) view.actorToLeftOut(newGrid, oldActorKey, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
 	}
-	inline function viewsActorToLeftIn(oldGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
-		for (view in views) view.actorToLeftIn(oldGrid, oldActorKey, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
+	inline function viewsActorToLeftIn(oldGrid:Grid, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int = 0) {
+		for (view in views) view.actorToLeftIn(oldGrid, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
 	}
 
 

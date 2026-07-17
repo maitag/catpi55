@@ -30,15 +30,15 @@ interface IActor {
 	public function freeRightUp():Bool;
 	public function freeRightDown():Bool;
 
-	public function goLeft(syncToView:Bool=true):Void;
-	public function goRight(syncToView:Bool=true):Void;
-	public function goUp(syncToView:Bool=true):Void;
-	public function goDown(syncToView:Bool=true):Void;
+	public function goLeft (time:Int=0, syncToView:Bool=true):Void;
+	public function goRight(time:Int=0, syncToView:Bool=true):Void;
+	public function goUp   (time:Int=0, syncToView:Bool=true):Void;
+	public function goDown (time:Int=0, syncToView:Bool=true):Void;
 
-	public function goLeftUp(syncToView:Bool=true):Void;
-	public function goLeftDown(syncToView:Bool=true):Void;
-	public function goRightUp(syncToView:Bool=true):Void;
-	public function goRightDown(syncToView:Bool=true):Void;
+	public function goLeftUp   (time:Int=0, syncToView:Bool=true):Void;
+	public function goLeftDown (time:Int=0, syncToView:Bool=true):Void;
+	public function goRightUp  (time:Int=0, syncToView:Bool=true):Void;
+	public function goRightDown(time:Int=0, syncToView:Bool=true):Void;
 	
 	// SIM:
 	public function tryFallDown():Bool;

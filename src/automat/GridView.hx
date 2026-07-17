@@ -67,7 +67,7 @@ class GridView {
 
 
 	// ------------------------------------------------------
-	// -- actor: add, remove, move/update and switch grid ---
+	// --------------- Actor: add, remove -------------------
 	// ------------------------------------------------------
 	public function addActor(actor:IActor, actorKey:Int, actor_pos_x:Int) {
 		if (isInside(actor_pos_x, actor.pos.y)) {
@@ -83,52 +83,43 @@ class GridView {
 		}
 	}
 
+	// ------------------------------------------------------
+	// ---------------- Actor: MOVEMENT ---------------------
+	// ------------------------------------------------------
 
 	public function actorToLeft(old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
-		trace("actorToLeft");
-		if (isInside(old_actor_pos_x, actor.pos.y)) // was inside before
-		{
-			if (isInside(actor_pos_x, actor.pos.y)) { // inside afterwards -> move it
+		if (isInside(old_actor_pos_x, actor.pos.y)) { // inside before
+			if (isInside(actor_pos_x, actor.pos.y)) { // inside after -> move it
 				multiGridView.switchGridViewIndex(index); multiGridView.actorGoLeft(actorKey, time);
 			}
-			else { // not inside afterwards -> remove
+			else { // not inside after -> remove
 				multiGridView.switchGridViewIndex(index); multiGridView.removeActor(actorKey);
 			}				
 		}
-		else // was not inside before
-		{
-			if (isInside(actor_pos_x, actor.pos.y)) { // inside afterwards -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);
-			}			
+		else if (isInside(actor_pos_x, actor.pos.y)) { // not inside before AND inside after -> add
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);
 		}
 	}
 	public function actorToLeftOut(newGrid:Grid, oldActorkey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
-		trace("actorToLeftOut");
 		var indexLeft = multiGridView.gridViewCache.leftIndex(index);
 		var gridViewLeft = multiGridView.gridViewCache.getByIndex(indexLeft);
-		if (isInside(old_actor_pos_x, actor.pos.y)) // was inside before
-		{
-			// if (gridViewLeft.grid != null && gridViewLeft.isInside(actor_pos_x, actor.pos.y) ) { 
-			if (gridViewLeft.grid == newGrid && gridViewLeft.isInside(actor_pos_x, actor.pos.y) ) { // inside afterwards -> move it
+		if (isInside(old_actor_pos_x, actor.pos.y)) { // inside before		
+			if (gridViewLeft.grid == newGrid && gridViewLeft.isInside(actor_pos_x, actor.pos.y) ) { // inside after -> move it
 				multiGridView.switchGridViewIndex(index);
 				multiGridView.actorToSideGrid(indexLeft, oldActorkey, actorKey);
 				multiGridView.switchGridViewIndex(indexLeft);
 				multiGridView.actorGoLeft(actorKey, time);
 			}
-			else { // NOT inside afterwards -> remove
+			else { // not inside after -> remove
 				multiGridView.switchGridViewIndex(index); multiGridView.removeActor(oldActorkey);
 			}		
 		}		
 	}
-	// TODO: no oldActorkey is needed at here
-	public function actorToLeftIn(oldGrid:Grid, oldActorkey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
-		trace("actorToLeftIn");
+	public function actorToLeftIn(oldGrid:Grid, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
 		var indexRight = multiGridView.gridViewCache.rightIndex(index);
 		var gridViewRight = multiGridView.gridViewCache.getByIndex(indexRight);
-		// if (gridViewRight.grid == null || !gridViewRight.isInside(old_actor_pos_x, actor.pos.y)) 
-		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(old_actor_pos_x, actor.pos.y)) // was NOT inside before
-		{
-			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside afterwards -> add
+		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(old_actor_pos_x, actor.pos.y)) { // not inside before		
+			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside after -> add
 				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);				
 				// TODO LATER: evtl. add position offset to "move in":
 				// multiGridView.actorGoLeft(actorKey, time);
@@ -137,9 +128,12 @@ class GridView {
 	}
 
 
-	// ------------------------------------------
-	// ---------- SHRINK AND GROW ---------------
-	// ------------------------------------------
+
+
+
+	// ----------------------------------------------
+	// ---------- SHRINK AND GROW THE VIEW ----------
+	// ----------------------------------------------
 
 	// TODO: optimize it without cell arrays !
 

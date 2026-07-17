@@ -351,7 +351,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.x > 0 && pos.x + $v{bitGrid.width} <= Grid.WIDTH && pos.y + $v{bitGrid.height} <= Grid.HEIGHT) { // fully keep inside
 						$b{f(-1,0)};
@@ -360,81 +363,32 @@ class ShapeMacro {
 					else {
 						var g:automat.Grid = grid;
 						// store old values to sync the views afterwards
-						var oldGrid:automat.Grid = g;
-						var oldActorKey:Int = gridKey;
+						var oldGrid:automat.Grid = g; var oldActorKey:Int = gridKey;
 						var old_actor_pos_x:Int = pos.x + $v{originXOffset};
 						if (syncToView && pos.x + $v{originXOffset} >= Grid.WIDTH) {
-							oldGrid = oldGrid.right;
-							oldActorKey = gridKeyR;
-							old_actor_pos_x %= Grid.WIDTH; 
+							oldGrid = oldGrid.right; oldActorKey = gridKeyR; old_actor_pos_x %= Grid.WIDTH; 
 						}						
 						
-						removeFromGrid(false);
-						
+						removeFromGrid(false);						
 						if (pos.x == 0) addToGrid(g.left, util.Pos.xy(Grid.WIDTH-1,pos.y), false);
 						else addToGrid(g, util.Pos.xy(pos.x-1, pos.y), false);
-
-						// sync views
-						if (syncToView) {
+												
+						if (syncToView) { // sync views
 							if (pos.x + $v{originXOffset} >= Grid.WIDTH) {
-								if (grid.right == oldGrid)
-									grid.right.viewsActorToLeft(old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
+								if (grid.right == oldGrid) grid.right.viewsActorToLeft(old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
 								else {
 									oldGrid.right.viewsActorToLeftOut(grid.right, oldActorKey, old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
-									grid.right.viewsActorToLeftIn(oldGrid, oldActorKey, old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
+									grid.right.viewsActorToLeftIn(oldGrid, old_actor_pos_x, this, gridKeyR, (pos.x + $v{originXOffset}) % Grid.WIDTH);
 								}
-							}
-							else {
-								if (grid == oldGrid)
-									grid.viewsActorToLeft(old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
+							} else {
+								if (grid == oldGrid) grid.viewsActorToLeft(old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
 								else {
 									oldGrid.viewsActorToLeftOut(grid, oldActorKey, old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
-									grid.viewsActorToLeftIn(oldGrid, oldActorKey, old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
+									grid.viewsActorToLeftIn(oldGrid, old_actor_pos_x, this, gridKey, pos.x + $v{originXOffset});
 								}
 							}
-						}	
-
-					}
-					// TODO: more optimized and grid-neigbour-change:
-					/*
-					if (pos.x > 0)
-					{
-						if (pos.x + $v{bitGrid.width} < Grid.WIDTH) { // fully keep inside
-							$b{f(-1,0)};
 						}
-						else if (pos.x + $v{bitGrid.width} == Grid.WIDTH) {
-							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) {
-								$b{f(-1,0)};
-								grid.right.actors.del(gridKeyR); gridKeyR = -1;  // leave right grid
-							}
-							else {
-								$b{f(-1,0)};
-								grid.right.actors.del(gridKeyR); gridKeyR = -1;  // leave right grid
-								grid.rightBottom.actors.del(gridKeyRB); gridKeyRB = -1;  // leave rightBottom grid
-							}
-						}
-						else {
-							if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) {
-								$b{f(-1,0)};
-							}
-							else {
-								$b{f(-1,0)};
-							}
-						}
-					}
-					else { // pos.x == 0
-						if (pos.y + $v{bitGrid.height} < Grid.HEIGHT) {
-							$b{f(-1,0)}; // TODO
-							grid.right = grid; gridKeyR = gridKey; grid = grid.left; gridKey = grid.actors.add();// enter left grid
-						}
-						else {
-							$b{f(-1,0)};
-							grid.rightBottom = grid; grid = grid.left; gridKey = grid.actors.add(); // enter left grid
-							grid.right = grid; grid = grid.left; gridKey = grid.actors.add(); // enter left grid
-						}
-				}
-				*/
-				,
+					},
 				ret: null
 			})
 		});
@@ -444,7 +398,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
 						$b{f(1,0)};
@@ -463,7 +420,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT && pos.x + $v{bitGrid.width} < Grid.WIDTH) // fully keep inside
 						$b{f(0,-1)};
@@ -481,7 +441,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.y + $v{bitGrid.height} < Grid.HEIGHT-1 && pos.x + $v{bitGrid.width} < Grid.WIDTH) // fully keep inside
 						$b{f(0,1)};
@@ -499,7 +462,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.x > 0 && pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
 						$b{f(-1,-1)};
@@ -519,7 +485,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.x > 0 && pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y + $v{bitGrid.height} < Grid.HEIGHT-1) // fully keep inside
 						$b{f(-1,1)};
@@ -539,7 +508,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y > 0 && pos.y + $v{bitGrid.height} < Grid.HEIGHT) // fully keep inside
 						$b{f(1,-1)};
@@ -559,7 +531,10 @@ class ShapeMacro {
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
-				args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+				args: [
+					{name:"time", opt:false, meta:[], type: macro:Int, value:macro 0},
+					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
+				],
 				expr: macro 
 					if (pos.x + $v{bitGrid.width} < Grid.WIDTH-1 && pos.y + $v{bitGrid.height} < Grid.HEIGHT-1) // fully keep inside
 						$b{f(1,1)};
