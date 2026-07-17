@@ -116,7 +116,7 @@ class GridView {
 				multiGridView.actorGoLeft(actorKey, time);
 			}
 			else { // NOT inside afterwards -> remove
-				multiGridView.switchGridViewIndex(index); multiGridView.removeActor(actorKey);
+				multiGridView.switchGridViewIndex(index); multiGridView.removeActor(oldActorkey);
 			}		
 		}		
 	}
@@ -129,9 +129,8 @@ class GridView {
 		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(old_actor_pos_x, actor.pos.y)) // was NOT inside before
 		{
 			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside afterwards -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);
-				
-				// TODO: add position offset to "move in":
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);				
+				// TODO LATER: evtl. add position offset to "move in":
 				// multiGridView.actorGoLeft(actorKey, time);
 			}
 		}	
