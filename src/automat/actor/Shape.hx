@@ -233,9 +233,21 @@ class Shape {
 		}
 	}
 	public static function goDown(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
-		var g = a.grid; removeFromGrid(a, shape, false);
+		var g:Grid = a.grid;
+		// store old values to sync the views afterwards
+		var oldGrid:Grid = g; var oldActorKey:Int = a.gridKey; var old_actor_pos_y:Int = a.pos.y;
+		
+		removeFromGrid(a, shape, false);
 		if (a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.bottom, P(a.pos.x, 0), shape, false);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape, false);
+
+		if (syncToView) { // sync views
+			if (a.grid == oldGrid) a.grid.viewsActorToDown(old_actor_pos_y, a, a.gridKey, time);
+			else {
+				oldGrid.viewsActorToDownOut(a.grid, oldActorKey, old_actor_pos_y, a, a.gridKey, time);
+				a.grid.viewsActorToDownIn(oldGrid, old_actor_pos_y, a, a.gridKey, time);
+			}
+		}
 	}
 	public static function goLeftUp(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g = a.grid; removeFromGrid(a, shape, false);

@@ -211,6 +211,16 @@ class Grid {
 	inline function viewsActorToUpIn(oldGrid:Grid, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
 		for (view in views) view.actorToUpIn(oldGrid, old_actor_pos_y, actor, actorKey, time);
 	}
+	// ------- down -------
+	inline function viewsActorToDown(old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToDown(old_actor_pos_y, actor, actorKey, time);
+	}
+	inline function viewsActorToDownOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToDownOut(newGrid, oldActorKey, old_actor_pos_y, actor, actorKey, time);
+	}
+	inline function viewsActorToDownIn(oldGrid:Grid, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToDownIn(oldGrid, old_actor_pos_y, actor, actorKey, time);
+	}
 
 
 	// -------------------------------------------------

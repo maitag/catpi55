@@ -358,7 +358,7 @@ class ShapeMacro {
 				expr: macro 
 					if (pos.x > 0 && pos.x + $v{bitGrid.width} <= Grid.WIDTH && pos.y + $v{bitGrid.height} <= Grid.HEIGHT) { // fully keep inside
 						$b{f(-1,0)};
-						if (syncToView) grid.viewsActorToLeft(pos.x + $v{originXOffset}+1, this, gridKey, pos.x + $v{originXOffset}, time);
+						if (syncToView) grid.viewsActorToLeft(pos.x + $v{originXOffset} + 1, this, gridKey, pos.x + $v{originXOffset}, time);
 					}
 					else {
 						var g:automat.Grid = grid;
@@ -405,7 +405,7 @@ class ShapeMacro {
 				expr: macro 
 					if (pos.x + $v{bitGrid.width} < Grid.WIDTH && pos.y + $v{bitGrid.height} <= Grid.HEIGHT) { // fully keep inside
 						$b{f(1,0)};
-						if (syncToView) grid.viewsActorToRight(pos.x + $v{originXOffset}-1, this, gridKey, pos.x + $v{originXOffset}, time);
+						if (syncToView) grid.viewsActorToRight(pos.x + $v{originXOffset} - 1, this, gridKey, pos.x + $v{originXOffset}, time);
 					}
 					else {
 						var g:automat.Grid = grid;
@@ -485,18 +485,32 @@ class ShapeMacro {
 					{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}
 				],
 				expr: macro 
-					if (pos.y + $v{bitGrid.height} < Grid.HEIGHT-1 && pos.x + $v{bitGrid.width} < Grid.WIDTH) { // fully keep inside
+					if (pos.y + $v{bitGrid.height} < Grid.HEIGHT && pos.x + $v{bitGrid.width} <= Grid.WIDTH) { // fully keep inside
 						$b{f(0,1)};
+						if (syncToView) grid.viewsActorToDown(pos.y - 1, this, gridKey, time);
 					}
 					else {
-						var g = grid; removeFromGrid(false);
+						var g:automat.Grid = grid;
+						// store old values to sync the views afterwards
+						var oldGrid:automat.Grid = g; var oldActorKey:Int = gridKey; var old_actor_pos_y:Int = pos.y;
+
+						removeFromGrid(false);
 						if (pos.y == Grid.HEIGHT-1) addToGrid(g.bottom, util.Pos.xy(pos.x, 0), false);
 						else addToGrid(g, util.Pos.xy(pos.x, pos.y+1), false);
+
+						if (syncToView) { // sync views							
+							if (grid == oldGrid) grid.viewsActorToDown(old_actor_pos_y, this, gridKey, time);
+							else {
+								oldGrid.viewsActorToDownOut(grid, oldActorKey, old_actor_pos_y, this, gridKey, time);
+								grid.viewsActorToDownIn(oldGrid, old_actor_pos_y, this, gridKey, time);
+							}							
+						}
 					},
 				ret: null
 			})
 		});
 
+		// ------------------- TODO ---------------------
 		fields.push({
 			name: "goLeftUp",
 			access: [APublic, AInline],
