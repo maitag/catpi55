@@ -112,6 +112,7 @@ class GridView {
 			if (gridViewLeft.grid == newGrid && gridViewLeft.isInside(actor_pos_x, actor.pos.y) ) { // inside afterwards -> move it
 				multiGridView.switchGridViewIndex(index);
 				multiGridView.actorToSideGrid(indexLeft, oldActorkey, actorKey);
+				multiGridView.switchGridViewIndex(indexLeft);
 				multiGridView.actorGoLeft(actorKey, time);
 			}
 			else { // NOT inside afterwards -> remove
@@ -129,10 +130,11 @@ class GridView {
 		{
 			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside afterwards -> add
 				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);
+				
 				// TODO: add position offset to "move in":
 				// multiGridView.actorGoLeft(actorKey, time);
 			}
-		}		
+		}	
 	}
 
 

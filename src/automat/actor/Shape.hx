@@ -29,28 +29,38 @@ class Shape {
 		a.grid = grid;
 		a.pos = pos;
 		a.gridKey = grid.actors.add(a);
-		if ( pos.x + shape.width < Grid.WIDTH ) {
-			if ( pos.y + shape.height < Grid.HEIGHT) {
+		// trace("ADD TO GRID",a.pos, a.gridKey);
+		if ( pos.x + shape.width <= Grid.WIDTH ) {
+			if ( pos.y + shape.height <= Grid.HEIGHT) {
+				// trace("A");
 				_addToGridFromTo(pos, 0, 0, 0, shape.width, 0, shape.height, a.grid, a.gridKey, shape); // root grid
 			}
 			else {
+				// trace("A1");
 				_addToGridFromTo(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, a.grid, a.gridKey, shape); // root grid
 				a.gridKeyB = a.grid.bottom.actors.add(a);
+				// trace("A2");
 				_addToGridFromTo(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
 			}
 		}
 		else {
 			a.gridKeyR = a.grid.right.actors.add(a);
-			if ( pos.y + shape.height < Grid.HEIGHT ) {
+			if ( pos.y + shape.height <= Grid.HEIGHT ) {
+				// trace("B");
 				_addToGridFromTo(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, a.grid, a.gridKey, shape); // root grid
+				// trace("B1");
 				_addToGridFromTo(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, a.grid.right, a.gridKeyR, shape); // right
 			}
 			else {
+				// trace("C");
 				_addToGridFromTo(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, a.grid, a.gridKey, shape); // root grid
+				// trace("C1");
 				_addToGridFromTo(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, a.grid.right, a.gridKeyR, shape); // right
 				a.gridKeyB = a.grid.bottom.actors.add(a);
+				// trace("C2");
 				_addToGridFromTo(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
 				a.gridKeyRB = a.grid.rightBottom.actors.add(a);
+				// trace("C2");
 				_addToGridFromTo(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.rightBottom, a.gridKeyRB, shape); // rightBottom
 			}
 		}
@@ -69,8 +79,8 @@ class Shape {
 	}
 
 	public static inline function removeFromGrid(a:IActor, shape:BitGrid, syncToView:Bool = true) {
-		if ( a.pos.x + shape.width < Grid.WIDTH ) {
-			if ( a.pos.y + shape.height < Grid.HEIGHT) {
+		if ( a.pos.x + shape.width <= Grid.WIDTH ) {
+			if ( a.pos.y + shape.height <= Grid.HEIGHT) {
 				_removeFromGrid(a.pos, 0, 0, 0, shape.width, 0, shape.height, a.grid, shape); // root grid
 			}
 			else {
@@ -80,7 +90,7 @@ class Shape {
 			}
 		}
 		else {
-			if ( a.pos.y + shape.height < Grid.HEIGHT ) {
+			if ( a.pos.y + shape.height <= Grid.HEIGHT ) {
 				_removeFromGrid(a.pos, 0, 0, 0, a.pos.x + shape.width - Grid.WIDTH, 0, shape.height, a.grid, shape); // root grid
 				_removeFromGrid(a.pos, Grid.WIDTH, 0, a.pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, a.grid.right, shape); // right
 			}
@@ -150,7 +160,7 @@ class Shape {
 
 	// Optimization: keep the actor key while remove and adding again
 	public static function goLeft(a:IActor, shape:BitGrid, syncToView:Bool = true) {
-		var g = a.grid;
+		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
 		var oldGrid:Grid = g;
 		var oldActorKey:Int = a.gridKey;
@@ -160,12 +170,13 @@ class Shape {
 			oldActorKey = a.gridKeyR;
 			old_actor_pos_x %= Grid.WIDTH; 
 		}
-
+		
 		removeFromGrid(a, shape, false);
-
+		
 		if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape, false);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape, false);
-
+		
+		
 		// sync views
 		if (syncToView) {
 			if (a.pos.x + shape.originXOffset >= Grid.WIDTH) {
@@ -186,44 +197,44 @@ class Shape {
 			}
 		}	
 	}
-	
-	public static function goRight(a:IActor, shape:BitGrid) {
+
+	public static function goRight(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.right, P(0, a.pos.y), shape, false);
 		else addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape, false);
 	}
-	public static function goUp(a:IActor, shape:BitGrid) {
+	public static function goUp(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x, Grid.HEIGHT - 1), shape, false);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y-1), shape, false);
 	}
-	public static function goDown(a:IActor, shape:BitGrid) {
+	public static function goDown(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.bottom, P(a.pos.x, 0), shape, false);
 		else addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape, false);
 	}
-	public static function goLeftUp(a:IActor, shape:BitGrid) {
+	public static function goLeftUp(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.x == 0 && a.pos.y == 0) addToGrid(a, g.leftTop, P(Grid.WIDTH - 1, Grid.HEIGHT - 1), shape, false);
 		else if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y-1), shape, false);
 		else if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x-1, Grid.HEIGHT - 1), shape, false);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y-1), shape, false);
 	}
-	public static function goLeftDown(a:IActor, shape:BitGrid) {
+	public static function goLeftDown(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.x == 0 && a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.leftBottom, P(Grid.WIDTH - 1, 0), shape, false);
 		else if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y+1), shape, false);
 		else if (a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.bottom, P(a.pos.x-1, 0), shape, false);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y+1), shape, false);
 	}
-	public static function goRightUp(a:IActor, shape:BitGrid) {
+	public static function goRightUp(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.x == Grid.WIDTH - 1 && a.pos.y == 0) addToGrid(a, g.rightTop, P(0, Grid.HEIGHT - 1), shape, false);
 		else if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.right, P(0, a.pos.y-1), shape, false);
 		else if (a.pos.y == 0) addToGrid(a, g.bottom, P(a.pos.x+1, Grid.HEIGHT - 1), shape, false);
 		else addToGrid(a, g, P(a.pos.x+1, a.pos.y-1), shape, false);
 	}
-	public static function goRightDown(a:IActor, shape:BitGrid) {
+	public static function goRightDown(a:IActor, shape:BitGrid, syncToView:Bool = true) {
 		var g = a.grid; removeFromGrid(a, shape, false);
 		if (a.pos.x == Grid.WIDTH - 1 && a.pos.y == Grid.HEIGHT - 1) addToGrid(a, g.rightBottom, P(0, 0), shape, false);
 		else if (a.pos.x == Grid.WIDTH - 1) addToGrid(a, g.left, P(0, a.pos.y+1), shape, false);

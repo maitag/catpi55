@@ -173,8 +173,8 @@ class Actor {
 					access: [APublic, AInline],
 					pos: Context.currentPos(),
 					kind: FFun({
-						args: [],
-						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid),
+						args: [{name:"syncToView", opt:false, meta:[], type: macro:Bool, value:macro true}],
+						expr: macro automat.actor.Shape.$fname(this, shapeBitGrid, syncToView),
 						ret: null
 					})
 				});
