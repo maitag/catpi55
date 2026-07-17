@@ -213,7 +213,6 @@ class MultiGridView {
 
 	// ------- actor ---------
 
-
 	public inline function addActor(actor:IActor, actorKey:CellActor) {
 		view.addActor(actor.pos, actorKey, actor.type);
 	}
@@ -227,15 +226,15 @@ class MultiGridView {
 		view.actorToSideGrid(newIndex, oldKey, newKey);
 	}
 
-
 	// actor MOVES
-	public function actorGoLeft(actorKey:Int, time:Int) {
-		view.actorGoLeft(actorKey, time);
-	}
+	public inline function actorGoLeft(actorKey:Int, time:Int) view.actorGoLeft(actorKey, time);
+	public inline function actorGoRight(actorKey:Int, time:Int) view.actorGoRight(actorKey, time);
+	public inline function actorGoTop(actorKey:Int, time:Int) view.actorGoTop(actorKey, time);
+	public inline function actorGoDown(actorKey:Int, time:Int) view.actorGoDown(actorKey, time);
 
 
 	// ------- update --------
-
+	// TODO:
 	public inline function updateCell(pos:Pos, cell:CellType) { // CellParam!
 		view.updateCell(pos, cell);
 	}

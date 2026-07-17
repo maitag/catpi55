@@ -60,7 +60,7 @@ class GridView {
 		multiGridView.removeGridView(index);
 	}
 
-	public function isInside(x:Int, y:Int):Bool {
+	public inline function isInside(x:Int, y:Int):Bool {
 		return x >= xFrom && x < xTo && y >= yFrom && y < yTo;
 	}
 
