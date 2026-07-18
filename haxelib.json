@@ -1,0 +1,12 @@
+{
+	"name": "catpi55",
+	"url": "https://github.com/maitag/catpi55",
+	"license": "GPL3",
+	"tags": ["cell", "simmulation", "milk", "piss", "peote"],
+	"description": "to create and explore 2d cell simmulations together with my friend halfwheat *hugs",
+	"version": "0.0.1",
+	"classPath": "src/",
+	"releasenote": "wrote the old stuff again -> but better now",
+	"contributors": ["maitag"],
+	"dependencies": {}
+}
