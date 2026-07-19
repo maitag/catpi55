@@ -345,7 +345,7 @@ class ShapeMacro {
 			if (!originWasSet) e.push( macro grid.setActorOriginAt(util.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
 			return e;
 		}
-
+		// ------- left -------
 		fields.push({
 			name: "goLeft",
 			access: [APublic, AInline],
@@ -392,7 +392,7 @@ class ShapeMacro {
 				ret: null
 			})
 		});
-
+		// ------- right -------
 		fields.push({
 			name: "goRight",
 			access: [APublic, AInline],
@@ -439,7 +439,7 @@ class ShapeMacro {
 				ret: null
 			})
 		});
-
+		// ------- top -------
 		fields.push({
 			name: "goUp",
 			access: [APublic, AInline],
@@ -474,7 +474,7 @@ class ShapeMacro {
 				ret: null
 			})
 		});
-
+		// ------- down -------
 		fields.push({
 			name: "goDown",
 			access: [APublic, AInline],

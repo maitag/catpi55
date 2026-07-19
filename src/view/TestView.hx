@@ -43,7 +43,7 @@ class TestView extends Application
 	var multiGridView:MultiGridView;
 	var view:View;
 
-	var actor = new Stone2x2("player");
+	var actor = new Cross("player");
 
 	public function start(window:Window)
 	{

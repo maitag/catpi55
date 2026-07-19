@@ -20,6 +20,7 @@ class Shape {
 
 	static inline function _addToGridFromTo(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, actorKey:CellActor, shape:BitGrid)	{
 		var originXOffset:Int = shape.originXOffset;
+		trace('ADD: shapeX:$xFrom-$xTo, shapeY:$yFrom-$yTo - x:${pos.x + xFrom - xOff}-${pos.x + xTo - xOff}, y:${pos.y + yFrom - yOff}-${pos.y + yTo - yOff}');
 		for (y in yFrom...yTo)
 			for (x in xFrom...xTo)
 				if (shape.get(x,y)) grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), actorKey, y == 0 && x == originXOffset);
@@ -29,39 +30,29 @@ class Shape {
 		a.grid = grid;
 		a.pos = pos;
 		a.gridKey = grid.actors.add(a);
-		// trace("ADD TO GRID",a.pos, a.gridKey);
 		if ( pos.x + shape.width <= Grid.WIDTH ) {
 			if ( pos.y + shape.height <= Grid.HEIGHT) {
-				// trace("A");
 				_addToGridFromTo(pos, 0, 0, 0, shape.width, 0, shape.height, a.grid, a.gridKey, shape); // root grid
 			}
 			else {
-				// trace("A1");
-				_addToGridFromTo(pos, 0, 0, 0, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, a.grid, a.gridKey, shape); // root grid
+				_addToGridFromTo(pos, 0, 0, 0, shape.width, 0, Grid.HEIGHT - pos.y, a.grid, a.gridKey, shape); // root grid
 				a.gridKeyB = a.grid.bottom.actors.add(a);
-				// trace("A2");
-				_addToGridFromTo(pos, 0, Grid.HEIGHT, 0, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
+				_addToGridFromTo(pos, 0, Grid.HEIGHT, 0, shape.width, Grid.HEIGHT - pos.y, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
 			}
 		}
 		else {
 			a.gridKeyR = a.grid.right.actors.add(a);
 			if ( pos.y + shape.height <= Grid.HEIGHT ) {
-				// trace("B");
-				_addToGridFromTo(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, shape.height, a.grid, a.gridKey, shape); // root grid
-				// trace("B1");
-				_addToGridFromTo(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, a.grid.right, a.gridKeyR, shape); // right
+				_addToGridFromTo(pos, 0, 0, 0, Grid.WIDTH - pos.x, 0, shape.height, a.grid, a.gridKey, shape); // root grid
+				_addToGridFromTo(pos, Grid.WIDTH, 0, Grid.WIDTH - pos.x, shape.width, 0, shape.height, a.grid.right, a.gridKeyR, shape); // right
 			}
 			else {
-				// trace("C");
-				_addToGridFromTo(pos, 0, 0, 0, pos.x + shape.width - Grid.WIDTH, 0, pos.y + shape.height - Grid.HEIGHT, a.grid, a.gridKey, shape); // root grid
-				// trace("C1");
-				_addToGridFromTo(pos, Grid.WIDTH, 0, pos.x + shape.width - Grid.WIDTH, shape.width, 0, pos.y + shape.height - Grid.HEIGHT, a.grid.right, a.gridKeyR, shape); // right
+				_addToGridFromTo(pos, 0, 0, 0, Grid.WIDTH - pos.x, 0, Grid.HEIGHT - pos.y, a.grid, a.gridKey, shape); // root grid
+				_addToGridFromTo(pos, Grid.WIDTH, 0, Grid.WIDTH - pos.x, shape.width, 0, Grid.HEIGHT - pos.y, a.grid.right, a.gridKeyR, shape); // right
 				a.gridKeyB = a.grid.bottom.actors.add(a);
-				// trace("C2");
-				_addToGridFromTo(pos, 0, Grid.HEIGHT, 0, pos.x + shape.width - Grid.WIDTH, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
+				_addToGridFromTo(pos, 0, Grid.HEIGHT, 0, Grid.WIDTH - pos.x, Grid.HEIGHT - pos.y, shape.height, a.grid.bottom, a.gridKeyB, shape); // bottom
 				a.gridKeyRB = a.grid.rightBottom.actors.add(a);
-				// trace("C2");
-				_addToGridFromTo(pos, Grid.WIDTH, Grid.HEIGHT, pos.x + shape.width - Grid.WIDTH, shape.width, pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.rightBottom, a.gridKeyRB, shape); // rightBottom
+				_addToGridFromTo(pos, Grid.WIDTH, Grid.HEIGHT, Grid.WIDTH - pos.x, shape.width, Grid.HEIGHT - pos.y, shape.height, a.grid.rightBottom, a.gridKeyRB, shape); // rightBottom
 			}
 		}
 
@@ -73,6 +64,7 @@ class Shape {
 	}
 
 	static inline function _removeFromGrid(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, shape:BitGrid) {
+		trace('REMOVE: shapeX:$xFrom-$xTo, shapeY:$yFrom-$yTo - x:${pos.x + xFrom - xOff}-${pos.x + xTo - xOff}, y:${pos.y + yFrom - yOff}-${pos.y + yTo - yOff}');
 		for (y in yFrom...yTo)
 			for (x in xFrom...xTo)
 				if (shape.get(x,y)) grid.delCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff));
@@ -84,21 +76,21 @@ class Shape {
 				_removeFromGrid(a.pos, 0, 0, 0, shape.width, 0, shape.height, a.grid, shape); // root grid
 			}
 			else {
-				_removeFromGrid(a.pos, 0, 0, 0, shape.width, 0, a.pos.y + shape.height - Grid.HEIGHT, a.grid, shape); // root grid
-				_removeFromGrid(a.pos, 0, Grid.HEIGHT, 0, shape.width, a.pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, shape); // bottom
+				_removeFromGrid(a.pos, 0, 0, 0, shape.width, 0, Grid.HEIGHT - a.pos.y, a.grid, shape); // root grid
+				_removeFromGrid(a.pos, 0, Grid.HEIGHT, 0, shape.width, Grid.HEIGHT - a.pos.y, shape.height, a.grid.bottom, shape); // bottom
 				a.grid.bottom.actors.del(a.gridKeyB); a.gridKeyB = -1;
 			}
 		}
 		else {
 			if ( a.pos.y + shape.height <= Grid.HEIGHT ) {
-				_removeFromGrid(a.pos, 0, 0, 0, a.pos.x + shape.width - Grid.WIDTH, 0, shape.height, a.grid, shape); // root grid
-				_removeFromGrid(a.pos, Grid.WIDTH, 0, a.pos.x + shape.width - Grid.WIDTH, shape.width, 0, shape.height, a.grid.right, shape); // right
+				_removeFromGrid(a.pos, 0, 0, 0, Grid.WIDTH - a.pos.x, 0, shape.height, a.grid, shape); // root grid
+				_removeFromGrid(a.pos, Grid.WIDTH, 0, Grid.WIDTH - a.pos.x, shape.width, 0, shape.height, a.grid.right, shape); // right
 			}
 			else {
-				_removeFromGrid(a.pos, 0, 0, 0, a.pos.x + shape.width - Grid.WIDTH, 0, a.pos.y + shape.height - Grid.HEIGHT, a.grid, shape); // root grid
-				_removeFromGrid(a.pos, Grid.WIDTH, 0, a.pos.x + shape.width - Grid.WIDTH, shape.width, 0, a.pos.y + shape.height - Grid.HEIGHT, a.grid.right, shape); // right
-				_removeFromGrid(a.pos, 0, Grid.HEIGHT, 0, a.pos.x + shape.width - Grid.WIDTH, a.pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.bottom, shape); // bottom
-				_removeFromGrid(a.pos, Grid.WIDTH, Grid.HEIGHT, a.pos.x + shape.width - Grid.WIDTH, shape.width, a.pos.y + shape.height - Grid.HEIGHT, shape.height, a.grid.rightBottom, shape); // rightBottom
+				_removeFromGrid(a.pos, 0, 0, 0, Grid.WIDTH - a.pos.x, 0, Grid.HEIGHT - a.pos.y, a.grid, shape); // root grid
+				_removeFromGrid(a.pos, Grid.WIDTH, 0, Grid.WIDTH - a.pos.x, shape.width, 0, Grid.HEIGHT - a.pos.y, a.grid.right, shape); // right
+				_removeFromGrid(a.pos, 0, Grid.HEIGHT, 0, Grid.WIDTH - a.pos.x, Grid.HEIGHT - a.pos.y, shape.height, a.grid.bottom, shape); // bottom
+				_removeFromGrid(a.pos, Grid.WIDTH, Grid.HEIGHT, Grid.WIDTH - a.pos.x, shape.width, Grid.HEIGHT - a.pos.y, shape.height, a.grid.rightBottom, shape); // rightBottom
 				a.grid.bottom.actors.del(a.gridKeyB); a.gridKeyB = -1;
 				a.grid.rightBottom.actors.del(a.gridKeyRB); a.gridKeyRB = -1;
 			}
@@ -249,8 +241,11 @@ class Shape {
 			}
 		}
 	}
+
+	// ---------- TODO ----------
 	public static function goLeftUp(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
-		var g = a.grid; removeFromGrid(a, shape, false);
+		var g = a.grid; 
+		removeFromGrid(a, shape, false);
 		if (a.pos.x == 0 && a.pos.y == 0) addToGrid(a, g.leftTop, P(Grid.WIDTH - 1, Grid.HEIGHT - 1), shape, false);
 		else if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y-1), shape, false);
 		else if (a.pos.y == 0) addToGrid(a, g.top, P(a.pos.x-1, Grid.HEIGHT - 1), shape, false);

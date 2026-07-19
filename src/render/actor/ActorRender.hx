@@ -95,6 +95,13 @@ class ActorRender {
 				elemViewBuffer.set(mapkey, element);
 				bufferStatic.addElement(element);
 
+			case CROSS:
+				var tile = Actors.tile(TileID.CROSS);
+				var sheet = Actors.sheets[ tile.sheet ];
+				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
+
 			default: throw('ActorRender - actorType $actorType not implemented yet!');
 		}
 	}

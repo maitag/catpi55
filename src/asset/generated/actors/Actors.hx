@@ -9,9 +9,10 @@ import asset.Anim;
     var STONE1x1;
     var STONE1x2;
     var STONE2x2;
-    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2"];
+    var CROSS;
+    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2", "CROSS"];
     @:from static public function fromString(s:String):TileID return names.indexOf(s);
-    public static function iterator() return new IntIterator(0,3);
+    public static function iterator() return new IntIterator(0,4);
 }
 
 @:publicFields enum abstract AnimID(Int) from Int to Int {
@@ -62,6 +63,17 @@ interface Tile {
     }
     var animID:Array<AnimID> = [still];
 }
+@:publicFields class Cross implements Tile {
+    inline function new () {};
+    var sheet(get, never):Int; inline function get_sheet() return 3;
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(0, 0);
+            default: throw("Error, Cross don't have this animation"); null;
+        }
+    }
+    var animID:Array<AnimID> = [still];
+}
 
 
 class Actors {
@@ -70,12 +82,14 @@ class Actors {
         new Sheet("actors32x32.png", 32, 32, 0, 8, 1),
         new Sheet("actors32x64.png", 32, 64, 0, 8, 1),
         new Sheet("actors64x64.png", 64, 64, 0, 8, 1),
+        new Sheet("actors96x96.png", 96, 96, 0, 8, 1),
     ];
     public inline static function tile(id:TileID):Tile {
         return switch(id) {
             case STONE1x1: new Stone1x1();
             case STONE1x2: new Stone1x2();
             case STONE2x2: new Stone2x2();
+            case CROSS: new Cross();
             default:  throw("Error, no tile for this ID"); null;
         }
     }
