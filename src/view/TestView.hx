@@ -56,7 +56,7 @@ class TestView extends Application
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
 		// controllable actor
-		actor.addToGrid(grid, P(61,2));
+		actor.addToGrid(grid, P(2,2));
 
 		var actor1 = new Stone1x1("Stone1x1");
 		actor1.addToGrid(grid, P(1,1));

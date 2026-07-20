@@ -120,8 +120,9 @@ class View {
 
 	public inline function mapKey(index:Int, actorKey:Int) return (index << (CellActor.bits-1)) | actorKey;
 
-	public function addActor(pos:Pos, actorKey:Int, actorType:ActorType) {
+	public function addActor(pos:Pos, actorIntoLeftGrid:Bool, actorKey:Int, actorType:ActorType) {
 		trace("addActor", 'x:${pos.x+gridViewX} y:${pos.y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		if (actorIntoLeftGrid) pos.x -= Grid.WIDTH; 
 		renderView.actorRender.addActor(pos.x+gridViewX, pos.y+gridViewY, mapKey(gridViewIndex, actorKey), actorType);
 	}
 
