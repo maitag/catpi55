@@ -74,7 +74,7 @@ class View {
 	var gridViewY:Int = 0;
 
 	public inline function switchGridViewIndex(index:Int) {
-		// trace("switchGridViewIndex", index);
+		trace("switchGridViewIndex", index);
 		gridViewIndex = index;
 		var offset = gridData.get(index);
 		gridViewX = offset.x * Grid.WIDTH;
