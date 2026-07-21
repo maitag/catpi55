@@ -72,7 +72,7 @@ class GridView {
 	public function addActor(actor:IActor, actorKey:Int, actor_pos_x:Int) {
 		if (isInside(actor_pos_x, actor.pos.y)) {
 			multiGridView.switchGridViewIndex(index);
-			multiGridView.addActor(actor, actorKey, (actor.pos.x > actor_pos_x));
+			multiGridView.addActor(actor, actorKey, actor_pos_x);
 		}
 	}
 
@@ -99,7 +99,7 @@ class GridView {
 			else multiGridView.removeActor(actorKey); // not inside after -> remove			
 		}
 		else if (isInside(actor_pos_x, actor.pos.y)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, (actor.pos.x > actor_pos_x));
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, actor_pos_x);
 		}
 	}
 	public function actorToLeftOut(newGrid:Grid, oldActorkey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
@@ -119,7 +119,7 @@ class GridView {
 		var gridViewRight = multiGridView.gridViewCache.getByIndexRight(index);
 		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(old_actor_pos_x, actor.pos.y)) { // not inside before		
 			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);				
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, actor_pos_x);				
 				// TODO LATER: evtl. add position offset to "move in":
 				// multiGridView.actorGoLeft(actorKey, time);
 			}
@@ -133,7 +133,7 @@ class GridView {
 			else multiGridView.removeActor(actorKey); // not inside after -> remove			
 		}
 		else if (isInside(actor_pos_x, actor.pos.y)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey);
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, actor_pos_x);
 		}
 	}
 	public function actorToRightOut(newGrid:Grid, oldActorkey:Int, old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
@@ -153,7 +153,7 @@ class GridView {
 		var gridViewLeft = multiGridView.gridViewCache.getByIndexLeft(index);
 		if (gridViewLeft.grid != oldGrid || !gridViewLeft.isInside(old_actor_pos_x, actor.pos.y)) { // not inside before		
 			if ( isInside(actor_pos_x, actor.pos.y) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, (actor.pos.x > actor_pos_x));
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, actor_pos_x);
 			}
 		}	
 	}
@@ -165,7 +165,7 @@ class GridView {
 			else multiGridView.removeActor(actorKey); // not inside after -> remove			
 		}
 		else if (isInside(new_actor_pos_x, new_actor_pos_y)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, (actor.pos.x > new_actor_pos_x));
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, new_actor_pos_x);
 		}
 	}
 	public function actorToUpOut(newGrid:Grid, oldActorkey:Int, old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
@@ -185,7 +185,7 @@ class GridView {
 		var gridViewBottom = multiGridView.gridViewCache.getByIndexBottom(index);
 		if (gridViewBottom.grid != oldGrid || !gridViewBottom.isInside(old_actor_pos_x, old_actor_pos_y)) { // not inside before		
 			if ( isInside(new_actor_pos_x, new_actor_pos_y) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, (actor.pos.x > new_actor_pos_x));
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, new_actor_pos_x);
 			}
 		}	
 	}
@@ -197,7 +197,7 @@ class GridView {
 			else multiGridView.removeActor(actorKey); // not inside after -> remove			
 		}
 		else if (isInside(new_actor_pos_x, new_actor_pos_y)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, (actor.pos.x > new_actor_pos_x));
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, new_actor_pos_x);
 		}
 	}
 	public function actorToDownOut(newGrid:Grid, oldActorkey:Int, old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
@@ -217,7 +217,7 @@ class GridView {
 		var gridViewTop = multiGridView.gridViewCache.getByIndexTop(index);
 		if (gridViewTop.grid != oldGrid || !gridViewTop.isInside(old_actor_pos_x, old_actor_pos_y)) { // not inside before		
 			if ( isInside(new_actor_pos_x, new_actor_pos_y) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, (actor.pos.x > new_actor_pos_x));
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, actorKey, new_actor_pos_x);
 			}
 		}	
 	}
@@ -245,7 +245,7 @@ class GridView {
 			if (cell.isOrigin) {
 				actorKey = cell.actor;
 				var actor:IActor = grid.actors.get(actorKey);
-				multiGridView.addActor( actor, actorKey, (actor.pos.x > xFrom)); // actor enters the view
+				multiGridView.addActor( actor, actorKey, xFrom); // actor enters the view
 			}
 		}
 		multiGridView.addCellsVertical( xFrom, yFrom, yTo, cells );
@@ -279,7 +279,7 @@ class GridView {
 			if (cell.isOrigin) {
 				actorKey = cell.actor;
 				var actor:IActor = grid.actors.get(actorKey);
-				multiGridView.addActor( actor, actorKey, (actor.pos.x > xTo)); // actor enters the view
+				multiGridView.addActor( actor, actorKey, xTo); // actor enters the view
 			}
 		}
 		multiGridView.addCellsVertical( xTo, yFrom, yTo, cells );
@@ -314,7 +314,7 @@ class GridView {
 			if (cell.isOrigin) {
 				actorKey = cell.actor;
 				var actor:IActor = grid.actors.get(actorKey);
-				multiGridView.addActor( actor, actorKey, (actor.pos.x > x)); // actor enters the view
+				multiGridView.addActor( actor, actorKey, x); // actor enters the view
 			}
 		}
 		multiGridView.addCellsHorizontal( yFrom, xFrom, xTo, cells );
@@ -348,7 +348,7 @@ class GridView {
 			if (cell.isOrigin) {
 				actorKey = cell.actor;
 				var actor:IActor = grid.actors.get(actorKey);
-				multiGridView.addActor( actor, actorKey, (actor.pos.x > x)); // actor enters the view
+				multiGridView.addActor( actor, actorKey, x); // actor enters the view
 			}
 		}
 		multiGridView.addCellsHorizontal( yTo, xFrom, xTo, cells );

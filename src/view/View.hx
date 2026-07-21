@@ -120,14 +120,9 @@ class View {
 
 	public inline function mapKey(index:Int, actorKey:Int) return (index << (CellActor.bits-1)) | actorKey;
 
-	public function addActor(pos:Pos, actorIntoLeftGrid:Bool, actorKey:Int, actorType:ActorType) {
-		var origin_x_offset:Int = 0;
-		if (actorIntoLeftGrid) {
-			origin_x_offset = pos.x - Grid.WIDTH;
-			trace("------>actorIntoLeftGrid",pos.x, origin_x_offset);
-		} 
-		trace("addActor", 'x:${pos.x+origin_x_offset+gridViewX} y:${pos.y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
-		renderView.actorRender.addActor(pos.x    +origin_x_offset*Grid.WIDTH   +gridViewX, pos.y+gridViewY, mapKey(gridViewIndex, actorKey), actorType);
+	public function addActor(x:Int, y:Int, actorKey:Int, actorType:ActorType) {
+		trace("addActor", 'x:${x+gridViewX} y:${y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		renderView.actorRender.addActor(x+gridViewX, y+gridViewY, mapKey(gridViewIndex, actorKey), actorType);
 	}
 
 	public function removeActor(actorKey:Int) {

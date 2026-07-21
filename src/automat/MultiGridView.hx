@@ -213,8 +213,10 @@ class MultiGridView {
 
 	// ------- actor ---------
 
-	public inline function addActor(actor:IActor, actorKey:CellActor, actorIntoLeftGrid:Bool = false) {
-		view.addActor(actor.pos, actorIntoLeftGrid, actorKey, actor.type);
+	public inline function addActor(actor:IActor, actorKey:CellActor, originPosX:Int) {
+		var x:Int = actor.pos.x;
+		if (x > originPosX) x -= Grid.WIDTH;
+		view.addActor(x, actor.pos.y, actorKey, actor.type);
 	}
 
 	public inline function removeActor(actorKey:CellActor) {

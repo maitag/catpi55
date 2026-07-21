@@ -1,5 +1,6 @@
 package view;
 
+import peote.view.Color;
 import haxe.Timer;
 import util.Maze;
 import haxe.CallStack;
@@ -57,6 +58,7 @@ class TestView extends Application
 		
 		// controllable actor
 		actor.addToGrid(grid, P(2,2));
+		// actor.addToGrid(grid, P(50,50));
 
 		var actor1 = new Stone1x1("Stone1x1");
 		actor1.addToGrid(grid, P(1,1));
@@ -72,10 +74,12 @@ class TestView extends Application
 		var maxWidth = 40;
 		var maxHeight = 30;
 
-		view = new View(peoteView, 0, 0, 1280, 640);
+		var zoom = 0.620921323059155;
+		// view = new View(peoteView, 0, 0, 800, 600);
+		view = new View(peoteView, 0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 
-		view.zoom = 0.620921323059155;
+		view.zoom = zoom;
 		// trace(multiGridView.gridViewCache);
 		// trace(new Maze(10,10).toString());
 
