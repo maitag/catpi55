@@ -218,11 +218,11 @@ class GridTestData
 ";
 
 public static inline var TESTGRID_1:String = "
-###################       ########################       #######
+###################       ########################       ###    
 #                                                               
 #         EEEE                                                  
 #       EEEEEE                                                  
-       EEE EEE              R   R       R      R   R   RRRRR    
+       EEE EEE              R   R       R      R   R   RRRRR   #
            EEE              R   R      R R      R R    R        
            EEE              RRRRR     R   R      R     RRRRR  ..
 #          EEE              R   R    RRRRRRR    R R    R        
@@ -277,19 +277,19 @@ public static inline var TESTGRID_1:String = "
 #                                                              #
 #                                                              #
 #                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#############                 #############            #########
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#############                 #############            ####     
 ";
 
 public static inline var TESTGRID_2:String = "
-############          #####################      ##    #########
+    ########          #####################      ##    #########
                                                                #
           EEEEE                                                #
         EEEEEEEE                                               #
-       EEE    EEE                                               
+#      EEE    EEE                                               
              EEE                                                
 ....        EEE                                                 
 #  .      EEEE                                                  
@@ -344,11 +344,11 @@ public static inline var TESTGRID_2:String = "
                                                                #
 #                                                              #
 #                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#                                                              #
-#################         ###################          #########
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+     ############         ###################          #########
 ";
 public static inline var TESTGRID_3:String = "
 #########          ########      ###########             #######

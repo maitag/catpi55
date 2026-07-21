@@ -181,6 +181,13 @@ class Grid {
 		for (view in views) view.removeActor(actor, actorKey, actor_pos_x);
 	}
 
+
+
+	
+	// TODO -> FULLY REFACTOR 
+	// - actor and positions at first arguments
+	// - rename arguments into oldX, oldY etc .. actorKeys into oldKey, newKey
+
 	// ------- left -------
 	inline function viewsActorToLeft(old_actor_pos_x:Int, actor:IActor, actorKey:Int, actor_pos_x:Int, time:Int) {
 		for (view in views) view.actorToLeft(old_actor_pos_x, actor, actorKey, actor_pos_x, time);
@@ -202,24 +209,24 @@ class Grid {
 		for (view in views) view.actorToRightIn(oldGrid, old_actor_pos_x, actor, actorKey, actor_pos_x, time);
 	}
 	// ------- up -------
-	inline function viewsActorToUp(old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
-		for (view in views) view.actorToUp(old_actor_pos_y, actor, actorKey, time);
+	inline function viewsActorToUp(old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToUp(old_actor_pos_x, old_actor_pos_y, new_actor_pos_x, new_actor_pos_y, actor, actorKey, time);
 	}
-	inline function viewsActorToUpOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
-		for (view in views) view.actorToUpOut(newGrid, oldActorKey, old_actor_pos_y, actor, actorKey, time);
+	inline function viewsActorToUpOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToUpOut(newGrid, oldActorKey, old_actor_pos_x, old_actor_pos_y, new_actor_pos_x, new_actor_pos_y, actor, actorKey, time);
 	}
-	inline function viewsActorToUpIn(oldGrid:Grid, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
-		for (view in views) view.actorToUpIn(oldGrid, old_actor_pos_y, actor, actorKey, time);
+	inline function viewsActorToUpIn(oldGrid:Grid, old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToUpIn(oldGrid, old_actor_pos_x, old_actor_pos_y, new_actor_pos_x, new_actor_pos_y, actor, actorKey, time);
 	}
 	// ------- down -------
-	inline function viewsActorToDown(old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
-		for (view in views) view.actorToDown(old_actor_pos_y, actor, actorKey, time);
+	inline function viewsActorToDown(old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToDown(old_actor_pos_x, old_actor_pos_y, new_actor_pos_x, new_actor_pos_y, actor, actorKey, time);
 	}
-	inline function viewsActorToDownOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
-		for (view in views) view.actorToDownOut(newGrid, oldActorKey, old_actor_pos_y, actor, actorKey, time);
+	inline function viewsActorToDownOut(newGrid:Grid, oldActorKey:Int, old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToDownOut(newGrid, oldActorKey, old_actor_pos_x, old_actor_pos_y, new_actor_pos_x, new_actor_pos_y, actor, actorKey, time);
 	}
-	inline function viewsActorToDownIn(oldGrid:Grid, old_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
-		for (view in views) view.actorToDownIn(oldGrid, old_actor_pos_y, actor, actorKey, time);
+	inline function viewsActorToDownIn(oldGrid:Grid, old_actor_pos_x:Int, old_actor_pos_y:Int, new_actor_pos_x:Int, new_actor_pos_y:Int, actor:IActor, actorKey:Int, time:Int) {
+		for (view in views) view.actorToDownIn(oldGrid, old_actor_pos_x, old_actor_pos_y, new_actor_pos_x, new_actor_pos_y, actor, actorKey, time);
 	}
 
 
