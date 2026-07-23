@@ -40,6 +40,7 @@ class ShapeMacro {
 		
 		// ---------- addToGrid --------------
 		e = [];
+		// TODO: keepGrid=false argument, to optimize MODE functions (remove+add again)
 		e.push(macro this.grid = grid);	
 		e.push(macro this.pos = pos);	
 		e.push(macro gridKey = grid.actors.add(this));	
@@ -116,6 +117,7 @@ class ShapeMacro {
 		
 		// ---------- removeFromGrid --------------
 		e = [];
+		// TODO: keepGrid=false argument, to optimize MODE functions (remove+add again)
 		e.push(macro 
 			if ( pos.x + $v{bitGrid.width} <= automat.Grid.WIDTH ) {					
 				if ( pos.y + $v{bitGrid.height} <= automat.Grid.HEIGHT) {

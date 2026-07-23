@@ -26,6 +26,7 @@ class Shape {
 				if (shape.get(x,y)) grid.setCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff), actorKey, y == 0 && x == originXOffset);
 	}
 
+	// TODO: keepGrid=false argument, to optimize MODE functions (remove+add again)
 	public static inline function addToGrid(a:IActor, grid:Grid, pos:Pos, shape:BitGrid, syncToView:Bool) {
 		a.grid = grid;
 		a.pos = pos;
@@ -70,6 +71,7 @@ class Shape {
 				if (shape.get(x,y)) grid.delCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff));
 	}
 
+	// TODO: keepGrid=false argument, to optimize MODE functions (remove+add again)
 	public static inline function removeFromGrid(a:IActor, shape:BitGrid, syncToView:Bool) {
 		if ( a.pos.x + shape.width <= Grid.WIDTH ) {
 			if ( a.pos.y + shape.height <= Grid.HEIGHT) {
@@ -151,17 +153,8 @@ class Shape {
 
 
 
-	// TODO -> FULLY REFACTOR 
-	// - actor and positions at first arguments
-	// - rename arguments into oldX, oldY etc .. actorKeys into oldKey, newKey
+	// TODO
 
-	// better function helpers in Actor:
-		// - originOut(?poxOffset:Int):Bool return ((pos.x+posxOffset)%Grid.WIDTH+shape.originXOffset< Grid.WIDTH);
-		// - originGrid(?poxOffset:Int):Grid return ((pos.x+posxOffset)%Grid.WIDTH+shape.originXOffset< Grid.WIDTH) ? grid : grid.right;
-		// - originKey(?poxOffset:Int) return ((pos.x+posxOffset)%Grid.WIDTH+shape.originXOffset< Grid.WIDTH) ? gridKey : gridKeyR;
-		// - originOutAfter(poxOffset:Int):Bool return  originOut(0) == originOut(posxOffset);
-
-	// check left/right correctness
 	public static function goLeft(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
@@ -177,8 +170,17 @@ class Shape {
 		removeFromGrid(a, shape, false);		
 		if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape, false);
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape, false);
-						
+					
 		if (syncToView) { // sync views
+			if (oldX > 0) oldGrid.viewsActorToLeft(oldX, a, oldKey, oldX-1, time);
+			else {
+				var newX:Int = Grid.WIDTH-1;
+				var newGrid:Grid = oldGrid.left;
+				var newKey:Int = a.gridKey;
+				oldGrid.viewsActorToLeftOut(newGrid, oldKey, oldX, a, newKey, newX, time);
+				newGrid.viewsActorToLeftIn(oldGrid, oldX, a, newKey, newX, time);
+			}
+			/*
 			var newGrid:Grid = oldGrid;
 			var newKey:Int = oldKey;
 			var newX:Int = oldX-1;
@@ -193,9 +195,10 @@ class Shape {
 				// TODO: all extra variables only here !
 				oldGrid.viewsActorToLeftOut(newGrid, oldKey, oldX, a, newKey, newX, time);
 				newGrid.viewsActorToLeftIn(oldGrid, oldX, a, newKey, newX, time);
-			}
+			}*/
 		}	
 	}
+
 	public static function goRight(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
