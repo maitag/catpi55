@@ -10,9 +10,10 @@ import asset.Anim;
     var STONE1x2;
     var STONE2x2;
     var CROSS;
-    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2", "CROSS"];
+    var EDGEBR3x3;
+    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2", "CROSS", "EDGEBR3x3"];
     @:from static public function fromString(s:String):TileID return names.indexOf(s);
-    public static function iterator() return new IntIterator(0,4);
+    public static function iterator() return new IntIterator(0,5);
 }
 
 @:publicFields enum abstract AnimID(Int) from Int to Int {
@@ -74,6 +75,17 @@ interface Tile {
     }
     var animID:Array<AnimID> = [still];
 }
+@:publicFields class Edgebr3x3 implements Tile {
+    inline function new () {};
+    var sheet(get, never):Int; inline function get_sheet() return 3;
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(1, 1);
+            default: throw("Error, Edgebr3x3 don't have this animation"); null;
+        }
+    }
+    var animID:Array<AnimID> = [still];
+}
 
 
 class Actors {
@@ -90,6 +102,7 @@ class Actors {
             case STONE1x2: new Stone1x2();
             case STONE2x2: new Stone2x2();
             case CROSS: new Cross();
+            case EDGEBR3x3: new Edgebr3x3();
             default:  throw("Error, no tile for this ID"); null;
         }
     }

@@ -7,6 +7,7 @@ enum abstract ActorType(Int) {
 	var STONE2x2;
 	
 	var CROSS;
+	var EDGEBR3x3;
 	var LIVE;
 	var HAXE;
 	var HILBERT;

@@ -44,7 +44,7 @@ class TestView extends Application
 	var multiGridView:MultiGridView;
 	var view:View;
 
-	var actor = new Cross("player");
+	var actor = new EdgeBR3x3("player");
 
 	public function start(window:Window)
 	{

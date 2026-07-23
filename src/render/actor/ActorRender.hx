@@ -102,6 +102,13 @@ class ActorRender {
 				elemViewBuffer.set(mapkey, element);
 				bufferStatic.addElement(element);
 
+			case EDGEBR3x3:
+				var tile = Actors.tile(TileID.EDGEBR3x3);
+				var sheet = Actors.sheets[ tile.sheet ];
+				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
+
 			default: throw('ActorRender - actorType $actorType not implemented yet!');
 		}
 	}
