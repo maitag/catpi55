@@ -202,24 +202,24 @@ class Grid {
 		for (view in views) view.actorToRightIn(a, oldGrid, key, oldX, newX, time);
 	}
 	// ------- up -------
-	inline function viewsActorToUp(a:IActor, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
-		for (view in views) view.actorToUp(a, key, oldX, oldY, newX, newY, time);
+	inline function viewsActorToUp(a:IActor, key:Int, x:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToUp(a, key, x, oldY, newY, time);
 	}
-	inline function viewsActorToUpOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
-		for (view in views) view.actorToUpOut(a, newGrid, oldKey, newKey, oldX, oldY, newX, newY, time);
+	inline function viewsActorToUpOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, x:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToUpOut(a, newGrid, oldKey, newKey, x, oldY, newY, time);
 	}
-	inline function viewsActorToUpIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
-		for (view in views) view.actorToUpIn(a, oldGrid, key, oldX, oldY, newX, newY, time);
+	inline function viewsActorToUpIn(a:IActor, oldGrid:Grid, key:Int, x:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToUpIn(a, oldGrid, key, x, oldY, newY, time);
 	}
 	// ------- down -------
-	inline function viewsActorToDown(a:IActor, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
-		for (view in views) view.actorToDown(a, key, oldX, oldY, newX, newY, time);
+	inline function viewsActorToDown(a:IActor, key:Int, x:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToDown(a, key, x, oldY, newY, time);
 	}
-	inline function viewsActorToDownOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
-		for (view in views) view.actorToDownOut(a, newGrid, oldKey, newKey, oldX, oldY, newX, newY, time);
+	inline function viewsActorToDownOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, x:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToDownOut(a, newGrid, oldKey, newKey, x, oldY, newY, time);
 	}
-	inline function viewsActorToDownIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
-		for (view in views) view.actorToDownIn(a, oldGrid, key, oldX, oldY, newX, newY, time);
+	inline function viewsActorToDownIn(a:IActor, oldGrid:Grid, key:Int, x:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToDownIn(a, oldGrid, key, x, oldY, newY, time);
 	}
 
 
