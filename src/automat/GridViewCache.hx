@@ -34,20 +34,28 @@ class GridViewCache {
 	inline function index(x:Int, y:Int):Int return modY(y) * sizeX + modX(x);
 
 	// gets the index side of an index -> TODO: can be optimized without using index() cos modulo is only need once
-	public inline function leftIndex(i:Int)  :Int return index( (i % sizeX)-1, Std.int(i/sizeX)   );
-	public inline function rightIndex(i:Int) :Int return index( (i % sizeX)+1, Std.int(i/sizeX)   ); 
-	public inline function topIndex(i:Int)   :Int return index( (i % sizeX)  , Std.int(i/sizeX)-1 ); 
-	public inline function bottomIndex(i:Int):Int return index( (i % sizeX)  , Std.int(i/sizeX)+1 ); 
+	public inline function leftIndex  (i:Int):Int return index( (i % sizeX)-1, Std.int(i/sizeX)   );
+	public inline function rightIndex (i:Int):Int return index( (i % sizeX)+1, Std.int(i/sizeX)   );
+	public inline function topIndex   (i:Int):Int return index( (i % sizeX)  , Std.int(i/sizeX)-1 );
+	public inline function bottomIndex(i:Int):Int return index( (i % sizeX)  , Std.int(i/sizeX)+1 );
+	public inline function leftTopIndex    (i:Int):Int return index( (i % sizeX)-1, Std.int(i/sizeX)-1 );
+	public inline function leftBottomIndex (i:Int):Int return index( (i % sizeX)-1, Std.int(i/sizeX)+1 );
+	public inline function rightTopIndex   (i:Int):Int return index( (i % sizeX)+1, Std.int(i/sizeX)-1 ); 
+	public inline function rightBottomIndex(i:Int):Int return index( (i % sizeX)+1, Std.int(i/sizeX)+1 ); 
 
 	public inline function get(x:Int, y:Int):GridView return data.get( index(x, y) );
 	
 	public inline function getByIndex(i:Int):GridView return data.get(i);
 	
-	public inline function getByIndexLeft(i:Int):GridView return data.get(leftIndex(i));
-	public inline function getByIndexRight(i:Int):GridView return data.get(rightIndex(i));
-	public inline function getByIndexTop(i:Int):GridView return data.get(topIndex(i));
+	public inline function getByIndexLeft  (i:Int):GridView return data.get(leftIndex(i));
+	public inline function getByIndexRight (i:Int):GridView return data.get(rightIndex(i));
+	public inline function getByIndexTop   (i:Int):GridView return data.get(topIndex(i));
 	public inline function getByIndexBottom(i:Int):GridView return data.get(bottomIndex(i));
-	
+	public inline function getByIndexLeftTop    (i:Int):GridView return data.get(leftTopIndex(i));
+	public inline function getByIndexLeftBottom (i:Int):GridView return data.get(leftBottomIndex(i));
+	public inline function getByIndexRightTop   (i:Int):GridView return data.get(rightTopIndex(i));
+	public inline function getByIndexRightBottom(i:Int):GridView return data.get(rightBottomIndex(i));
+		
 	inline function addToGrid(x:Int, y:Int, grid:Grid, offsetX:Int, offsetY:Int, _xFrom:Int, _xTo:Int, _yFrom:Int, _yTo:Int) {
 		if (grid != null) get(x, y).addToGrid( grid, offsetX, offsetY, _xFrom, _xTo, _yFrom, _yTo);
 	}

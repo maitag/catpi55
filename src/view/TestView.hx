@@ -181,6 +181,10 @@ class TestView extends Application
 				if (actor.freeDown()) {
 					actor.goDown();
 				}
+			case Q:
+				if (actor.freeLeftUp()) {
+					actor.goLeftUp();
+				}
 	
 
 			default:

@@ -218,6 +218,39 @@ class GridView {
 		}	
 	}
 
+	// ------- leftUp -------
+	public function actorToLeftUp(a:IActor, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		if (isInside(oldX, oldY)) { // inside before
+			multiGridView.switchGridViewIndex(index); 
+			if (isInside(newX, newY)) multiGridView.actorGoLeftUp(key, time); // inside after -> move it
+			else multiGridView.removeActor(key); // not inside after -> remove			
+		}
+		else if (isInside(newX, newY)) { // not inside before AND inside after -> add
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
+		}
+	}
+	public function actorToLeftUpOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		var indexSide = (oldX == 0 && oldY == 0) ? multiGridView.gridViewCache.leftTopIndex(index)  :  ((oldX == 0) ? multiGridView.gridViewCache.leftIndex(index) : multiGridView.gridViewCache.topIndex(index));
+		var gridViewSide = multiGridView.gridViewCache.getByIndex(indexSide);
+		if (isInside(oldX, oldY)) { // inside before		
+			multiGridView.switchGridViewIndex(index);
+			if (gridViewSide.grid == newGrid && gridViewSide.isInside(newX, newY) ) { // inside after -> move it
+				multiGridView.actorToSideGrid(indexSide, oldKey, newKey);
+				multiGridView.switchGridViewIndex(indexSide);
+				multiGridView.actorGoLeftUp(newKey, time);
+			}
+			else multiGridView.removeActor(oldKey); // not inside after -> remove	
+		}
+	}
+	public function actorToLeftUpIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		var gridViewSide = (oldX == 0 && oldY == 0) ? multiGridView.gridViewCache.getByIndexRightBottom(index)  :  ((oldX == 0) ? multiGridView.gridViewCache.getByIndexRight(index) : multiGridView.gridViewCache.getByIndexBottom(index));
+		if (gridViewSide.grid != oldGrid || !gridViewSide.isInside(oldX, oldY)) { // not inside before		
+			if ( isInside(newX, newY) ) { // inside after -> add
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);				
+			}
+		}
+	}
+
 
 
 

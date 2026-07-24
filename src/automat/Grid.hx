@@ -221,7 +221,16 @@ class Grid {
 	inline function viewsActorToDownIn(a:IActor, oldGrid:Grid, key:Int, x:Int, oldY:Int, newY:Int, time:Int) {
 		for (view in views) view.actorToDownIn(a, oldGrid, key, x, oldY, newY, time);
 	}
-
+	// ------- leftUp -------
+	inline function viewsActorToLeftUp(a:IActor, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToLeftUp(a, key, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToLeftUpOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToLeftUpOut(a, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToLeftUpIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToLeftUpIn(a, oldGrid, key, oldX, newX, oldY, newY, time);
+	}
 
 	// -------------------------------------------------
 	// ---------------- SIMMULATION --------------------

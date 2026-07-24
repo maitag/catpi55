@@ -154,6 +154,27 @@ class ActorRender {
 		bufferStatic.updateElement(element);
 	}
 
+	public function actorGoLeftUp(mapkey:Int, time:Int) {
+		var element = elemViewBuffer.get(mapkey);
+		element.x -= 32; element.y -= 32;
+		bufferStatic.updateElement(element);
+	}
+	public function actorGoLeftDown(mapkey:Int, time:Int) {
+		var element = elemViewBuffer.get(mapkey);
+		element.x -= 32; element.y += 32;
+		bufferStatic.updateElement(element);
+	}
+	public function actorGoRightUp(mapkey:Int, time:Int) {
+		var element = elemViewBuffer.get(mapkey);
+		element.x += 32; element.y -= 32;
+		bufferStatic.updateElement(element);
+	}
+	public function actorGoRightDown(mapkey:Int, time:Int) {
+		var element = elemViewBuffer.get(mapkey);
+		element.x += 32; element.y += 32;
+		bufferStatic.updateElement(element);
+	}
+
 
 
 
