@@ -155,6 +155,7 @@ class Shape {
 
 	// TODO: refactor double and constant arguments for view-sync out!
 
+	// ------- left -------
 	public static function goLeft(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
@@ -166,17 +167,17 @@ class Shape {
 		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape, false);
 					
 		if (syncToView) { // sync views
-			if (oldX > 0) oldGrid.viewsActorToLeft(oldX, a, oldKey, oldX-1, time);
+			if (oldX > 0) oldGrid.viewsActorToLeft(a, oldKey, oldX, oldX-1, time);
 			else {
 				var newX:Int = Grid.WIDTH-1;
 				var newGrid:Grid = oldGrid.left;
 				var newKey:Int = a.gridKey;
-				oldGrid.viewsActorToLeftOut(newGrid, oldKey, oldX, a, newKey, newX, time);
-				newGrid.viewsActorToLeftIn(oldGrid, oldX, a, newKey, newX, time);
+				oldGrid.viewsActorToLeftOut(a, newGrid, oldKey, newKey, oldX, newX, time);
+				newGrid.viewsActorToLeftIn(a, oldGrid, newKey, oldX, newX, time);
 			}
 		}	
 	}
-
+	// ------- right -------
 	public static function goRight(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
@@ -188,18 +189,17 @@ class Shape {
 		else addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape, false);
 
 		if (syncToView) { // sync views
-			if (oldX < Grid.WIDTH-1) oldGrid.viewsActorToRight(oldX, a, oldKey, oldX+1, time);
+			if (oldX < Grid.WIDTH-1) oldGrid.viewsActorToRight(a, oldKey, oldX, oldX+1, time);
 			else {
 				var newX:Int = 0;
 				var newGrid:Grid = oldGrid.right;
 				var newKey:Int = (shape.originXOffset == 0) ? a.gridKey : a.gridKeyR;
-				oldGrid.viewsActorToRightOut(newGrid, oldKey, oldX, a, newKey, newX, time);
-				newGrid.viewsActorToRightIn(oldGrid, oldX, a, newKey, newX, time);
+				oldGrid.viewsActorToRightOut(a, newGrid, oldKey, newKey, oldX, newX, time);
+				newGrid.viewsActorToRightIn(a, oldGrid, newKey, oldX, newX, time);
 			}
 		}
-
 	}
-
+	// ------- up -------
 	public static function goUp(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
@@ -212,17 +212,17 @@ class Shape {
 		else addToGrid(a, g, P(a.pos.x, a.pos.y-1), shape, false);
 		
 		if (syncToView) { // sync views
-			if (oldY > 0) oldGrid.viewsActorToUp(oldX, oldY, oldX, oldY-1, a, oldKey, time);
+			if (oldY > 0) oldGrid.viewsActorToUp(a, oldKey, oldX, oldY, oldX, oldY-1, time);
 			else {
 				var newY:Int = Grid.HEIGHT-1;
 				var newGrid:Grid = oldGrid.top;
 				var newKey:Int = (a.pos.x + shape.originXOffset < Grid.WIDTH) ? a.gridKey : a.gridKeyR;
-				oldGrid.viewsActorToUpOut(newGrid, oldKey, oldX, oldY, oldX, newY, a, newKey, time);
-				newGrid.viewsActorToUpIn(oldGrid, oldX, oldY, oldX, newY, a, newKey, time);
+				oldGrid.viewsActorToUpOut(a, newGrid, oldKey, newKey, oldX, oldY, oldX, newY, time);
+				newGrid.viewsActorToUpIn(a, oldGrid, newKey, oldX, oldY, oldX, newY, time);
 			}
 		}
 	}
-
+	// ------- down -------
 	public static function goDown(a:IActor, shape:BitGrid, time:Int, syncToView:Bool) {
 		var g:Grid = a.grid;
 		// store old values to sync the views afterwards
@@ -235,13 +235,13 @@ class Shape {
 		else addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape, false);
 
 		if (syncToView) { // sync views
-			if (oldY < Grid.HEIGHT-1) oldGrid.viewsActorToDown(oldX, oldY, oldX, oldY+1, a, oldKey, time);
+			if (oldY < Grid.HEIGHT-1) oldGrid.viewsActorToDown(a, oldKey, oldX, oldY, oldX, oldY+1, time);
 			else {
 				var newY:Int = 0;
 				var newGrid:Grid = oldGrid.bottom;
 				var newKey:Int = (a.pos.x + shape.originXOffset < Grid.WIDTH) ? a.gridKey : a.gridKeyR;
-				oldGrid.viewsActorToDownOut(newGrid, oldKey, oldX, oldY, oldX, newY, a, newKey, time);
-				newGrid.viewsActorToDownIn(oldGrid, oldX, oldY, oldX, newY, a, newKey, time);
+				oldGrid.viewsActorToDownOut(a, newGrid, oldKey, newKey, oldX, oldY, oldX, newY, time);
+				newGrid.viewsActorToDownIn(a, oldGrid, newKey, oldX, oldY, oldX, newY, time);
 			}
 		}
 	}

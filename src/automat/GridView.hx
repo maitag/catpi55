@@ -87,27 +87,23 @@ class GridView {
 	// ---------------- Actor: MOVEMENT ---------------------
 	// ------------------------------------------------------
 
-	// TODO -> FULLY REFACTOR 
-	// - actor and positions at first arguments
-	// - rename arguments into oldX, oldY etc .. actorKeys into oldKey, newKey
-
 	// ------- left -------
-	public function actorToLeft(oldX:Int, actor:IActor, newKey:Int, newX:Int, time:Int) {
-		if (isInside(oldX, actor.pos.y)) { // inside before
+	public function actorToLeft(a:IActor, key:Int, oldX:Int, newX:Int, time:Int) {
+		if (isInside(oldX, a.pos.y)) { // inside before
 			multiGridView.switchGridViewIndex(index); 
-			if (isInside(newX, actor.pos.y)) multiGridView.actorGoLeft(newKey, time); // inside after -> move it
-			else multiGridView.removeActor(newKey); // not inside after -> remove			
+			if (isInside(newX, a.pos.y)) multiGridView.actorGoLeft(key, time); // inside after -> move it
+			else multiGridView.removeActor(key); // not inside after -> remove			
 		}
-		else if (isInside(newX, actor.pos.y)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+		else if (isInside(newX, a.pos.y)) { // not inside before AND inside after -> add
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 		}
 	}
-	public function actorToLeftOut(newGrid:Grid, oldKey:Int, oldX:Int, actor:IActor, newKey:Int, newX:Int, time:Int) {
+	public function actorToLeftOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, time:Int) {
 		var indexLeft = multiGridView.gridViewCache.leftIndex(index);
 		var gridViewLeft = multiGridView.gridViewCache.getByIndex(indexLeft);
-		if (isInside(oldX, actor.pos.y)) { // inside before		
+		if (isInside(oldX, a.pos.y)) { // inside before		
 			multiGridView.switchGridViewIndex(index);
-			if (gridViewLeft.grid == newGrid && gridViewLeft.isInside(newX, actor.pos.y) ) { // inside after -> move it
+			if (gridViewLeft.grid == newGrid && gridViewLeft.isInside(newX, a.pos.y) ) { // inside after -> move it
 				multiGridView.actorToSideGrid(indexLeft, oldKey, newKey);
 				multiGridView.switchGridViewIndex(indexLeft);
 				multiGridView.actorGoLeft(newKey, time);
@@ -115,33 +111,33 @@ class GridView {
 			else multiGridView.removeActor(oldKey); // not inside after -> remove	
 		}		
 	}
-	public function actorToLeftIn(oldGrid:Grid, oldX:Int, actor:IActor, newKey:Int, newX:Int, time:Int) {
+	public function actorToLeftIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, time:Int) {
 		var gridViewRight = multiGridView.gridViewCache.getByIndexRight(index);
-		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(oldX, actor.pos.y)) { // not inside before		
-			if ( isInside(newX, actor.pos.y) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);				
+		if (gridViewRight.grid != oldGrid || !gridViewRight.isInside(oldX, a.pos.y)) { // not inside before		
+			if ( isInside(newX, a.pos.y) ) { // inside after -> add
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);				
 				// TODO LATER: evtl. add position offset to "move in":
-				// multiGridView.actorGoLeft(newKey, time);
+				// multiGridView.actorGoLeft(key, time);
 			}
 		}	
 	}
 	// ------- right -------
-	public function actorToRight(oldX:Int, actor:IActor, newKey:Int, newX:Int, time:Int) {
-		if (isInside(oldX, actor.pos.y)) { // inside before
+	public function actorToRight(a:IActor, key:Int, oldX:Int, newX:Int, time:Int) {
+		if (isInside(oldX, a.pos.y)) { // inside before
 			multiGridView.switchGridViewIndex(index); 
-			if (isInside(newX, actor.pos.y)) multiGridView.actorGoRight(newKey, time); // inside after -> move it
-			else multiGridView.removeActor(newKey); // not inside after -> remove			
+			if (isInside(newX, a.pos.y)) multiGridView.actorGoRight(key, time); // inside after -> move it
+			else multiGridView.removeActor(key); // not inside after -> remove			
 		}
-		else if (isInside(newX, actor.pos.y)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+		else if (isInside(newX, a.pos.y)) { // not inside before AND inside after -> add
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 		}
 	}
-	public function actorToRightOut(newGrid:Grid, oldKey:Int, oldX:Int, actor:IActor, newKey:Int, newX:Int, time:Int) {
+	public function actorToRightOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, time:Int) {
 		var indexRight = multiGridView.gridViewCache.rightIndex(index);
 		var gridViewRight = multiGridView.gridViewCache.getByIndex(indexRight);
-		if (isInside(oldX, actor.pos.y)) { // inside before		
+		if (isInside(oldX, a.pos.y)) { // inside before		
 			multiGridView.switchGridViewIndex(index);
-			if (gridViewRight.grid == newGrid && gridViewRight.isInside(newX, actor.pos.y) ) { // inside after -> move it
+			if (gridViewRight.grid == newGrid && gridViewRight.isInside(newX, a.pos.y) ) { // inside after -> move it
 				multiGridView.actorToSideGrid(indexRight, oldKey, newKey);
 				multiGridView.switchGridViewIndex(indexRight);
 				multiGridView.actorGoRight(newKey, time);
@@ -149,26 +145,26 @@ class GridView {
 			else multiGridView.removeActor(oldKey); // not inside after -> remove	
 		}		
 	}
-	public function actorToRightIn(oldGrid:Grid, oldX:Int, actor:IActor, newKey:Int, newX:Int, time:Int) {
+	public function actorToRightIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, time:Int) {
 		var gridViewLeft = multiGridView.gridViewCache.getByIndexLeft(index);
-		if (gridViewLeft.grid != oldGrid || !gridViewLeft.isInside(oldX, actor.pos.y)) { // not inside before		
-			if ( isInside(newX, actor.pos.y) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+		if (gridViewLeft.grid != oldGrid || !gridViewLeft.isInside(oldX, a.pos.y)) { // not inside before		
+			if ( isInside(newX, a.pos.y) ) { // inside after -> add
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 			}
 		}	
 	}
 	// ------- up -------
-	public function actorToUp(oldX:Int, oldY:Int, newX:Int, newY:Int, actor:IActor, newKey:Int, time:Int) {
+	public function actorToUp(a:IActor, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
 		if (isInside(oldX, oldY)) { // inside before
 			multiGridView.switchGridViewIndex(index); 
-			if (isInside(newX, newY)) multiGridView.actorGoUp(newKey, time); // inside after -> move it
-			else multiGridView.removeActor(newKey); // not inside after -> remove			
+			if (isInside(newX, newY)) multiGridView.actorGoUp(key, time); // inside after -> move it
+			else multiGridView.removeActor(key); // not inside after -> remove			
 		}
 		else if (isInside(newX, newY)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 		}
 	}
-	public function actorToUpOut(newGrid:Grid, oldKey:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, actor:IActor, newKey:Int, time:Int) {
+	public function actorToUpOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
 		var indexTop = multiGridView.gridViewCache.topIndex(index);
 		var gridViewTop = multiGridView.gridViewCache.getByIndex(indexTop);
 		if (isInside(oldX, oldY)) { // inside before		
@@ -181,26 +177,26 @@ class GridView {
 			else multiGridView.removeActor(oldKey); // not inside after -> remove
 		}		
 	}
-	public function actorToUpIn(oldGrid:Grid, oldX:Int, oldY:Int, newX:Int, newY:Int, actor:IActor, newKey:Int, time:Int) {
+	public function actorToUpIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
 		var gridViewBottom = multiGridView.gridViewCache.getByIndexBottom(index);
 		if (gridViewBottom.grid != oldGrid || !gridViewBottom.isInside(oldX, oldY)) { // not inside before		
 			if ( isInside(newX, newY) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 			}
 		}	
 	}
 	// ------- down -------
-	public function actorToDown(oldX:Int, oldY:Int, newX:Int, newY:Int, actor:IActor, newKey:Int, time:Int) {
+	public function actorToDown(a:IActor, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
 		if (isInside(oldX, oldY)) { // inside before
 			multiGridView.switchGridViewIndex(index); 
-			if (isInside(newX, newY)) multiGridView.actorGoDown(newKey, time); // inside after -> move it
-			else multiGridView.removeActor(newKey); // not inside after -> remove			
+			if (isInside(newX, newY)) multiGridView.actorGoDown(key, time); // inside after -> move it
+			else multiGridView.removeActor(key); // not inside after -> remove			
 		}
 		else if (isInside(newX, newY)) { // not inside before AND inside after -> add
-			multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+			multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 		}
 	}
-	public function actorToDownOut(newGrid:Grid, oldKey:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, actor:IActor, newKey:Int, time:Int) {
+	public function actorToDownOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
 		var indexBottom = multiGridView.gridViewCache.topIndex(index);
 		var gridViewBottom = multiGridView.gridViewCache.getByIndex(indexBottom);
 		if (isInside(oldX, oldY)) { // inside before		
@@ -213,11 +209,11 @@ class GridView {
 			else multiGridView.removeActor(oldKey); // not inside after -> remove
 		}		
 	}
-	public function actorToDownIn(oldGrid:Grid, oldX:Int, oldY:Int, newX:Int, newY:Int, actor:IActor, newKey:Int, time:Int) {
+	public function actorToDownIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, oldY:Int, newX:Int, newY:Int, time:Int) {
 		var gridViewTop = multiGridView.gridViewCache.getByIndexTop(index);
 		if (gridViewTop.grid != oldGrid || !gridViewTop.isInside(oldX, oldY)) { // not inside before		
 			if ( isInside(newX, newY) ) { // inside after -> add
-				multiGridView.switchGridViewIndex(index); multiGridView.addActor(actor, newKey, newX);
+				multiGridView.switchGridViewIndex(index); multiGridView.addActor(a, key, newX);
 			}
 		}	
 	}
