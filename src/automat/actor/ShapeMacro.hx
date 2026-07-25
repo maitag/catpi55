@@ -575,7 +575,7 @@ class ShapeMacro {
 						var g = grid; removeFromGrid(false);
 						if (pos.x == Grid.WIDTH - 1 && pos.y == 0) addToGrid(g.rightTop, util.Pos.xy(0, Grid.HEIGHT - 1), false);
 						else if (pos.x == Grid.WIDTH - 1) addToGrid(g.right, util.Pos.xy(0, pos.y-1), false);
-						else if (pos.y == 0) addToGrid(g.bottom, util.Pos.xy(pos.x+1, Grid.HEIGHT - 1), false);
+						else if (pos.y == 0) addToGrid(g.top, util.Pos.xy(pos.x+1, Grid.HEIGHT - 1), false);
 						else addToGrid(g, util.Pos.xy(pos.x+1, pos.y-1), false);
 					},
 				ret: null
@@ -597,7 +597,7 @@ class ShapeMacro {
 					else {
 						var g = grid; removeFromGrid(false);
 						if (pos.x == Grid.WIDTH - 1 && pos.y == Grid.HEIGHT - 1) addToGrid(g.rightBottom, util.Pos.xy(0, 0), false);
-						else if (pos.x == Grid.WIDTH - 1) addToGrid(g.left, util.Pos.xy(0, pos.y+1), false);
+						else if (pos.x == Grid.WIDTH - 1) addToGrid(g.right, util.Pos.xy(0, pos.y+1), false);
 						else if (pos.y == Grid.HEIGHT - 1) addToGrid(g.bottom, util.Pos.xy(pos.x+1, 0), false);
 						else addToGrid(g, util.Pos.xy(pos.x+1, pos.y+1), false);
 					},

@@ -185,6 +185,18 @@ class TestView extends Application
 				if (actor.freeLeftUp()) {
 					actor.goLeftUp();
 				}
+			case Y:
+				if (actor.freeLeftDown()) {
+					actor.goLeftDown();
+				}
+			case E:
+				if (actor.freeRightUp()) {
+					actor.goRightUp();
+				}
+			case C:
+				if (actor.freeRightDown()) {
+					actor.goRightDown();
+				}
 	
 
 			default:

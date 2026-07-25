@@ -221,6 +221,7 @@ class Grid {
 	inline function viewsActorToDownIn(a:IActor, oldGrid:Grid, key:Int, x:Int, oldY:Int, newY:Int, time:Int) {
 		for (view in views) view.actorToDownIn(a, oldGrid, key, x, oldY, newY, time);
 	}
+
 	// ------- leftUp -------
 	inline function viewsActorToLeftUp(a:IActor, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
 		for (view in views) view.actorToLeftUp(a, key, oldX, newX, oldY, newY, time);
@@ -230,6 +231,36 @@ class Grid {
 	}
 	inline function viewsActorToLeftUpIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
 		for (view in views) view.actorToLeftUpIn(a, oldGrid, key, oldX, newX, oldY, newY, time);
+	}
+	// ------- leftDown -------
+	inline function viewsActorToLeftDown(a:IActor, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToLeftDown(a, key, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToLeftDownOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToLeftDownOut(a, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToLeftDownIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToLeftDownIn(a, oldGrid, key, oldX, newX, oldY, newY, time);
+	}
+	// ------- rightUp -------
+	inline function viewsActorToRightUp(a:IActor, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToRightUp(a, key, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToRightUpOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToRightUpOut(a, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToRightUpIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToRightUpIn(a, oldGrid, key, oldX, newX, oldY, newY, time);
+	}
+	// ------- rightDown -------
+	inline function viewsActorToRightDown(a:IActor, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToRightDown(a, key, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToRightDownOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToRightDownOut(a, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
+	}
+	inline function viewsActorToRightDownIn(a:IActor, oldGrid:Grid, key:Int, oldX:Int, newX:Int, oldY:Int, newY:Int, time:Int) {
+		for (view in views) view.actorToRightDownIn(a, oldGrid, key, oldX, newX, oldY, newY, time);
 	}
 
 	// -------------------------------------------------
