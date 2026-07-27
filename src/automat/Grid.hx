@@ -302,7 +302,7 @@ class Grid {
 		var eventsPerStep:Int = timeSlicer.get(eventTimeStep);
 		if (eventsPerStep >= MAX_EVENTS_PER_STEP) throw("grid-timeslicer events OVERFLOW");
 
-		trace(eventTimeStep , eventsPerStep); // TODO: in neko the eventsPerStep is null!
+		trace(eventTimeStep , eventsPerStep);
 
 		timeSlicer.set(eventTimeStep + 1 + eventsPerStep, event);
 

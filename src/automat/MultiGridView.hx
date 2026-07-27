@@ -232,8 +232,7 @@ class MultiGridView {
 	public inline function actorGoLeft(actorKey:Int, time:Int) view.actorGoLeft(actorKey, time);
 	public inline function actorGoRight(actorKey:Int, time:Int) view.actorGoRight(actorKey, time);
 	public inline function actorGoUp(actorKey:Int, time:Int) view.actorGoUp(actorKey, time);
-	public inline function actorGoDown(actorKey:Int, time:Int) view.actorGoDown(actorKey, time);
-	
+	public inline function actorGoDown(actorKey:Int, time:Int) view.actorGoDown(actorKey, time);	
 	public inline function actorGoLeftUp(actorKey:Int, time:Int) view.actorGoLeftUp(actorKey, time);
 	public inline function actorGoLeftDown(actorKey:Int, time:Int) view.actorGoLeftDown(actorKey, time);
 	public inline function actorGoRightUp(actorKey:Int, time:Int) view.actorGoRightUp(actorKey, time);

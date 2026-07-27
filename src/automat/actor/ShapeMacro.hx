@@ -347,6 +347,9 @@ class ShapeMacro {
 			if (!originWasSet) e.push( macro grid.setActorOriginAt(util.Pos.xy(pos.x+$v{originXOffset}, pos.y)) );
 			return e;
 		}
+
+		// TODO: migrate stable stuff from Shape.hx to here LATER!
+		
 		// ------- left -------
 		fields.push({
 			name: "goLeft",

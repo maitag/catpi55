@@ -1,5 +1,7 @@
 package automat.sim;
 
+import automat.actor.IActor;
+
 class Sim {
 	public static inline function init() {			
 	}
@@ -21,6 +23,8 @@ class Sim {
 
 			case ACTOR_AFTER_MOVE: {
 				trace(event);
+				var a:IActor = grid.actors.get(event.actorKey);
+				a.onAfterMove();
 			}
 
 			// TODO

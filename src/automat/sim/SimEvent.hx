@@ -27,8 +27,8 @@ enum abstract SimEventType(Int) from Int to Int {
 // ------------------------------------------------------
 
 abstract SimEvent(Int) from Int to Int {
-	public inline function new(type:SimEventType, pos:Pos) {
-		this = (pos << SimEventType.bits) | type;
+	public inline function new(type:SimEventType, data:Int) {
+		this = (data << SimEventType.bits) | type;
 	}
 
 	public var type(get, set):SimEventType;
@@ -44,9 +44,6 @@ abstract SimEvent(Int) from Int to Int {
 	public var actorKey(get, set):Int;
 	inline function get_actorKey():Int return this >> SimEventType.bits;
 	inline function set_actorKey(key:Int):Pos return (key << SimEventType.bits) | type;
-
-
-
 
 
 	// debug:

@@ -70,7 +70,8 @@ class Actor {
 		
 		fields.push({ name: "isMove",
 			access: [APublic],
-			kind: FProp("default", "null", macro:Bool, macro false),
+			// kind: FProp("default", "null", macro:Bool, macro false),
+			kind: FVar(macro:Bool, macro false),
 			pos: Context.currentPos()
 		});
 

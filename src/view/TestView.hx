@@ -88,16 +88,20 @@ class TestView extends Application
 		// actor1.tryFallDown();
 
 		// -------- grid simmulation ----------
-		grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
-		grid.setSimEvent(new SimEvent(CELL_EMPTY, P(3,4)), Grid.MAX_STEPS-1); // max delay time 
+		// grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
+		// grid.setSimEvent(new SimEvent(CELL_EMPTY, P(3,4)), Grid.MAX_STEPS-1); // max delay time 
 
+		
+		
 		// simmulate 10 timesteps
-		/*
+		
+		actor1.tryFallDown();
+
 		for (i in 0...10) {
 			trace('step $i');
 			grid.step();
 		}
-		*/
+		
 		
 		
 	}

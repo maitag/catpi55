@@ -41,6 +41,7 @@ interface IActor {
 	public function goRightDown(time:Int=0, syncToView:Bool=true):Void;
 	
 	// SIM:
+	public var isMove:Bool;
 	public function tryFallDown():Bool;
 
 	public function onAddToGrid():Void;
