@@ -45,6 +45,9 @@ class ActorSim {
 		// 1) the upper ones
 		// 2) the left and right upper outsides
 
-		// -> needs a shape-function-helper at first what gives all "offsets" from one direction!!!!!!
+		// -> needs a shape-function-helper at first what gives all "shape-offsets" from one direction!!!!!!
+
+		// some SIMPLE at FIRST :)
+		a.tryFallDown();
 	}
 }

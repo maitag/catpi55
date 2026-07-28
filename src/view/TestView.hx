@@ -93,14 +93,15 @@ class TestView extends Application
 
 		
 		
-		// simmulate 10 timesteps
+		// test SIMMULATION
 		
 		actor1.tryFallDown();
 
-		for (i in 0...10) {
-			trace('step $i');
+		var timer = new haxe.Timer(50);
+		timer.run = function() { 
 			grid.step();
-		}
+		};
+		
 		
 		
 		
