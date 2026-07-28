@@ -7,20 +7,28 @@ class ActorSim {
 
 	public static inline function tryFallDown(a:IActor):Bool {
 		trace("tryFallDown");
-		if ( a.freeDown() ) {
-			
+		if ( a.freeDown() ) {			
 			a.goDown();
 			a.isMove = true;
-
-			// set Sim Event -> ACTOR_AFTER_MOVE
 			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
 			a.grid.setSimEvent(e, 5);
-
 			return true;
 		}
-
-		return false;
-
+		else if (a.freeLeftDown()) {
+			a.goLeftDown();
+			a.isMove = true;
+			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
+			a.grid.setSimEvent(e, 5);
+			return true;
+		}
+		else if (a.freeRightDown()) {
+			a.goRightDown();
+			a.isMove = true;
+			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
+			a.grid.setSimEvent(e, 5);
+			return true;
+		}
+		else return false;
 	}
 	public static inline function tryFallDownLeft(a:IActor):Bool {return false;}
 	public static inline function tryFallDownRight(a:IActor):Bool {return false;}

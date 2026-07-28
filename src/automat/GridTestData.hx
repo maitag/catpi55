@@ -229,18 +229,18 @@ public static inline var TESTGRID_1:String = "
 #        EEEEEEE            R   R   R       R  R   R   RRRRR    
 #        EEEEEEE                                               #
 #                                                               
-#                                                               
+#                                                            
 #                                              EE   E   EEE     
-#                                             E  E  E   E  E    
-#                                             EEEE  E   E  E   #
-#                                             E  E  E   E  E   #
+#           E E  E    E                       E  E  E   E  E    
+#              #                              EEEE  E   E  E   #
+#          E E E E E E                        E  E  E   E  E   #
 #                                             E  E  E   EEE     
-#                                                               
-#                                                               
-#                                                               
-#                                                               
-#                                                              #
-#                                                              #
+#           # E   E  E E                                        
+#          #   #                                                
+#           E  ## E #                                           
+#                  E  E                                         
+#         E  #   #   #                                         #
+#              #                                               #
 #                                                              #
 #                                                              #
                                                                #

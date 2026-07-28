@@ -61,7 +61,7 @@ class TestView extends Application
 		// actor.addToGrid(grid, P(50,50));
 
 		var actor1 = new Stone1x1("Stone1x1");
-		actor1.addToGrid(grid, P(1,1));
+		actor1.addToGrid(grid, P(15,10));
 
 		var actor2 = new Stone1x2("Stone1x2");
 		actor2.addToGrid(grid, P(2,1));
@@ -97,7 +97,7 @@ class TestView extends Application
 		
 		actor1.tryFallDown();
 
-		var timer = new haxe.Timer(50);
+		var timer = new haxe.Timer(100);
 		timer.run = function() { 
 			grid.step();
 		};
