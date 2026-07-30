@@ -57,14 +57,14 @@ class TestView extends Application
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
 		// controllable actor
-		actor.addToGrid(grid, P(3,2));
+		actor.addToGrid(grid, P(3,3));
 		// actor.addToGrid(grid, P(50,50));
 
-		var actor1 = new Stone1x1("Stone1x1");
-		actor1.addToGrid(grid, P(15,10));
+		// var actor1 = new Stone1x1("Stone1x1");
+		// actor1.addToGrid(grid, P(15,10));
 
-		var actor2 = new Stone1x2("Stone1x2");
-		actor2.addToGrid(grid, P(2,1));
+		// var actor2 = new Stone1x2("Stone1x2");
+		// actor2.addToGrid(grid, P(2,1));
 		
 		// GridTestData.traceGrid(grid, 64, 64);
 		
@@ -94,14 +94,14 @@ class TestView extends Application
 		
 		
 		// test SIMMULATION
-		
+		/*
 		actor1.tryFallDown();
 
 		var timer = new haxe.Timer(100);
 		timer.run = function() { 
 			grid.step();
 		};
-		
+		*/
 		
 		
 		

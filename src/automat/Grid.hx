@@ -68,6 +68,8 @@ class Grid {
 		return (actorID == CellActor.EMPTY) ? null : actors.get( actorID );
 	}
 
+	// TODO: optimize arguments by change CellActor into Int!
+	
 	inline function setCellActorAt(pos:Pos, cellActor:CellActor, isOrigin:Bool) {
 		var cell = get(pos);
 		// cell.actor = cellActor;
@@ -75,18 +77,29 @@ class Grid {
 		set(pos, cell);
 	}
 
-	// only used by macro-unroll-mode
+	// only used by macro-unroll-mode (DCE eliminated if-branches)
 	inline function setCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid,
 		a:CellActor, aR:CellActor, aB:CellActor, aRB:CellActor, isOrigin:Bool)
-	{
-		if (gR==null || gRB==null || x < WIDTH) {
-			if (gB==null || y < HEIGHT) setCellActorAt(P(x,y), a, isOrigin);
+	{	
+		if (gRB != null) {
+			if (x < WIDTH) {
+				if ( y < HEIGHT) setCellActorAt(P(x,y), a, isOrigin);
+				else gB.setCellActorAt(P(x, y - HEIGHT), aB, isOrigin);
+			}
+			else {
+				if ( y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR, isOrigin);
+				else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB, isOrigin);
+			}
+		}
+		else if (gR != null) {
+			if (x < WIDTH) setCellActorAt(P(x,y), a, isOrigin);
+			else gR.setCellActorAt(P(x - WIDTH, y), aR, isOrigin);
+		}
+		else if (gB != null) {
+			if ( y < HEIGHT) setCellActorAt(P(x,y), a, isOrigin);
 			else gB.setCellActorAt(P(x, y - HEIGHT), aB, isOrigin);
 		}
-		else {
-			if (gRB==null || y < HEIGHT) gR.setCellActorAt(P(x - WIDTH, y), aR, isOrigin);
-			else gRB.setCellActorAt(P(x - WIDTH, y - HEIGHT), aRB, isOrigin);
-		}
+		else setCellActorAt(P(x,y), a, isOrigin);
 	}
 
 	inline function setActorOriginAt(pos:Pos) {
@@ -117,16 +130,27 @@ class Grid {
 	}
 */	
 
-	// only used by macro-unroll-mode
+	// only used by macro-unroll-mode (DCE eliminated if-branches)
 	inline function delCellActorAtOffset(x:Int, y:Int, gR:Grid, gB:Grid, gRB:Grid) {
-		if (gR==null || gRB==null || x < WIDTH) {
-			if (gB==null || y < HEIGHT) delCellActorAt(P(x,y));
+		if (gRB != null) {
+			if (x < WIDTH) {
+				if (y < HEIGHT) delCellActorAt(P(x,y));
+				else gB.delCellActorAt(P(x, y - HEIGHT));
+			}
+			else {
+				if (y < HEIGHT) gR.delCellActorAt(P(x - WIDTH, y));
+				else gRB.delCellActorAt(P(x - WIDTH, y - HEIGHT));
+			}
+		}
+		else if (gR != null) {
+			if (x < WIDTH) delCellActorAt(P(x,y));
+			else gR.delCellActorAt(P(x - WIDTH, y));
+		}
+		else if (gB != null) {
+			if ( y < HEIGHT) delCellActorAt(P(x,y));
 			else gB.delCellActorAt(P(x, y - HEIGHT));
 		}
-		else {
-			if (gRB==null || y < HEIGHT) gR.delCellActorAt(P(x - WIDTH, y));
-			else gRB.delCellActorAt(P(x - WIDTH, y - HEIGHT));
-		}
+		else delCellActorAt(P(x,y));	
 	}
 	
 	// the optional check-parameters here is used in macro-unroll-mode to optimize the "isFree" functions!

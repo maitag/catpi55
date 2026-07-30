@@ -156,7 +156,7 @@ class Actor {
 				})
 			});
 
-			for (fname in ["freeLeft","freeRight","freeUp","freeDown","freeLeftUp","freeLeftDown","freeRightUp","freeRightDown"])
+			for (fname in ["freeLeft","freeRight","freeUp","freeDown"])
 				fields.push({
 					name: fname,
 					access: [APublic, AInline],
@@ -164,6 +164,18 @@ class Actor {
 					kind: FFun({
 						args: [],
 						expr: macro return automat.actor.Shape.$fname(grid, pos, blockedCellType, shapeBitGrid),
+						ret: macro:Bool
+					})
+				});
+
+			for (fname in ["freeLeftUp","freeLeftDown","freeRightUp","freeRightDown"])
+				fields.push({
+					name: fname,
+					access: [APublic, AInline],
+					pos: Context.currentPos(),
+					kind: FFun({
+						args: [{name:"checkSide", opt:false, meta:[], type: macro:Bool, value:macro false}],
+						expr: macro return automat.actor.Shape.$fname(grid, pos, blockedCellType, shapeBitGrid, checkSide),
 						ret: macro:Bool
 					})
 				});

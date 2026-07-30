@@ -14,14 +14,14 @@ class ActorSim {
 			a.grid.setSimEvent(e, 5);
 			return true;
 		}
-		else if (a.freeLeftDown()) {
+		else if (a.freeLeftDown(true)) {
 			a.goLeftDown();
 			a.isMove = true;
 			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
 			a.grid.setSimEvent(e, 5);
 			return true;
 		}
-		else if (a.freeRightDown()) {
+		else if (a.freeRightDown(true)) {
 			a.goRightDown();
 			a.isMove = true;
 			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);

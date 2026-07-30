@@ -96,16 +96,19 @@ class Shape {
 				a.grid.bottom.actors.del(a.gridKeyB); a.gridKeyB = -1;
 				a.grid.rightBottom.actors.del(a.gridKeyRB); a.gridKeyRB = -1;
 			}
-			a.grid.right.actors.del(a.gridKeyR); a.gridKeyR = -1;
+			a.grid.right.actors.del(a.gridKeyR); //a.gridKeyR = -1;
 		}
-		a.grid.actors.del(a.gridKey); a.gridKey = -1;
-		a.grid = null;
+		a.grid.actors.del(a.gridKey);
 
 		// trigger actor-remove to the origin corresponding grid and its views
 		if (syncToView) {
 			if (a.pos.x + shape.originXOffset < Grid.WIDTH) a.grid.viewsActorRemove(a, a.gridKey, a.pos.x + shape.originXOffset);
 			else a.grid.right.viewsActorRemove(a, a.gridKeyR, (a.pos.x + shape.originXOffset) % Grid.WIDTH);
 		}
+		// clean up after view-sync
+		a.gridKey = -1;
+		a.gridKeyR = -1;
+		a.grid = null;
 	}
 
 	public static function isFitIntoGrid(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
@@ -127,28 +130,33 @@ class Shape {
 	}
 
 	public static function freeLeft(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide(-1, 0, grid, pos, blockedCellType, shape );
+		return _isFreeSide(-1, 0, grid, pos, blockedCellType, shape);
 	}
 	public static function freeRight(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( 1, 0, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 1, 0, grid, pos, blockedCellType, shape);
 	}
 	public static function freeUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( 0,-1, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 0,-1, grid, pos, blockedCellType, shape);
 	}
 	public static function freeDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( 0, 1, grid, pos, blockedCellType, shape );
+		return _isFreeSide( 0, 1, grid, pos, blockedCellType, shape);
 	}
-	public static function freeLeftUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide(-1,-1, grid, pos, blockedCellType, shape );
+
+	public static function freeLeftUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid, checkSide:Bool=false):Bool {
+		if (checkSide) return _isFreeSide(-1, 0, grid, pos, blockedCellType, shape) && _isFreeSide(-1,-1, grid, pos, blockedCellType, shape);
+		else return _isFreeSide(-1,-1, grid, pos, blockedCellType, shape);
 	}
-	public static function freeLeftDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide(-1, 1, grid, pos, blockedCellType, shape );
+	public static function freeLeftDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid, checkSide:Bool=false):Bool {
+		if (checkSide) return _isFreeSide(-1, 0, grid, pos, blockedCellType, shape) && _isFreeSide(-1, 1, grid, pos, blockedCellType, shape);
+		else return _isFreeSide(-1, 1, grid, pos, blockedCellType, shape);
 	}
-	public static function freeRightUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( 1,-1, grid, pos, blockedCellType, shape );
+	public static function freeRightUp(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid, checkSide:Bool=false):Bool {
+		if (checkSide) return _isFreeSide(1, 0, grid, pos, blockedCellType, shape) && _isFreeSide( 1,-1, grid, pos, blockedCellType, shape);
+		else return _isFreeSide( 1,-1, grid, pos, blockedCellType, shape);
 	}
-	public static function freeRightDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid):Bool {
-		return _isFreeSide( 1, 1, grid, pos, blockedCellType, shape );
+	public static function freeRightDown(grid:Grid, pos:Int, blockedCellType:Int, shape:BitGrid, checkSide:Bool=false):Bool {
+		if (checkSide) return _isFreeSide(1, 0, grid, pos, blockedCellType, shape) && _isFreeSide( 1, 1, grid, pos, blockedCellType, shape);
+		else return _isFreeSide( 1, 1, grid, pos, blockedCellType, shape);
 	}
 
 

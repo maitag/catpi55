@@ -25,10 +25,10 @@ interface IActor {
 	public function freeUp():Bool;
 	public function freeDown():Bool;
 
-	public function freeLeftUp():Bool;
-	public function freeLeftDown():Bool;
-	public function freeRightUp():Bool;
-	public function freeRightDown():Bool;
+	public function freeLeftUp(checkSide:Bool=false):Bool;
+	public function freeLeftDown(checkSide:Bool=false):Bool;
+	public function freeRightUp(checkSide:Bool=false):Bool;
+	public function freeRightDown(checkSide:Bool=false):Bool;
 
 	public function goLeft (time:Int=0, syncToView:Bool=true):Void;
 	public function goRight(time:Int=0, syncToView:Bool=true):Void;
