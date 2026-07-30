@@ -76,6 +76,9 @@ abstract CellActor(Int) from Int to Int {
 
 	public static inline var maskWithOrigin:Int = ((1 << bits+1)-1) << (CellParam.bits + CellType.bits);
 	public static inline var ORIGIN_BIT:Int = (1 << (CellActor.bits + CellParam.bits + CellType.bits));
+	// TODO:
+	// public static inline var maskWithLock:Int = ((1 << bits+2)-1) << (CellParam.bits + CellType.bits);
+	// public static inline var LOCK_BIT:Int = (1 << (CellActor.bits + CellParam.bits + CellType.bits + 1));
 	
 	public static inline var EMPTY:Int = MAX_ACTORS;
 
@@ -128,9 +131,13 @@ abstract Cell(Int) from Int to Int {
 	// --------- ACTOR key -------------
 
 	public var actor(get, set):CellActor;
+
+	// TODO: check on neko that all bitops works the same 
 	inline function get_actor():CellActor return (this & CellActor.mask) >> (CellParam.bits + CellType.bits);
 	inline function set_actor(actor:CellActor):CellActor return this = (this & ~CellActor.mask) | (actor << (CellParam.bits + CellType.bits));
-	// TODO: problem on neko with the bitops
+
+
+	// TODO: setActor with "LOCK_BIT" and removeActor without touching the "lock" to use it for moving-sim
 
 	public inline function setActor(actor:CellActor, isOrigin:Bool = false):CellActor {
 		if (isOrigin)

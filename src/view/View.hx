@@ -121,7 +121,7 @@ class View {
 	public inline function mapKey(index:Int, actorKey:Int) return (index << (CellActor.bits-1)) | actorKey;
 
 	public function addActor(x:Int, y:Int, actorKey:Int, actorType:ActorType) {
-		trace("addActor", 'x:${x+gridViewX} y:${y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("addActor", 'x:${x+gridViewX} y:${y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
 		renderView.actorRender.addActor(x+gridViewX, y+gridViewY, mapKey(gridViewIndex, actorKey), actorType);
 	}
 
@@ -138,35 +138,35 @@ class View {
 
 	// actor MOVES
 	public function actorGoLeft(actorKey:Int, time:Int) {
-		trace("actorGoLeft", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoLeft", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoLeft(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoRight(actorKey:Int, time:Int) {
-		trace("actorGoRight", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoRight", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoRight(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoUp(actorKey:Int, time:Int) {
-		trace("actorGoTop", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoTop", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoUp(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoDown(actorKey:Int, time:Int) {
-		trace("actorGoDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoDown(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoLeftUp(actorKey:Int, time:Int) {
-		trace("actorGoLeftUp", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoLeftUp", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoLeftUp(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoLeftDown(actorKey:Int, time:Int) {
-		trace("actorGoLeftDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoLeftDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoLeftDown(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoRightUp(actorKey:Int, time:Int) {
-		trace("actorGoRightUp", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoRightUp", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoRightUp(mapKey(gridViewIndex, actorKey), time);
 	}
 	public function actorGoRightDown(actorKey:Int, time:Int) {
-		trace("actorGoRightDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("actorGoRightDown", 'index:$gridViewIndex, actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');
 		renderView.actorRender.actorGoRightDown(mapKey(gridViewIndex, actorKey), time);
 	}
 

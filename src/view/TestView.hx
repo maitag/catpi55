@@ -44,7 +44,8 @@ class TestView extends Application
 	var multiGridView:MultiGridView;
 	var view:View;
 
-	var actor = new EdgeBR3x3("player");
+	// var actor = new EdgeBR3x3("player");
+	var actor = new Semmi("player");
 
 	public function start(window:Window)
 	{
@@ -60,8 +61,8 @@ class TestView extends Application
 		actor.addToGrid(grid, P(3,3));
 		// actor.addToGrid(grid, P(50,50));
 
-		var actor1 = new Stone1x1("Stone1x1");
-		actor1.addToGrid(grid, P(15,10));
+		var stone1x1 = new Stone1x1("Stone1x1");
+		stone1x1.addToGrid(grid, P(9,5));
 
 		// var actor2 = new Stone1x2("Stone1x2");
 		// actor2.addToGrid(grid, P(2,1));
@@ -92,11 +93,31 @@ class TestView extends Application
 		
 		// test SIMMULATION
 		
-		actor1.tryFallDown();
+		stone1x1.tryFallDown();
 
-		var timer = new haxe.Timer(200);
+		// spawn some haxe actors
+		for (i in 0...18) new Haxe(grid, P(10+i*3,10));
+		for (i in 0...9) new Haxe(grid, P(17+i*3,12));
+		for (i in 0...9) new Haxe(grid, P(16+i*3,14));
+		for (i in 0...9) new Haxe(grid, P(17+i*3,16));
+		for (i in 0...9) new Haxe(grid, P(16+i*3,18));
+		for (i in 0...9) new Haxe(grid, P(17+i*3,20));
+		for (i in 0...9) new Haxe(grid, P(16+i*3,22));
+		for (i in 0...9) new Haxe(grid, P(17+i*3,24));
+		for (i in 0...9) new Haxe(grid, P(16+i*3,26));
+		for (i in 0...9) new Haxe(grid, P(17+i*3,28));
+		
+		var timer = new haxe.Timer(80);
 		timer.run = function() { 
 			grid.step();
+			grid.right.step();
+			grid.right.right.step();
+			grid.bottom.step();
+			grid.bottom.right.step();
+			grid.bottom.right.right.step();
+			grid.bottom.bottom.step();
+			grid.bottom.bottom.right.step();
+			grid.bottom.bottom.right.right.step();
 		};
 		
 		

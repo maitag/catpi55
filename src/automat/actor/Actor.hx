@@ -6,9 +6,11 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class Actor {
-	static public function build(shape:String, unroll = false):Array<Field>
+	static public function build(shape:String, unroll = true):Array<Field>
 	{
 		var fields = Context.getBuildFields();
+		var fieldNames:Array<String> = [for (field in fields) field.name]; // to check for custom fields and overwrites
+
 		var bitGrid:util.BitGrid = shape;
 		
 		// ---- pos, grid and gridKeys ----
@@ -91,8 +93,18 @@ class Actor {
 			})
 		});
 
-		for (fname in ["onAddToGrid", "onAfterMove"])
-			fields.push({ name: fname,
+		
+		for (fname in ["onAddToGrid", "onAfterMove"]) {
+			var customFunctionName:String = null; 
+			
+			// check for custom actor-sim-eventfunctions with same name to give the generated a SUPER postfix:
+			var i = fieldNames.indexOf(fname);
+			// if (i >= 0) {
+				// TODO: check that it have the same props (will also result into error without cos of the interface!)
+				// if (fields[i]...)
+			// }
+
+			fields.push({ name: (i >= 0) ? fname + "_SUPER" : fname,
 				access: [APublic, AInline],
 				pos: Context.currentPos(),
 				kind: FFun({
@@ -101,7 +113,7 @@ class Actor {
 					ret: null
 				})
 			});
-		
+		}
 
 		// ------------------------------------------------
 		// -------------- Shape functions -----------------

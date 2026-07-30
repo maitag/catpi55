@@ -24,6 +24,7 @@
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->
 
+	<haxedef name="peoteview_fps" />
 	
 	<source path="src" />
 	

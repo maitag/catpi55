@@ -291,7 +291,7 @@ class Grid {
 	// ---------------- SIMMULATION --------------------
 	// -------------------------------------------------
 	public static inline var MAX_STEPS:Int = 10;
-	public static inline var MAX_EVENTS_PER_STEP:Int = 100;//9;
+	public static inline var MAX_EVENTS_PER_STEP:Int = 500;//9;
 	public static inline var STEP_SIZE:Int = MAX_EVENTS_PER_STEP + 1;
 
 	public var timeSlicer = new Vector<Int>(MAX_STEPS * STEP_SIZE);
@@ -326,7 +326,7 @@ class Grid {
 		var eventsPerStep:Int = timeSlicer.get(eventTimeStep);
 		if (eventsPerStep >= MAX_EVENTS_PER_STEP) throw("grid-timeslicer events OVERFLOW");
 
-		trace(eventTimeStep , eventsPerStep);
+		// trace(eventTimeStep , eventsPerStep);
 
 		timeSlicer.set(eventTimeStep + 1 + eventsPerStep, event);
 

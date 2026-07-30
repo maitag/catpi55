@@ -109,7 +109,21 @@ class ActorRender {
 				elemViewBuffer.set(mapkey, element);
 				bufferStatic.addElement(element);
 
-			default: throw('ActorRender - actorType $actorType not implemented yet!');
+			case SEMMI:
+				var tile = Actors.tile(TileID.SEMMI);
+				var sheet = Actors.sheets[ tile.sheet ];
+				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
+
+			case HAXE:
+				var tile = Actors.tile(TileID.HAXE);
+				var sheet = Actors.sheets[ tile.sheet ];
+				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
+	
+				default: throw('ActorRender - actorType $actorType not implemented yet!');
 		}
 	}
 	
