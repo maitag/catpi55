@@ -60,8 +60,8 @@ class TestView extends Application
 		actor.addToGrid(grid, P(3,3));
 		// actor.addToGrid(grid, P(50,50));
 
-		// var actor1 = new Stone1x1("Stone1x1");
-		// actor1.addToGrid(grid, P(15,10));
+		var actor1 = new Stone1x1("Stone1x1");
+		actor1.addToGrid(grid, P(15,10));
 
 		// var actor2 = new Stone1x2("Stone1x2");
 		// actor2.addToGrid(grid, P(2,1));
@@ -84,9 +84,6 @@ class TestView extends Application
 		// trace(new Maze(10,10).toString());
 
 
-		// TODO:
-		// actor1.tryFallDown();
-
 		// -------- grid simmulation ----------
 		// grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
 		// grid.setSimEvent(new SimEvent(CELL_EMPTY, P(3,4)), Grid.MAX_STEPS-1); // max delay time 
@@ -94,14 +91,14 @@ class TestView extends Application
 		
 		
 		// test SIMMULATION
-		/*
+		
 		actor1.tryFallDown();
 
-		var timer = new haxe.Timer(100);
+		var timer = new haxe.Timer(200);
 		timer.run = function() { 
 			grid.step();
 		};
-		*/
+		
 		
 		
 		

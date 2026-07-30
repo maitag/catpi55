@@ -275,8 +275,8 @@ class ShapeMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"checkSide", opt:false, meta:[], type: macro:Bool, value:macro false}],
-				// expr: macro if (checkSide) {return freeLeft() && freeLeftUp(false);} else $b{f(-1, -1)},
-				expr: macro $b{f(-1, -1)},
+				expr: macro if (checkSide) {return freeLeft() && freeLeftUp(false);} else $b{f(-1, -1)},
+				// expr: macro $b{f(-1, -1)},
 				ret: macro:Bool
 			})
 		});
@@ -287,7 +287,8 @@ class ShapeMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"checkSide", opt:false, meta:[], type: macro:Bool, value:macro false}],
-				expr: macro $b{f(-1, 1)},
+				expr: macro if (checkSide) {return freeLeft() && freeLeftDown(false);} else $b{f(-1, 1)},
+				// expr: macro $b{f(-1, 1)},
 				ret: macro:Bool
 			})
 		});
@@ -298,7 +299,8 @@ class ShapeMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"checkSide", opt:false, meta:[], type: macro:Bool, value:macro false}],
-				expr: macro $b{f(1, -1)},
+				expr: macro if (checkSide) {return freeRight() && freeRightUp(false);} else $b{f(1, -1)},
+				// expr: macro $b{f(1, -1)},
 				ret: macro:Bool
 			})
 		});
@@ -309,7 +311,8 @@ class ShapeMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"checkSide", opt:false, meta:[], type: macro:Bool, value:macro false}],
-				expr: macro $b{f(1, 1)},
+				expr: macro if (checkSide) {return freeRight() && freeRightDown(false);} else $b{f(1, 1)},
+				// expr: macro $b{f(1, 1)},
 				ret: macro:Bool
 			})
 		});
