@@ -47,6 +47,6 @@ abstract SimEvent(Int) from Int to Int {
 
 
 	// debug:
-	public function toString():String return 'type:$type, pos:$pos';
+	public function toString():String return 'type:$type, actorKey:$actorKey';
 
 }

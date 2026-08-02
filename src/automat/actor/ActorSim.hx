@@ -41,7 +41,7 @@ class ActorSim {
 	}
 
 	public static inline function onAfterMove(a:IActor) {
-		// trace("onAfterMove");
+		trace("onAfterMove");
 		a.isMove = false;
 
 		// TODO: check the cells that was getting empty after move

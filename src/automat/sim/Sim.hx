@@ -24,6 +24,7 @@ class Sim {
 			case ACTOR_AFTER_MOVE: {
 				// trace(event);
 				var a:IActor = grid.actors.get(event.actorKey);
+				// if (a.name=="C") trace(event);
 				a.onAfterMove();
 			}
 

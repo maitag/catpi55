@@ -123,11 +123,19 @@ class ActorRender {
 				elemViewBuffer.set(mapkey, element);
 				bufferStatic.addElement(element);
 	
-				default: throw('ActorRender - actorType $actorType not implemented yet!');
+			case FLIXEL:
+				var tile = Actors.tile(TileID.FLIXEL);
+				var sheet = Actors.sheets[ tile.sheet ];
+				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
+				elemViewBuffer.set(mapkey, element);
+				bufferStatic.addElement(element);
+	
+			default: throw('ActorRender - actorType $actorType not implemented yet!');
 		}
 	}
 	
 	public inline function removeActor(mapkey:Int) {
+		// trace("remove", mapkey);
 		var element = elemViewBuffer.get(mapkey);
 		// if (element!=null) {
 			bufferStatic.removeElement(element);
@@ -137,6 +145,7 @@ class ActorRender {
 
 	// swaps the mapkeys if actor enters a new gridView
 	public function actorChangeMapkey(oldMapkey:Int, newMapkey:Int) {
+		// trace("actorChangeMapkey", oldMapkey, newMapkey);
 		var element = elemViewBuffer.get(oldMapkey);
 		elemViewBuffer.remove(oldMapkey);
 		elemViewBuffer.set(newMapkey, element);

@@ -126,13 +126,13 @@ class View {
 	}
 
 	public function removeActor(actorKey:Int) {
-		trace("removeActor", 'actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
+		// trace("removeActor", 'actorKey:$actorKey, mapkey:${mapKey(gridViewIndex, actorKey)}');		
 		renderView.actorRender.removeActor(mapKey(gridViewIndex, actorKey));
 	}
 
 	// if actors origin moved to a side-grid -> switch the mapkeys
 	public inline function actorToSideGrid(newIndex:Int, oldActorKey:Int, newActorKey:Int) {
-		trace("actorToSideGrid", 'index:$gridViewIndex newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey, oldMapkey:${mapKey(gridViewIndex, oldActorKey)}, newMapkey:${mapKey(newIndex, newActorKey)}');		
+		// trace("actorToSideGrid", 'index:$gridViewIndex newIndex:$newIndex, oldActorKey:$oldActorKey, newActorKey:$newActorKey, oldMapkey:${mapKey(gridViewIndex, oldActorKey)}, newMapkey:${mapKey(newIndex, newActorKey)}');		
 		renderView.actorRender.actorChangeMapkey(mapKey(gridViewIndex, oldActorKey), mapKey(newIndex, newActorKey));
 	}
 

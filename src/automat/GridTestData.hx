@@ -244,12 +244,12 @@ public static inline var TESTGRID_1:String = "
 #                                                              #
 #                                                              #
                                                                #
-                                                               #
-                                                                
-                                                                
-#                                                               
-#                                                               
-#                                                              #
+                                                            ####
+                                                            #   
+                                                            #   
+#                                                           #   
+#                                                           #   
+#                                                           ####
 #                                                              #
 #                                                              #
 #                                                              #
@@ -311,13 +311,13 @@ public static inline var TESTGRID_2:String = "
 #                                                ##            #
 #     ########                                   #             #
 #                                             ####          ####
-#                                                              #
-#                                                               
-                                                                
-                                                                
-                   #                                            
-                   #                                            
-                   #                                            
+####                                                           #
+   #                                                            
+   #                                                            
+   #                                                            
+   #               #                                            
+####               #                                            
+#                  #                                            
 #                  #                                           #
 #                  #                                           #
 #                                                              #

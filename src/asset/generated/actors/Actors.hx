@@ -11,11 +11,12 @@ import asset.Anim;
     var STONE2x2;
     var SEMMI;
     var HAXE;
+    var FLIXEL;
     var CROSS;
     var EDGEBR3x3;
-    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2", "SEMMI", "HAXE", "CROSS", "EDGEBR3x3"];
+    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2", "SEMMI", "HAXE", "FLIXEL", "CROSS", "EDGEBR3x3"];
     @:from static public function fromString(s:String):TileID return names.indexOf(s);
-    public static function iterator() return new IntIterator(0,7);
+    public static function iterator() return new IntIterator(0,8);
 }
 
 @:publicFields enum abstract AnimID(Int) from Int to Int {
@@ -88,6 +89,17 @@ interface Tile {
     }
     var animID:Array<AnimID> = [still];
 }
+@:publicFields class Flixel implements Tile {
+    inline function new () {};
+    var sheet(get, never):Int; inline function get_sheet() return 2;
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(3, 3);
+            default: throw("Error, Flixel don't have this animation"); null;
+        }
+    }
+    var animID:Array<AnimID> = [still];
+}
 @:publicFields class Cross implements Tile {
     inline function new () {};
     var sheet(get, never):Int; inline function get_sheet() return 3;
@@ -127,6 +139,7 @@ class Actors {
             case STONE2x2: new Stone2x2();
             case SEMMI: new Semmi();
             case HAXE: new Haxe();
+            case FLIXEL: new Flixel();
             case CROSS: new Cross();
             case EDGEBR3x3: new Edgebr3x3();
             default:  throw("Error, no tile for this ID"); null;

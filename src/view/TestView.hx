@@ -58,11 +58,11 @@ class TestView extends Application
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
 		// controllable actor
-		actor.addToGrid(grid, P(3,3));
-		// actor.addToGrid(grid, P(50,50));
+		// actor.addToGrid(grid, P(3,3));
+		// actor.addToGrid(grid, P(50,50));dd
 
-		var stone1x1 = new Stone1x1("Stone1x1");
-		stone1x1.addToGrid(grid, P(9,5));
+		// var stone1x1 = new Stone1x1("Stone1x1");
+		// stone1x1.addToGrid(grid, P(9,5));
 
 		// var actor2 = new Stone1x2("Stone1x2");
 		// actor2.addToGrid(grid, P(2,1));
@@ -93,10 +93,10 @@ class TestView extends Application
 		
 		// test SIMMULATION
 		
-		stone1x1.tryFallDown();
+		// stone1x1.tryFallDown();
 
 		// spawn some haxe actors
-		for (i in 0...18) new Haxe(grid, P(10+i*3,10));
+		for (i in 0...17) new Haxe(grid, P(10+i*3,10));
 		for (i in 0...9) new Haxe(grid, P(17+i*3,12));
 		for (i in 0...9) new Haxe(grid, P(16+i*3,14));
 		for (i in 0...9) new Haxe(grid, P(17+i*3,16));
@@ -107,8 +107,13 @@ class TestView extends Application
 		for (i in 0...9) new Haxe(grid, P(16+i*3,26));
 		for (i in 0...9) new Haxe(grid, P(17+i*3,28));
 		
-		var timer = new haxe.Timer(80);
-		timer.run = function() { 
+		new Flixel("A",grid, P(62,27));
+		new Flixel("B",grid, P(62,29));
+		
+		// new Haxe("C",grid.right, P(50,31));
+		
+		var timer = new haxe.Timer(100);
+		timer.run = function() {
 			grid.step();
 			grid.right.step();
 			grid.right.right.step();

@@ -303,8 +303,7 @@ class Grid {
 
 	// todo: maybe needs a "lock" if setSimEvent called from outwards!
 	public function step()
-	{		
-		// get all events to the actual time
+	{	// get all events to the actual time
 		for (i in 0...simEventsLength()) {
 			Sim.step(this, getSimEvent(i));
 		}
@@ -323,7 +322,7 @@ class Grid {
 		if (eventTimeStep >= MAX_STEPS * STEP_SIZE) eventTimeStep -= MAX_STEPS * STEP_SIZE;
 		
 		// get the events-amount at this time
-		var eventsPerStep:Int = timeSlicer.get(eventTimeStep);
+		var eventsPerStep:Int = timeSlicer.get(eventTimeStep);//trace("eventsPerStep",eventsPerStep);
 		if (eventsPerStep >= MAX_EVENTS_PER_STEP) throw("grid-timeslicer events OVERFLOW");
 
 		// trace(eventTimeStep , eventsPerStep);

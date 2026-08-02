@@ -7,19 +7,12 @@ import automat.sim.SimEvent.SimEventType;
 
 import util.Pos;
 
-/*@:build(automat.actor.Actor.build("
-|#  #   ##   #   #  ####|
-|#  #  #  #   # #   #   |
-|####  ####    #    ####|
-|#  #  #  #   # #   #   |
-|#  #  #  #  #   #  ####|
-")) */
 @:build(automat.actor.Actor.build("
 |##|
 |##|
-")) class Haxe implements IActor {
+")) class Flixel implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ActorType.HAXE;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.FLIXEL;
 
 	public var name:String;
 

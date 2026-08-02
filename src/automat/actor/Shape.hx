@@ -168,12 +168,9 @@ class Shape {
 		var oldGrid:Grid = g; var oldKey:Int = a.gridKey; var oldX:Int = a.pos.x + shape.originXOffset;
 		if (syncToView && oldX >= Grid.WIDTH) {	oldGrid = oldGrid.right; oldKey = a.gridKeyR; oldX -= Grid.WIDTH; }
 		
-		/*removeFromGrid(a, shape, false);		
-		if (a.pos.x == 0) addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape, false);
-		else addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape, false);*/
 		if (a.pos.x == 0) {
 			removeFromGrid(a, shape, false, (shape.width == 1), true, (shape.width == 1), true);		
-			addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape, false, -1, a.gridKey, -1, a.gridKeyB   );
+			addToGrid(a, g.left, P(Grid.WIDTH - 1, a.pos.y), shape, false, -1, a.gridKey, -1, a.gridKeyB);
 		}
 		else {
 			removeFromGrid(a, shape, false, false, (a.pos.x + shape.width == Grid.WIDTH+1), false, (a.pos.x + shape.width == Grid.WIDTH+1));		
