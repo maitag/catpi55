@@ -44,7 +44,6 @@ class TestView extends Application
 	var multiGridView:MultiGridView;
 	var view:View;
 
-	// var actor = new EdgeBR3x3("player");
 	var actor = new Semmi("player");
 
 	public function start(window:Window)
@@ -59,7 +58,6 @@ class TestView extends Application
 		
 		// controllable actor
 		actor.addToGrid(grid, P(3,3));
-		// actor.addToGrid(grid, P(50,50));dd
 
 		// var stone1x1 = new Stone1x1("Stone1x1");
 		// stone1x1.addToGrid(grid, P(9,5));
@@ -68,6 +66,7 @@ class TestView extends Application
 		// actor2.addToGrid(grid, P(2,1));
 		
 		// GridTestData.traceGrid(grid, 64, 64);
+
 		
 		var rootX:Int = 0;
 		var rootY:Int = 0;
@@ -110,9 +109,20 @@ class TestView extends Application
 		new Flixel("A",grid, P(62,27));
 		// new Flixel("B",grid, P(62,29));
 		
-		// new Haxe("C",grid.right, P(50,31));
+		new Cross("C",grid, P(2,5));
+		new Cross("C",grid, P(5,5));
+		new Cross("C",grid, P(8,5));
+		new Cross("C",grid, P(1,7));
+		new Cross("C",grid, P(3,8));
+		new Cross("C",grid, P(2,10));
+		for (i in 0...17) new Cross("C",grid, P(1,12+i*3));
+
+		for (i in 0...7) new EdgeBR3x3("E",grid, P(14+i,1+i));
 		
-		var timer = new haxe.Timer(10);
+		// return;
+
+
+		var timer = new haxe.Timer(50);
 		timer.run = function() {
 			grid.step();
 			grid.right.step();
