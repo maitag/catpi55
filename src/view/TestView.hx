@@ -58,7 +58,7 @@ class TestView extends Application
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
 		// controllable actor
-		// actor.addToGrid(grid, P(3,3));
+		actor.addToGrid(grid, P(3,3));
 		// actor.addToGrid(grid, P(50,50));dd
 
 		// var stone1x1 = new Stone1x1("Stone1x1");
@@ -108,11 +108,11 @@ class TestView extends Application
 		for (i in 0...9) new Haxe(grid, P(17+i*3,28));
 		
 		new Flixel("A",grid, P(62,27));
-		new Flixel("B",grid, P(62,29));
+		// new Flixel("B",grid, P(62,29));
 		
 		// new Haxe("C",grid.right, P(50,31));
 		
-		var timer = new haxe.Timer(100);
+		var timer = new haxe.Timer(10);
 		timer.run = function() {
 			grid.step();
 			grid.right.step();

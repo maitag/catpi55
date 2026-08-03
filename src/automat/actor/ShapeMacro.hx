@@ -602,11 +602,22 @@ class ShapeMacro {
 						var oldGrid = g; var oldKey:Int = gridKey; var oldX:Int = pos.x + $v{originXOffset};
 						if (syncToView && oldX >= Grid.WIDTH) {	oldGrid = oldGrid.right; oldKey = gridKeyR; oldX -= Grid.WIDTH; }
 
-						_removeFromGrid(false);
-						if (pos.x == 0 && pos.y == 0) _addToGrid(g.leftTop, util.Pos.xy(Grid.WIDTH - 1, Grid.HEIGHT - 1), false);
-						else if (pos.x == 0) _addToGrid(g.left, util.Pos.xy(Grid.WIDTH - 1, pos.y-1), false);
-						else if (pos.y == 0) _addToGrid(g.top, util.Pos.xy(pos.x-1, Grid.HEIGHT - 1), false);
-						else _addToGrid(g, util.Pos.xy(pos.x-1, pos.y-1), false);
+						if (pos.x == 0 && pos.y == 0) {
+							_removeFromGrid(false);
+							_addToGrid(g.leftTop, util.Pos.xy(Grid.WIDTH - 1, Grid.HEIGHT - 1), false);
+						}
+						else if (pos.x == 0) {
+							_removeFromGrid(false);
+							_addToGrid(g.left, util.Pos.xy(Grid.WIDTH - 1, pos.y-1), false);
+						}
+						else if (pos.y == 0) {
+							_removeFromGrid(false);
+							_addToGrid(g.top, util.Pos.xy(pos.x-1, Grid.HEIGHT - 1), false);
+						}
+						else {
+							_removeFromGrid(false);
+							_addToGrid(g, util.Pos.xy(pos.x-1, pos.y-1), false);
+						}
 
 						if (syncToView) { // sync views
 							if (oldX > 0 && oldY > 0) oldGrid.viewsActorToLeftUp(this, oldKey, oldX, oldX-1, oldY, oldY-1, time);
@@ -645,11 +656,22 @@ class ShapeMacro {
 						var oldGrid = g; var oldKey:Int = gridKey; var oldX:Int = pos.x + $v{originXOffset};
 						if (syncToView && oldX >= Grid.WIDTH) {	oldGrid = oldGrid.right; oldKey = gridKeyR; oldX -= Grid.WIDTH; }
 
-						_removeFromGrid(false);
-						if (pos.x == 0 && pos.y == Grid.HEIGHT - 1) _addToGrid(g.leftBottom, util.Pos.xy(Grid.WIDTH - 1, 0), false);
-						else if (pos.x == 0) _addToGrid(g.left, util.Pos.xy(Grid.WIDTH - 1, pos.y+1), false);
-						else if (pos.y == Grid.HEIGHT - 1) _addToGrid(g.bottom, util.Pos.xy(pos.x-1, 0), false);
-						else _addToGrid(g, util.Pos.xy(pos.x-1, pos.y+1), false);
+						if (pos.x == 0 && pos.y == Grid.HEIGHT - 1) {
+							_removeFromGrid(false);
+							_addToGrid(g.leftBottom, util.Pos.xy(Grid.WIDTH - 1, 0), false);
+						}
+						else if (pos.x == 0) {
+							_removeFromGrid(false);
+							_addToGrid(g.left, util.Pos.xy(Grid.WIDTH - 1, pos.y+1), false);
+						}
+						else if (pos.y == Grid.HEIGHT - 1) {
+							_removeFromGrid(false);
+							_addToGrid(g.bottom, util.Pos.xy(pos.x-1, 0), false);
+						}
+						else {
+							_removeFromGrid(false);
+							_addToGrid(g, util.Pos.xy(pos.x-1, pos.y+1), false);
+						}
 
 						if (syncToView) { // sync views
 							if (oldX > 0 && oldY < Grid.HEIGHT-1) oldGrid.viewsActorToLeftDown(this, oldKey, oldX, oldX-1, oldY, oldY+1, time);
@@ -687,11 +709,22 @@ class ShapeMacro {
 						var oldGrid = g; var oldKey:Int = gridKey; var oldX:Int = pos.x + $v{originXOffset};
 						if (syncToView && oldX >= Grid.WIDTH) {	oldGrid = oldGrid.right; oldKey = gridKeyR; oldX -= Grid.WIDTH; }
 
-						_removeFromGrid(false);
-						if (pos.x == Grid.WIDTH - 1 && pos.y == 0) _addToGrid(g.rightTop, util.Pos.xy(0, Grid.HEIGHT - 1), false);
-						else if (pos.x == Grid.WIDTH - 1) _addToGrid(g.right, util.Pos.xy(0, pos.y-1), false);
-						else if (pos.y == 0) _addToGrid(g.top, util.Pos.xy(pos.x+1, Grid.HEIGHT - 1), false);
-						else _addToGrid(g, util.Pos.xy(pos.x+1, pos.y-1), false);
+						if (pos.x == Grid.WIDTH - 1 && pos.y == 0) {
+							_removeFromGrid(false);
+							_addToGrid(g.rightTop, util.Pos.xy(0, Grid.HEIGHT - 1), false);
+						}
+						else if (pos.x == Grid.WIDTH - 1) {
+							_removeFromGrid(false);
+							_addToGrid(g.right, util.Pos.xy(0, pos.y-1), false);
+						}
+						else if (pos.y == 0) {
+							_removeFromGrid(false);
+							_addToGrid(g.top, util.Pos.xy(pos.x+1, Grid.HEIGHT - 1), false);
+						}
+						else {
+							_removeFromGrid(false);
+							_addToGrid(g, util.Pos.xy(pos.x+1, pos.y-1), false);
+						}
 
 						if (syncToView) { // sync views
 							if (oldX < Grid.WIDTH-1 && oldY > 0) oldGrid.viewsActorToRightUp(this, oldKey, oldX, oldX+1, oldY, oldY-1, time);
@@ -730,11 +763,22 @@ class ShapeMacro {
 						var oldGrid = g; var oldKey:Int = gridKey; var oldX:Int = pos.x + $v{originXOffset};
 						if (syncToView && oldX >= Grid.WIDTH) {	oldGrid = oldGrid.right; oldKey = gridKeyR; oldX -= Grid.WIDTH; }
 						
-						_removeFromGrid(false);
-						if (pos.x == Grid.WIDTH - 1 && pos.y == Grid.HEIGHT - 1) _addToGrid(g.rightBottom, util.Pos.xy(0, 0), false);
-						else if (pos.x == Grid.WIDTH - 1) _addToGrid(g.right, util.Pos.xy(0, pos.y+1), false);
-						else if (pos.y == Grid.HEIGHT - 1) _addToGrid(g.bottom, util.Pos.xy(pos.x+1, 0), false);
-						else _addToGrid(g, util.Pos.xy(pos.x+1, pos.y+1), false);
+						if (pos.x == Grid.WIDTH - 1 && pos.y == Grid.HEIGHT - 1) {
+							_removeFromGrid(false);
+							_addToGrid(g.rightBottom, util.Pos.xy(0, 0), false);
+						}
+						else if (pos.x == Grid.WIDTH - 1) {
+							_removeFromGrid(false);
+							_addToGrid(g.right, util.Pos.xy(0, pos.y+1), false);
+						}
+						else if (pos.y == Grid.HEIGHT - 1) {
+							_removeFromGrid(false);
+							_addToGrid(g.bottom, util.Pos.xy(pos.x+1, 0), false);
+						}
+						else {
+							_removeFromGrid(false);
+							_addToGrid(g, util.Pos.xy(pos.x+1, pos.y+1), false);
+						}
 
 						if (syncToView) { // sync views
 							if (oldX < Grid.WIDTH-1 && oldY < Grid.HEIGHT-1) oldGrid.viewsActorToRightDown(this, oldKey, oldX, oldX+1, oldY, oldY+1, time);
