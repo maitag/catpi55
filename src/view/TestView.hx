@@ -1,5 +1,6 @@
 package view;
 
+import automat.Cell.CellActor;
 import peote.view.Color;
 import haxe.Timer;
 import util.Maze;
@@ -128,6 +129,7 @@ class TestView extends Application
 
 		var timer = new haxe.Timer(50);
 		timer.run = function() {
+			// var t = Timer.stamp();
 			grid.step();
 			grid.right.step();
 			grid.right.right.step();
@@ -137,6 +139,8 @@ class TestView extends Application
 			grid.bottom.bottom.step();
 			grid.bottom.bottom.right.step();
 			grid.bottom.bottom.right.right.step();
+			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
+			// trace(Std.int((Timer.stamp()-t)*1000));
 		};
 		
 		

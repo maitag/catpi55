@@ -246,8 +246,8 @@ public static inline var TESTGRID_1:String = "
                                                                #
                                                             ####
                                                             #   
-                                                            #   
-#                                                           #   
+                                                                
+#                                                               
 #                                                           #   
 #                                                           ####
 #                                                              #

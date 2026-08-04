@@ -24,6 +24,8 @@
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->
 
+	<!-- <haxedef name="macro_unroll" /> -->
+	<haxedef name="viktor_safe" />
 	<haxedef name="peoteview_fps" />
 	
 	<source path="src" />
@@ -32,7 +34,6 @@
 	<haxelib name="peote-view" />
 	<haxelib name="viktor" />
 	
-	<haxedef name="viktor_safe" />
 
 	<!-- force compiling for a special opengl-es version (only set one of them) -->
 	<!-- this optimizes the build and forces no-runtimecheck for the gl-features -->
