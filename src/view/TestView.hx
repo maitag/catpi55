@@ -119,6 +119,10 @@ class TestView extends Application
 
 		for (i in 0...7) new EdgeBR3x3("E",grid, P(14+i,1+i));
 		
+		// ((hope will H E L P ;))
+		new Lime("4theSIGNmajesties", grid, P(1,1));
+		new OpenFL("flash for fantasy", grid, P(2,1));
+
 		// return;
 
 

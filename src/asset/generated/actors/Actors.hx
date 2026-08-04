@@ -7,6 +7,8 @@ import asset.Anim;
 
 @:publicFields enum abstract TileID(Int) from Int to Int {
     var STONE1x1;
+    var LIME;
+    var OPENFL;
     var STONE1x2;
     var STONE2x2;
     var SEMMI;
@@ -14,9 +16,9 @@ import asset.Anim;
     var FLIXEL;
     var CROSS;
     var EDGEBR3x3;
-    public static var names = ["STONE1x1", "STONE1x2", "STONE2x2", "SEMMI", "HAXE", "FLIXEL", "CROSS", "EDGEBR3x3"];
+    public static var names = ["STONE1x1", "LIME", "OPENFL", "STONE1x2", "STONE2x2", "SEMMI", "HAXE", "FLIXEL", "CROSS", "EDGEBR3x3"];
     @:from static public function fromString(s:String):TileID return names.indexOf(s);
-    public static function iterator() return new IntIterator(0,8);
+    public static function iterator() return new IntIterator(0,10);
 }
 
 @:publicFields enum abstract AnimID(Int) from Int to Int {
@@ -41,6 +43,28 @@ interface Tile {
         return switch(id) {
             case still: new Anim(0, 0);
             default: throw("Error, Stone1x1 don't have this animation"); null;
+        }
+    }
+    var animID:Array<AnimID> = [still];
+}
+@:publicFields class Lime implements Tile {
+    inline function new () {};
+    var sheet(get, never):Int; inline function get_sheet() return 0;
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(1, 1);
+            default: throw("Error, Lime don't have this animation"); null;
+        }
+    }
+    var animID:Array<AnimID> = [still];
+}
+@:publicFields class Openfl implements Tile {
+    inline function new () {};
+    var sheet(get, never):Int; inline function get_sheet() return 0;
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(2, 2);
+            default: throw("Error, Openfl don't have this animation"); null;
         }
     }
     var animID:Array<AnimID> = [still];
@@ -135,6 +159,8 @@ class Actors {
     public inline static function tile(id:TileID):Tile {
         return switch(id) {
             case STONE1x1: new Stone1x1();
+            case LIME: new Lime();
+            case OPENFL: new Openfl();
             case STONE1x2: new Stone1x2();
             case STONE2x2: new Stone2x2();
             case SEMMI: new Semmi();
