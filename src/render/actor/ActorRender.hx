@@ -49,6 +49,8 @@ class ActorRender {
 
 	var elemViewBuffer:IntMap<ActorElemStatic>;
 
+	var renderConfig:ActorRenderConfig;
+
 	public var zoom(get,set):Float;
 	inline function get_zoom():Float return display.zoom;
 	inline function set_zoom(z:Float):Float return display.zoom = z;
@@ -57,6 +59,8 @@ class ActorRender {
 
  	public function new(x:Int, y:Int, width:Int, height:Int)
 	{
+		renderConfig = new ActorRenderConfig();
+
 		bufferStatic = new Buffer<ActorElemStatic>(1024, 512);
 		bufferAnim = new Buffer<ActorElemAnim>(1024, 512);
 
@@ -72,80 +76,14 @@ class ActorRender {
 	public inline function addActor(x:Int, y:Int, mapkey:Int, actorType:ActorType) {
 		var px = x*32 + scrollOffsetX;
 		var py = y*32 + scrollOffsetY;
-		switch (actorType) {
-			// TODO
-			case STONE1x1:
-				var tile = Actors.tile(TileID.STONE1x1);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
 
-			case STONE1x2:
-				var tile = Actors.tile(TileID.STONE1x2);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
+		// TODO
+		var elemConfig = renderConfig.get(actorType);
+		trace(actorType);
+		var element = new ActorElemStatic(elemConfig.tileNr , elemConfig.sheetNr, px, py, elemConfig.width, elemConfig.height);
+		elemViewBuffer.set(mapkey, element);
+		bufferStatic.addElement(element);
 
-			case STONE2x2:
-				var tile = Actors.tile(TileID.STONE2x2);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-
-			case CROSS:
-				var tile = Actors.tile(TileID.CROSS);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-
-			case EDGEBR3x3:
-				var tile = Actors.tile(TileID.EDGEBR3x3);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-
-			case SEMMI:
-				var tile = Actors.tile(TileID.SEMMI);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-
-			case HAXE:
-				var tile = Actors.tile(TileID.HAXE);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-	
-			case LIME:
-				var tile = Actors.tile(TileID.LIME);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-	
-			case OPENFL:
-				var tile = Actors.tile(TileID.OPENFL);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-	
-			case FLIXEL:
-				var tile = Actors.tile(TileID.FLIXEL);
-				var sheet = Actors.sheets[ tile.sheet ];
-				var element = new ActorElemStatic(tile.anim(tile.animID[0]).start , tile.sheet, px, py, sheet.width, sheet.height);
-				elemViewBuffer.set(mapkey, element);
-				bufferStatic.addElement(element);
-	
-			default: throw('ActorRender - actorType $actorType not implemented yet!');
-		}
 	}
 	
 	public inline function removeActor(mapkey:Int) {

@@ -1,6 +1,6 @@
 package automat.actor;
 
-enum abstract ActorType(Int) {
+enum abstract ActorType(Int) to Int {
 	
 	var STONE1x1;
 	var STONE1x2;
@@ -19,4 +19,7 @@ enum abstract ActorType(Int) {
 	var HILBERT;
 
 	var SEMMI;
+
+	public static var length(get, never):Int; 
+	static inline function get_length():Int return ((SEMMI+1) : Int);
 }
