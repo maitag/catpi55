@@ -11,10 +11,11 @@ import peote.view.TextureConfig;
 
 import automat.actor.ActorType;
 
+// TODO: REFACTOR asset-stuff out of here and handle it by arguments for init()
 // assets
 import asset.Util;
 import asset.generated.actors.Actors;
-import asset.generated.actors.Actors.TileID;
+// import asset.generated.actors.Actors.TileID;
 // import asset.generated.Actors.AnimID;
 
 class ActorRender {
@@ -79,8 +80,7 @@ class ActorRender {
 
 		// TODO
 		var elemConfig = renderConfig.get(actorType);
-		trace(actorType);
-		var element = new ActorElemStatic(elemConfig.tileNr , elemConfig.sheetNr, px, py, elemConfig.width, elemConfig.height);
+		var element = new ActorElemStatic(elemConfig.tileNr, elemConfig.sheetNr, px, py, elemConfig.width, elemConfig.height);
 		elemViewBuffer.set(mapkey, element);
 		bufferStatic.addElement(element);
 

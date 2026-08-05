@@ -20,6 +20,5 @@ enum abstract ActorType(Int) to Int {
 
 	var SEMMI;
 
-	public static var length(get, never):Int; 
-	static inline function get_length():Int return ((SEMMI+1) : Int);
+	// public static var length(get, never):Int; static inline function get_length():Int return ((SEMMI+1) : Int);
 }

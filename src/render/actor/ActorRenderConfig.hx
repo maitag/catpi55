@@ -13,7 +13,10 @@ class ActorRenderConfig {
 	
 	var conf:Vector<ActorElemConfig>;
 
-	static var typeToTile:Map<ActorType, TileID> = [
+	// TODO: make this customizable for ActorTypes and generated Assets
+	// -> let it be Argument for ActorRender.init()
+	// and together with the Actor.sheets for the textures to load
+	static var mapTypeToTile:Map<ActorType, TileID> = [
 		STONE1x1 => TileID.STONE1x1,
 		STONE1x2 => TileID.STONE1x2,
 		STONE2x2 => TileID.STONE2x2,
@@ -26,10 +29,18 @@ class ActorRenderConfig {
 		SEMMI => TileID.SEMMI
 	];
 
+	// TODO: better handle all of this into ActorRender as static into init()
+	// and fully asset-customizable then!
 	public function new() {
-		conf = new Vector<ActorElemConfig>(ActorType.length);
 		
-		for ( actorType => tileID in typeToTile) {
+		var keyMax:Int = 0;
+		for ( key in mapTypeToTile.keys()) {
+			if ((key:Int) > keyMax) keyMax = key;
+		}
+		
+		conf = new Vector<ActorElemConfig>(keyMax+1);
+		
+		for ( actorType => tileID in mapTypeToTile) {
 			var tile = Actors.tile(tileID);
 			var sheet = Actors.sheets[ tile.sheet ];
 			conf.set(actorType, {
