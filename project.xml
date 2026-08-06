@@ -27,6 +27,8 @@
 	<!-- <haxedef name="macro_unroll" /> -->
 	<haxedef name="viktor_safe" />
 	<haxedef name="peoteview_fps" />
+
+	<haxeflag name="--macro" value="BuildSetup.setup()" />
 	
 	<source path="src" />
 	
