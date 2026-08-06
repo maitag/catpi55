@@ -48,7 +48,7 @@ class TestView extends Application
 
 	var actor = new Semmi("player");
 
-	static inline var SIM_STEP_TIME:Int = 200;
+	static inline var SIM_STEP_TIME:Int = 100;
 
 	public function start(window:Window)
 	{

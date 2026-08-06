@@ -28,7 +28,7 @@ class ActorRender {
 
 	public static function init(peoteView:PeoteView, stepTime:Int = 0) {
 		ActorRender.peoteView = peoteView;
-		ActorRender.stepTime = stepTime / 995;
+		ActorRender.stepTime = stepTime / 860; // <- TODO
 		loadTextures();
 	}
 
