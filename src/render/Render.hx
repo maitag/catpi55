@@ -10,12 +10,12 @@ class Render {
 
 	public static var peoteView:PeoteView;
 
-	public static function init(peoteView:PeoteView)
+	public static function init(peoteView:PeoteView, stepTime:Int = 0)
 	{
 		Render.peoteView = peoteView;
 
 		CellRender.init(peoteView);
-		ActorRender.init(peoteView);
+		ActorRender.init(peoteView, stepTime);
 	}
 
 

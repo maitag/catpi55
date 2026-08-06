@@ -48,11 +48,13 @@ class TestView extends Application
 
 	var actor = new Semmi("player");
 
+	static inline var SIM_STEP_TIME:Int = 200;
+
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
 
-		Render.init(peoteView);
+		Render.init(peoteView, SIM_STEP_TIME);
 		
 		grid = GridTestData.create3x3();
 		// var grid:Grid = GridTestData.createMaze(2,2);
@@ -120,7 +122,7 @@ class TestView extends Application
 		for (i in 0...17) new Cross("C",grid, P(1,12+i*3));
 
 		for (i in 0...7) new EdgeBR3x3("E",grid, P(14+i,1+i));
-		
+
 		// ((hope will H E L P ;))
 		new Lime("4theSIGNmajesties", grid, P(1,1));
 		new OpenFL("flash for fantasy", grid, P(2,1));
@@ -145,15 +147,13 @@ class TestView extends Application
 		};
 		*/
 		
-		
+		peoteView.start();
 		
 	}
 	
 	// ------------------------------------------------------------
 	// ----------------- LIME EVENTS ------------------------------
 	// ------------------------------------------------------------	
-
-	static inline var SIM_STEP_TIME:Int = 20;
 
 	var deltaTimeSum:Int = SIM_STEP_TIME;
 

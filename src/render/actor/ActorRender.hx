@@ -24,8 +24,11 @@ class ActorRender {
 	public static var peoteView:PeoteView;
 	public static var textures:Array<Texture>;
 
-	public static function init(peoteView:PeoteView) {
+	public static var stepTime:Float = 0.0;
+
+	public static function init(peoteView:PeoteView, stepTime:Int = 0) {
 		ActorRender.peoteView = peoteView;
+		ActorRender.stepTime = stepTime / 995;
 		loadTextures();
 	}
 
@@ -111,42 +114,54 @@ class ActorRender {
 		var element = elemViewBuffer.get(mapkey);
 		// var px = x*32 + scrollOffsetX;
 		element.x -= 32;
+		element._yStart = element._yEnd;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRight(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.x += 32;
+		element._yStart = element._yEnd;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.y -= 32;
+		element._xStart = element._xEnd;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.y += 32;
+		element._xStart = element._xEnd;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 
 	public function actorGoLeftUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.x -= 32; element.y -= 32;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoLeftDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.x -= 32; element.y += 32;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRightUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.x += 32; element.y -= 32;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRightDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
 		element.x += 32; element.y += 32;
+		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 

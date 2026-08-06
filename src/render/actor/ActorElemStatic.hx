@@ -2,9 +2,28 @@ package render.actor;
 
 class ActorElemStatic implements peote.view.Element
 {
+
+	public var x(get, set):Int;
+	inline function get_x():Int {
+		return _xEnd;
+	}
+	inline function set_x(v:Int):Int {
+		_xStart = _xEnd;
+		return _xEnd = v;
+	}
+
+	public var y(get, set):Int;
+	inline function get_y():Int {
+		return _yEnd;
+	}
+	inline function set_y(v:Int):Int {
+		_yStart = _yEnd;
+		return _yEnd = v;
+	}
+
 	// position in pixel (relative to upper left corner of Display)
-	@posX public var x:Int = 0;
-	@posY public var y:Int = 0;
+	@anim("default") @posX public var _x:Int = 0;
+	@anim("default") @posY public var _y:Int = 0;
 		
 	// size in pixel
 	@sizeX public var w:Int = 32;
@@ -27,8 +46,12 @@ class ActorElemStatic implements peote.view.Element
 	{
 		this.tile = tile;
 		this.sheet = sheet;
-		this.x = x;
-		this.y = y;
+		
+		_xStart = _xEnd = x;
+		_yStart = _yEnd = y;
+
+		time(0,0);
+		
 		this.w = w;
 		this.h = h;
 	}

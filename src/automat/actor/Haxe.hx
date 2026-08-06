@@ -51,14 +51,14 @@ import util.Pos;
 		var i:Int = 7;
 		if (Rnd.int(50)==0) direction = Rnd.intLimit(0,i);
 		switch(direction) {
-			case 0: if (freeLeft()) goLeft() else direction = Rnd.intLimit(0,i);
-			case 1: if (freeRight()) goRight() else direction = Rnd.intLimit(0,i);
-			case 2: if (freeUp()) goUp() else direction = Rnd.intLimit(0,i);
-			case 3: if (freeDown()) goDown() else direction = Rnd.intLimit(0,i);
-			case 4: if (freeLeftUp()) goLeftUp() else direction = Rnd.intLimit(0,i);
-			case 5: if (freeLeftDown()) goLeftDown() else direction = Rnd.intLimit(0,i);
-			case 6: if (freeRightUp()) goRightUp() else direction = Rnd.intLimit(0,i);
-			case 7: if (freeRightDown()) goRightDown() else direction = Rnd.intLimit(0,i);
+			case 0: if (freeLeft()) goLeft(delay) else direction = Rnd.intLimit(0,i);
+			case 1: if (freeRight()) goRight(delay) else direction = Rnd.intLimit(0,i);
+			case 2: if (freeUp()) goUp(delay) else direction = Rnd.intLimit(0,i);
+			case 3: if (freeDown()) goDown(delay) else direction = Rnd.intLimit(0,i);
+			case 4: if (freeLeftUp()) goLeftUp(delay) else direction = Rnd.intLimit(0,i);
+			case 5: if (freeLeftDown()) goLeftDown(delay) else direction = Rnd.intLimit(0,i);
+			case 6: if (freeRightUp()) goRightUp(delay) else direction = Rnd.intLimit(0,i);
+			case 7: if (freeRightDown()) goRightDown(delay) else direction = Rnd.intLimit(0,i);
 			default: 
 		}
 		
