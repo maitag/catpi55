@@ -44,6 +44,7 @@ class TestView extends Application
 	var peoteView:PeoteView;
 	var multiGridView:MultiGridView;
 	var view:View;
+	var grid:Grid;
 
 	var actor = new Semmi("player");
 
@@ -53,7 +54,7 @@ class TestView extends Application
 
 		Render.init(peoteView);
 		
-		var grid:Grid = GridTestData.create3x3();
+		grid = GridTestData.create3x3();
 		// var grid:Grid = GridTestData.createMaze(2,2);
 		// var grid:Grid = GridTestData.createMaze(50,50);
 		
@@ -126,7 +127,7 @@ class TestView extends Application
 
 		// return;
 
-
+		/*
 		var timer = new haxe.Timer(50);
 		timer.run = function() {
 			// var t = Timer.stamp();
@@ -142,7 +143,7 @@ class TestView extends Application
 			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
 			// trace(Std.int((Timer.stamp()-t)*1000));
 		};
-		
+		*/
 		
 		
 		
@@ -152,9 +153,31 @@ class TestView extends Application
 	// ----------------- LIME EVENTS ------------------------------
 	// ------------------------------------------------------------	
 
-	
+	static inline var SIM_STEP_TIME:Int = 20;
+
+	var deltaTimeSum:Int = SIM_STEP_TIME;
+
 	override function update(deltaTime:Int):Void {
-		// for game-logic update
+		if (grid==null) return;
+
+		if (deltaTimeSum < SIM_STEP_TIME) {
+			deltaTimeSum += deltaTime;
+		}
+		else 
+		{
+			deltaTimeSum -= SIM_STEP_TIME;
+
+			grid.step();
+			grid.right.step();
+			grid.right.right.step();
+			grid.bottom.step();
+			grid.bottom.right.step();
+			grid.bottom.right.right.step();
+			grid.bottom.bottom.step();
+			grid.bottom.bottom.right.step();
+			grid.bottom.bottom.right.right.step();
+			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
+		}
 	}
 	
 	// override function render(context:lime.graphics.RenderContext):Void {}

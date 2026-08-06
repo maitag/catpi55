@@ -128,6 +128,13 @@ class GridTestData
 		knotGridsLeftRight([grid11, grid12, grid13]);
 		knotGridsLeftRight([grid21, grid22, grid23]);
 		knotGridsLeftRight([grid31, grid32, grid33]);
+		
+		/*
+		// connect them into LOOP:  TODO: works not yet on View-initialization
+		knotGridsLeftRight([grid11, grid12, grid13, grid11]);
+		knotGridsLeftRight([grid21, grid22, grid23, grid21]);
+		knotGridsLeftRight([grid31, grid32, grid33, grid21]);
+		*/
 
 		knotGridsTopBottom([grid11, grid21, grid31]);
 		knotGridsTopBottom([grid12, grid22, grid32]);
