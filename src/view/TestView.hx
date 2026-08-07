@@ -1,7 +1,6 @@
 package view;
 
 import automat.Cell.CellActor;
-import peote.view.Color;
 import haxe.Timer;
 import util.Maze;
 import haxe.CallStack;
@@ -12,11 +11,8 @@ import peote.view.PeoteView;
 
 import automat.GridTestData;
 import automat.Grid;
-import automat.GridView;
 import automat.MultiGridView;
 import automat.actor.*;
-import automat.sim.SimEvent;
-import automat.sim.SimEvent.SimEventType;
 
 import util.Pos.xy as P;
 
@@ -85,13 +81,6 @@ class TestView extends Application
 
 		view.zoom = zoom;
 		// trace(multiGridView.gridViewCache);
-		// trace(new Maze(10,10).toString());
-
-
-		// -------- grid simmulation ----------
-		// grid.setSimEvent(new SimEvent(CELL_MOVE, P(1,1)), 0); // immediadly
-		// grid.setSimEvent(new SimEvent(CELL_EMPTY, P(3,4)), Grid.MAX_STEPS-1); // max delay time 
-
 		
 		
 		// test SIMMULATION
@@ -127,25 +116,6 @@ class TestView extends Application
 		new Lime("4theSIGNmajesties", grid, P(1,1));
 		new OpenFL("flash for fantasy", grid, P(2,1));
 
-		// return;
-
-		/*
-		var timer = new haxe.Timer(50);
-		timer.run = function() {
-			// var t = Timer.stamp();
-			grid.step();
-			grid.right.step();
-			grid.right.right.step();
-			grid.bottom.step();
-			grid.bottom.right.step();
-			grid.bottom.right.right.step();
-			grid.bottom.bottom.step();
-			grid.bottom.bottom.right.step();
-			grid.bottom.bottom.right.right.step();
-			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
-			// trace(Std.int((Timer.stamp()-t)*1000));
-		};
-		*/
 		
 		peoteView.start();
 		
@@ -167,15 +137,10 @@ class TestView extends Application
 		{
 			deltaTimeSum -= SIM_STEP_TIME;
 
-			grid.step();
-			grid.right.step();
-			grid.right.right.step();
-			grid.bottom.step();
-			grid.bottom.right.step();
-			grid.bottom.right.right.step();
-			grid.bottom.bottom.step();
-			grid.bottom.bottom.right.step();
-			grid.bottom.bottom.right.right.step();
+			grid.step(); grid.right.step();	grid.right.right.step();
+			grid.bottom.step(); grid.bottom.right.step(); grid.bottom.right.right.step();
+			grid.bottom.bottom.step(); grid.bottom.bottom.right.step(); grid.bottom.bottom.right.right.step();
+			// spawn a new on if there is free space:
 			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
 		}
 	}

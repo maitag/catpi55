@@ -22,8 +22,8 @@ class ActorElemStatic implements peote.view.Element
 	}
 
 	// position in pixel (relative to upper left corner of Display)
-	@anim("default") @posX public var _x:Int = 0;
-	@anim("default") @posY public var _y:Int = 0;
+	@anim @posX public var _x:Int = 0;
+	@anim @posY public var _y:Int = 0;
 		
 	// size in pixel
 	@sizeX public var w:Int = 32;
@@ -50,7 +50,7 @@ class ActorElemStatic implements peote.view.Element
 		_xStart = _xEnd = x;
 		_yStart = _yEnd = y;
 
-		time(0,0);
+		// time(0,0);
 		
 		this.w = w;
 		this.h = h;

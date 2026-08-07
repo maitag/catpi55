@@ -41,7 +41,7 @@ import util.Pos;
 
 	// ----- custom movement ----
 	var direction:Int = 1;
-	var delay:Int = 3;
+	var delay:Int = 3; // max delay time:  Grid.MAX_STEPS-1 
 	
 	
 	public function onAfterMove() { // <- overwrite default function
