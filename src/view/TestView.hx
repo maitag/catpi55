@@ -17,6 +17,7 @@ import automat.actor.*;
 import util.Pos.xy as P;
 
 import render.Render;
+import render.RenderView;
 import view.View;
 
 
@@ -50,45 +51,36 @@ class TestView extends Application
 	{
 		peoteView = new PeoteView(window);
 
-		Render.init(peoteView, SIM_STEP_TIME);
-		
-		grid = GridTestData.create3x3();
-		// var grid:Grid = GridTestData.createMaze(2,2);
-		// var grid:Grid = GridTestData.createMaze(50,50);
-		
-		// controllable actor
-		actor.addToGrid(grid, P(3,3));
-
-		// var stone1x1 = new Stone1x1("Stone1x1");
-		// stone1x1.addToGrid(grid, P(9,5));
-
-		// var actor2 = new Stone1x2("Stone1x2");
-		// actor2.addToGrid(grid, P(2,1));
-		
-		// GridTestData.traceGrid(grid, 64, 64);
-
 		
 		var rootX:Int = 0;
 		var rootY:Int = 0;
-
 		var maxWidth = 40;
 		var maxHeight = 30;
-
 		var zoom = 0.620921323059155;
-		// view = new View(peoteView, 0, 0, 800, 600);
-		view = new View(peoteView, 0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
-		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
+		
+		Render.init(peoteView, SIM_STEP_TIME);
 
+		// var renderView = new RenderView(0, 0, 800, 600);
+		var renderView = new RenderView(0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
+		
+		view = new View(renderView);
 		view.zoom = zoom;
-		// trace(multiGridView.gridViewCache);
-		
-		
-		// test SIMMULATION
-		
-		// stone1x1.tryFallDown();
 
+
+		grid = GridTestData.create3x3(); // GridTestData.createMaze(2,2);
+		// GridTestData.traceGrid(grid, 64, 64);
+
+		
+		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
+		// trace(multiGridView.gridViewCache);
+
+
+		
+		
+		// ---- test SIMMULATION ---
+		
 		// spawn some haxe actors
-		for (i in 0...17) new Haxe(grid, P(10+i*3,10));
+		for (i in 0...17)new Haxe(grid, P(10+i*3,10));
 		for (i in 0...9) new Haxe(grid, P(17+i*3,12));
 		for (i in 0...9) new Haxe(grid, P(16+i*3,14));
 		for (i in 0...9) new Haxe(grid, P(17+i*3,16));
@@ -100,7 +92,7 @@ class TestView extends Application
 		for (i in 0...9) new Haxe(grid, P(17+i*3,28));
 		
 		new Flixel("A",grid, P(62,27));
-		// new Flixel("B",grid, P(62,29));
+		new Flixel("B",grid, P(62,29));
 		
 		new Cross("C",grid, P(2,5));
 		new Cross("C",grid, P(5,5));
@@ -117,8 +109,7 @@ class TestView extends Application
 		new OpenFL("flash for fantasy", grid, P(2,1));
 
 		
-		peoteView.start();
-		
+		peoteView.start();		
 	}
 	
 	// ------------------------------------------------------------

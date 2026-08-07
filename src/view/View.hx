@@ -17,7 +17,6 @@ import render.RenderView;
 // this will be later handled by Remote-Client in peote-net!
 class View {
 
-	public var peoteView:PeoteView;
 	public var renderView:RenderView;
 	
 	// todo: setter of xFrom ...
@@ -43,10 +42,9 @@ class View {
 
 	// ----------------------------------------------
 
-	public function new(peoteView:PeoteView, x:Int, y:Int, width:Int, height:Int)
+	public function new(renderView:RenderView)
 	{
-		this.peoteView = peoteView;
-		renderView = new RenderView(x, y, width, height);
+		this.renderView = renderView;
 	}
 
 	// ----------------------------------------------
