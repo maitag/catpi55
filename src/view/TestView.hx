@@ -43,7 +43,7 @@ class TestView extends Application
 	var view:View;
 	var grid:Grid;
 
-	var actor = new Semmi("player");
+	var semmi = new Semmi("player");
 
 	static inline var SIM_STEP_TIME:Int = 100;
 
@@ -70,13 +70,13 @@ class TestView extends Application
 		grid = GridTestData.create3x3(); // GridTestData.createMaze(2,2);
 		// GridTestData.traceGrid(grid, 64, 64);
 
+		// only for testing:
+		semmi.addToGrid(grid, P(14,6));
 		
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 		// trace(multiGridView.gridViewCache);
 
-
-		
-		
+	
 		// ---- test SIMMULATION ---
 		
 		// spawn some haxe actors
@@ -135,18 +135,7 @@ class TestView extends Application
 			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
 		}
 	}
-	
-	// override function render(context:lime.graphics.RenderContext):Void {}
-	// override function onRenderContextLost ():Void trace(" --- WARNING: LOST RENDERCONTEXT --- ");		
-	// override function onRenderContextRestored (context:lime.graphics.RenderContext):Void trace(" --- onRenderContextRestored --- ");		
-		
-	// override function onPreloadComplete():Void {} // access embeded assets from here
 
-	// ----------------- MOUSE EVENTS ------------------------------
-	// override function onMouseMove (x:Float, y:Float):Void {}	
-	// override function onMouseDown (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
-	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}
-	
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
 		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
 		if (deltaY<0) {
@@ -156,13 +145,6 @@ class TestView extends Application
 		// trace(view.zoom);
 	}
 
-	// override function onMouseMoveRelative (x:Float, y:Float):Void {}
-
-	// ----------------- TOUCH EVENTS ------------------------------
-	// override function onTouchStart (touch:lime.ui.Touch):Void {}
-	// override function onTouchMove (touch:lime.ui.Touch):Void	{}
-	// override function onTouchEnd (touch:lime.ui.Touch):Void {}
-	
 	// ----------------- KEYBOARD EVENTS ---------------------------
 	override function onKeyDown (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {
 		switch(keyCode) {
@@ -190,43 +172,37 @@ class TestView extends Application
 				}
 			
 			// move the actor
-			case A:
-				if (actor.freeLeft()) {
-					actor.goLeft();
-				}
-			case D:
-				if (actor.freeRight()) {
-					actor.goRight();
-				}
-			case W:
-				if (actor.freeUp()) {
-					actor.goUp();
-				}
-			case S:
-				if (actor.freeDown()) {
-					actor.goDown();
-				}
-			case Q:
-				if (actor.freeLeftUp()) {
-					actor.goLeftUp();
-				}
-			case Y:
-				if (actor.freeLeftDown()) {
-					actor.goLeftDown();
-				}
-			case E:
-				if (actor.freeRightUp()) {
-					actor.goRightUp();
-				}
-			case C:
-				if (actor.freeRightDown()) {
-					actor.goRightDown();
-				}
-	
+			case A: if (semmi.freeLeft()) semmi.goLeft();
+			case D: if (semmi.freeRight()) semmi.goRight();
+			case W: if (semmi.freeUp()) semmi.goUp();
+			case S: if (semmi.freeDown()) semmi.goDown();
+			case Q: if (semmi.freeLeftUp()) semmi.goLeftUp();
+			case Y: if (semmi.freeLeftDown()) semmi.goLeftDown();
+			case E: if (semmi.freeRightUp()) semmi.goRightUp();
+			case C: if (semmi.freeRightDown()) semmi.goRightDown();	
 
 			default:
 		}
 	}	
+
+	// override function render(context:lime.graphics.RenderContext):Void {}
+	// override function onRenderContextLost ():Void trace(" --- WARNING: LOST RENDERCONTEXT --- ");		
+	// override function onRenderContextRestored (context:lime.graphics.RenderContext):Void trace(" --- onRenderContextRestored --- ");		
+		
+	// override function onPreloadComplete():Void {} // access embeded assets from here
+
+	// ----------------- MOUSE EVENTS ------------------------------
+	// override function onMouseMove (x:Float, y:Float):Void {}	
+	// override function onMouseDown (x:Float, y:Float, button:lime.ui.MouseButton):Void {}	
+	// override function onMouseUp (x:Float, y:Float, button:lime.ui.MouseButton):Void {}
+	
+	// override function onMouseMoveRelative (x:Float, y:Float):Void {}
+
+	// ----------------- TOUCH EVENTS ------------------------------
+	// override function onTouchStart (touch:lime.ui.Touch):Void {}
+	// override function onTouchMove (touch:lime.ui.Touch):Void	{}
+	// override function onTouchEnd (touch:lime.ui.Touch):Void {}
+	
 	// override function onKeyUp (keyCode:lime.ui.KeyCode, modifier:lime.ui.KeyModifier):Void {}
 
 	// -------------- other WINDOWS EVENTS ----------------------------
