@@ -1,5 +1,6 @@
 package render.actor;
 
+import asset.Tile;
 import haxe.ds.Vector;
 import automat.actor.ActorType;
 

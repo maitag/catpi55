@@ -70,9 +70,10 @@ class TestView extends Application
 		ActorRender.init(peoteView, SIM_STEP_TIME);
 
 		// TODO:
-		var test = new asset.generated.actors.Actors.Test();
-		// var test = asset.generated.actors.Actors.tile(TileID.HAXE);
-		trace( test.sheet, test.animID, test.anim(test.animID[AnimID.still]) );
+		// var test = new asset.generated.actors.Actors.Haxe();
+		var test = asset.generated.actors.Actors.Actors.tile(TileID.HAXE);
+		trace( test.sheet, test.animID, test.anim(test.animID[AnimID.still]).start );
+		
 		/*
 		ActorRender.init(peoteView, SIM_STEP_TIME, Actors.sheets
 			[
@@ -161,7 +162,7 @@ class TestView extends Application
 			grid.bottom.step(); grid.bottom.right.step(); grid.bottom.right.right.step();
 			grid.bottom.bottom.step(); grid.bottom.bottom.right.step(); grid.bottom.bottom.right.right.step();
 			// spawn a new on if there is free space:
-			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
+			// if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
 		}
 	}
 

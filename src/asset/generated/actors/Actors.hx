@@ -4,6 +4,7 @@ package asset.generated.actors;
 
 import asset.Sheet;
 import asset.Anim;
+import asset.Tile;
 
 @:publicFields enum abstract TileID(Int) from Int to Int {
     var STONE1x1;
@@ -30,12 +31,6 @@ import asset.Anim;
 
 // --------- Tiles ----------
 
-interface Tile {
-    public var sheet(get, never):Int;
-    public var animID:Array<AnimID>;
-    public function anim(id:AnimID):Anim;
-}
-
 @:publicFields class Stone1x1 implements Tile {
     inline function new () {};
     var sheet(get, never):Int; inline function get_sheet() return 0;
@@ -45,7 +40,7 @@ interface Tile {
             default: throw("Error, Stone1x1 don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Lime implements Tile {
     inline function new () {};
@@ -56,7 +51,7 @@ interface Tile {
             default: throw("Error, Lime don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Openfl implements Tile {
     inline function new () {};
@@ -67,7 +62,7 @@ interface Tile {
             default: throw("Error, Openfl don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Stone1x2 implements Tile {
     inline function new () {};
@@ -78,7 +73,7 @@ interface Tile {
             default: throw("Error, Stone1x2 don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Stone2x2 implements Tile {
     inline function new () {};
@@ -89,7 +84,7 @@ interface Tile {
             default: throw("Error, Stone2x2 don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Semmi implements Tile {
     inline function new () {};
@@ -100,7 +95,7 @@ interface Tile {
             default: throw("Error, Semmi don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Haxe implements Tile {
     inline function new () {};
@@ -111,7 +106,7 @@ interface Tile {
             default: throw("Error, Haxe don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Flixel implements Tile {
     inline function new () {};
@@ -122,7 +117,7 @@ interface Tile {
             default: throw("Error, Flixel don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Cross implements Tile {
     inline function new () {};
@@ -133,7 +128,7 @@ interface Tile {
             default: throw("Error, Cross don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Edgebr3x3 implements Tile {
     inline function new () {};
@@ -144,21 +139,7 @@ interface Tile {
             default: throw("Error, Edgebr3x3 don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
-}
-
-
-// TODO -----------------------------------------------
-abstract Test(asset.Tile) to asset.Tile {
-    public inline function new () this = new asset.Tile();
-    public var sheet(get, never):Int; inline function get_sheet() return 23;
-    public var animID(get, never):Array<AnimID>; inline function get_animID() return [still];
-    public inline function anim(id:AnimID):Anim {
-        return switch(id) {
-            case still: new Anim(0, 0);
-            default: throw("Error, Stone1x1 don't have this animation"); null;
-        }
-    }
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 
 
