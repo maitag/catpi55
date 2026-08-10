@@ -7,7 +7,7 @@ import automat.actor.ActorType;
 import asset.Util;
 import asset.generated.actors.Actors;
 import asset.generated.actors.Actors.TileID;
-// import asset.generated.Actors.AnimID;
+// import asset.generated.actors.Actors.AnimID;
 
 class ActorRenderConfig {
 	

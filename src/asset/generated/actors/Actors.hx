@@ -148,6 +148,20 @@ interface Tile {
 }
 
 
+// TODO -----------------------------------------------
+@:publicFields abstract Test(asset.Tile) to asset.Tile {
+    inline function new () this = new asset.Tile();
+    var sheet(get, never):Int; inline function get_sheet() return 23;
+    var animID(get, never):Array<AnimID>; inline function get_animID() return [still];
+    inline function anim(id:AnimID):Anim {
+        return switch(id) {
+            case still: new Anim(0, 0);
+            default: throw("Error, Stone1x1 don't have this animation"); null;
+        }
+    }
+}
+
+
 class Actors {
     public static var FPS:Int = 12;
     public static var sheets:Array<Sheet> = [

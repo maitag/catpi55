@@ -1,5 +1,8 @@
 package view;
 
+import asset.generated.actors.Actors.AnimID;
+import render.actor.ActorRender;
+import render.cell.CellRender;
 import automat.Cell.CellActor;
 import haxe.Timer;
 import util.Maze;
@@ -20,7 +23,10 @@ import render.Render;
 import render.RenderView;
 import view.View;
 
-
+import automat.actor.ActorType;
+// import asset.generated.actors.Actors;
+import asset.generated.actors.Actors.TileID;
+import asset.generated.actors.Actors.AnimID;
 
 class TestView extends Application
 {
@@ -58,7 +64,30 @@ class TestView extends Application
 		var maxHeight = 30;
 		var zoom = 0.620921323059155;
 		
-		Render.init(peoteView, SIM_STEP_TIME);
+
+		// Render.init(peoteView, SIM_STEP_TIME);
+		CellRender.init(peoteView);
+		ActorRender.init(peoteView, SIM_STEP_TIME);
+
+		// TODO:
+		var test = new asset.generated.actors.Actors.Test();
+		// var test = asset.generated.actors.Actors.tile(TileID.HAXE);
+		trace( test.sheet, test.animID, test.anim(test.animID[AnimID.still]) );
+		/*
+		ActorRender.init(peoteView, SIM_STEP_TIME, Actors.sheets
+			[
+				STONE1x1 => [Actors.tile(TileID.STONE1x1), AnimID.still],
+				STONE1x2 => TileID.STONE1x2,
+				STONE2x2 => TileID.STONE2x2,
+				CROSS => TileID.CROSS,
+				EDGEBR3x3 => TileID.EDGEBR3x3,
+				HAXE => TileID.HAXE,
+				LIME => TileID.LIME,
+				OPENFL => TileID.OPENFL,
+				FLIXEL => TileID.FLIXEL,
+				SEMMI => TileID.SEMMI
+			]			
+		);*/
 
 		// var renderView = new RenderView(0, 0, 800, 600);
 		var renderView = new RenderView(0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
