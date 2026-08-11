@@ -4,6 +4,7 @@ package asset.generated.cells;
 
 import asset.Sheet;
 import asset.Anim;
+import asset.Tile;
 
 @:publicFields enum abstract TileID(Int) from Int to Int {
     var EARTH;
@@ -26,12 +27,6 @@ import asset.Anim;
 
 // --------- Tiles ----------
 
-interface Tile {
-    public var sheet(get, never):Int;
-    public var animID:Array<AnimID>;
-    public function anim(id:AnimID):Anim;
-}
-
 @:publicFields class Earth implements Tile {
     inline function new () {};
     var sheet(get, never):Int; inline function get_sheet() return 0;
@@ -41,7 +36,7 @@ interface Tile {
             default: throw("Error, Earth don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Wood implements Tile {
     inline function new () {};
@@ -52,7 +47,7 @@ interface Tile {
             default: throw("Error, Wood don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Rock implements Tile {
     inline function new () {};
@@ -63,7 +58,7 @@ interface Tile {
             default: throw("Error, Rock don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Metal implements Tile {
     inline function new () {};
@@ -74,7 +69,7 @@ interface Tile {
             default: throw("Error, Metal don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Water implements Tile {
     inline function new () {};
@@ -85,7 +80,7 @@ interface Tile {
             default: throw("Error, Water don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 @:publicFields class Air implements Tile {
     inline function new () {};
@@ -96,7 +91,7 @@ interface Tile {
             default: throw("Error, Air don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [still];
+    var animID(default, never):Array<Int> = [AnimID.still];
 }
 
 
@@ -117,4 +112,3 @@ class Cells {
         }
     }
 }
-

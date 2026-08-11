@@ -4,6 +4,7 @@ package asset.generated.chars;
 
 import asset.Sheet;
 import asset.Anim;
+import asset.Tile;
 
 @:publicFields enum abstract TileID(Int) from Int to Int {
     var charactere;
@@ -21,12 +22,6 @@ import asset.Anim;
 
 // --------- Tiles ----------
 
-interface Tile {
-    public var sheet(get, never):Int;
-    public var animID:Array<AnimID>;
-    public function anim(id:AnimID):Anim;
-}
-
 @:publicFields class Charactere implements Tile {
     inline function new () {};
     var sheet(get, never):Int; inline function get_sheet() return 0;
@@ -36,7 +31,7 @@ interface Tile {
             default: throw("Error, Charactere don't have this animation"); null;
         }
     }
-    var animID:Array<AnimID> = [walk];
+    var animID(default, never):Array<Int> = [AnimID.walk];
 }
 
 

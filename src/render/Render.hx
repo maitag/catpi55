@@ -14,8 +14,10 @@ class Render {
 	{
 		Render.peoteView = peoteView;
 
-		CellRender.init(peoteView);
-		ActorRender.init(peoteView, stepTime);
+		// TODO: to make it more easy later to init them all together:
+		
+		// CellRender.init(peoteView);
+		// ActorRender.init(peoteView, stepTime);
 	}
 
 

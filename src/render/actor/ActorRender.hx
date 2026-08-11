@@ -1,7 +1,7 @@
 package render.actor;
 
+import haxe.ds.Vector;
 import haxe.ds.IntMap;
-import lime.graphics.Image;
 
 import peote.view.PeoteView;
 import peote.view.Buffer;
@@ -11,12 +11,9 @@ import peote.view.TextureConfig;
 
 import automat.actor.ActorType;
 
-// TODO: REFACTOR asset-stuff out of here and handle it by arguments for init()
-// assets
 import asset.Util;
-import asset.generated.actors.Actors;
-// import asset.generated.actors.Actors.TileID;
-// import asset.generated.Actors.AnimID;
+import asset.Sheet;
+import asset.Tile;
 
 class ActorRender {
 
@@ -26,13 +23,17 @@ class ActorRender {
 
 	public static var stepTime:Float = 0.0;
 
-	public static function init(peoteView:PeoteView, stepTime:Int = 0) {
+	public static var configStatic:Vector<ActorElemConfigStatic>;
+
+	public static function init(peoteView:PeoteView, stepTime:Int, sheets:Array<Sheet>, configStatic:ActorConfigStatic) {
 		ActorRender.peoteView = peoteView;
 		ActorRender.stepTime = stepTime / 860; // <- TODO
-		loadTextures();
+		loadTextures(sheets);
+
+		ActorRender.configStatic = configStatic.toConfigVector(sheets); // w t f sammie ;) ???
 	}
 
-	public static function loadTextures() {
+	public static function loadTextures(sheets:Array<Sheet>) {
 
 		var textureConfig:TextureConfig = {
 			format:TextureFormat.RGBA,
@@ -42,7 +43,7 @@ class ActorRender {
 			powerOfTwo: false,
 		};
 
-		textures = Util.loadTextures(Actors.sheets, textureConfig, false);
+		textures = Util.loadTextures(sheets, textureConfig, false);
 	}
 	//--------------------------------------------------
 
@@ -53,8 +54,6 @@ class ActorRender {
 
 	var elemViewBuffer:IntMap<ActorElemStatic>;
 
-	var renderConfig:ActorRenderConfig;
-
 	public var zoom(get,set):Float;
 	inline function get_zoom():Float return display.zoom;
 	inline function set_zoom(z:Float):Float return display.zoom = z;
@@ -63,8 +62,6 @@ class ActorRender {
 
  	public function new(x:Int, y:Int, width:Int, height:Int)
 	{
-		renderConfig = new ActorRenderConfig();
-
 		bufferStatic = new Buffer<ActorElemStatic>(1024, 512);
 		bufferAnim = new Buffer<ActorElemAnim>(1024, 512);
 
@@ -82,8 +79,8 @@ class ActorRender {
 		var py = y*32 + scrollOffsetY;
 
 		// TODO
-		var elemConfig = renderConfig.get(actorType);
-		var element = new ActorElemStatic(elemConfig.tileNr, elemConfig.sheetNr, px, py, elemConfig.width, elemConfig.height);
+		var config = configStatic.get(actorType);
+		var element = new ActorElemStatic(config.tileNr, config.sheetNr, px, py, config.width, config.height);
 		elemViewBuffer.set(mapkey, element);
 		bufferStatic.addElement(element);
 

@@ -24,7 +24,7 @@ import render.RenderView;
 import view.View;
 
 import automat.actor.ActorType;
-// import asset.generated.actors.Actors;
+import asset.generated.actors.Actors as ActorTILES;
 import asset.generated.actors.Actors.TileID;
 import asset.generated.actors.Actors.AnimID;
 
@@ -65,30 +65,23 @@ class TestView extends Application
 		var zoom = 0.620921323059155;
 		
 
-		// Render.init(peoteView, SIM_STEP_TIME);
-		CellRender.init(peoteView);
-		ActorRender.init(peoteView, SIM_STEP_TIME);
+		// TODO: Render.init(peoteView, SIM_STEP_TIME);
 
-		// TODO:
-		// var test = new asset.generated.actors.Actors.Haxe();
-		var test = asset.generated.actors.Actors.Actors.tile(TileID.HAXE);
-		trace( test.sheet, test.animID, test.anim(test.animID[AnimID.still]).start );
+		CellRender.init(peoteView);
 		
-		/*
-		ActorRender.init(peoteView, SIM_STEP_TIME, Actors.sheets
-			[
-				STONE1x1 => [Actors.tile(TileID.STONE1x1), AnimID.still],
-				STONE1x2 => TileID.STONE1x2,
-				STONE2x2 => TileID.STONE2x2,
-				CROSS => TileID.CROSS,
-				EDGEBR3x3 => TileID.EDGEBR3x3,
-				HAXE => TileID.HAXE,
-				LIME => TileID.LIME,
-				OPENFL => TileID.OPENFL,
-				FLIXEL => TileID.FLIXEL,
-				SEMMI => TileID.SEMMI
-			]			
-		);*/
+		// TODO: make the "anim" another "map" later to define how animActions are mapped to assets !!!
+		ActorRender.init(peoteView, SIM_STEP_TIME, asset.generated.actors.Actors.sheets, [
+			ActorType.STONE1x1  => { tile:ActorTILES.tile(TileID.STONE1x1) , anim:AnimID.still },
+			ActorType.STONE1x2  => { tile:ActorTILES.tile(TileID.STONE1x2) , anim:AnimID.still },
+			ActorType.STONE2x2  => { tile:ActorTILES.tile(TileID.STONE2x2) , anim:AnimID.still },
+			ActorType.CROSS     => { tile:ActorTILES.tile(TileID.CROSS)    , anim:AnimID.still },
+			ActorType.EDGEBR3x3 => { tile:ActorTILES.tile(TileID.EDGEBR3x3), anim:AnimID.still },
+			ActorType.HAXE      => { tile:ActorTILES.tile(TileID.HAXE)     , anim:AnimID.still },
+			ActorType.LIME      => { tile:ActorTILES.tile(TileID.LIME)     , anim:AnimID.still },
+			ActorType.OPENFL    => { tile:ActorTILES.tile(TileID.OPENFL)   , anim:AnimID.still },
+			ActorType.FLIXEL    => { tile:ActorTILES.tile(TileID.FLIXEL)   , anim:AnimID.still },
+			ActorType.SEMMI     => { tile:ActorTILES.tile(TileID.SEMMI)    , anim:AnimID.still }
+		]);
 
 		// var renderView = new RenderView(0, 0, 800, 600);
 		var renderView = new RenderView(0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
@@ -137,7 +130,6 @@ class TestView extends Application
 		// ((hope will H E L P ;))
 		new Lime("4theSIGNmajesties", grid, P(1,1));
 		new OpenFL("flash for fantasy", grid, P(2,1));
-
 		
 		peoteView.start();		
 	}
