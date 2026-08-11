@@ -1,6 +1,5 @@
 package view;
 
-import asset.generated.actors.Actors.AnimID;
 import render.actor.ActorRender;
 import render.cell.CellRender;
 import automat.Cell.CellActor;

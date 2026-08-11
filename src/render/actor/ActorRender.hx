@@ -30,7 +30,7 @@ class ActorRender {
 		ActorRender.stepTime = stepTime / 860; // <- TODO
 		loadTextures(sheets);
 
-		ActorRender.configStatic = configStatic.toConfigVector(sheets); // w t f sammie ;) ???
+		ActorRender.configStatic = configStatic.toConfigVector(sheets);
 	}
 
 	public static function loadTextures(sheets:Array<Sheet>) {
