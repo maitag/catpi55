@@ -23,9 +23,12 @@ import render.RenderView;
 import view.View;
 
 import automat.actor.ActorType;
+
+import asset.Tile;
+
 import asset.generated.actors.Actors as ActorTILES;
-import asset.generated.actors.Actors.TileID;
-import asset.generated.actors.Actors.AnimID;
+import asset.generated.actors.Actors.TileID as ActorTileID;
+import asset.generated.actors.Actors.AnimID as ActorAnimID;
 
 class TestView extends Application
 {
@@ -69,18 +72,19 @@ class TestView extends Application
 		CellRender.init(peoteView);
 		
 		// TODO: make the "anim" another "map" later to define how animActions are mapped to assets !!!
-		ActorRender.init(peoteView, SIM_STEP_TIME, asset.generated.actors.Actors.sheets, [
-			ActorType.STONE1x1  => { tile:ActorTILES.tile(TileID.STONE1x1) , anim:AnimID.still },
-			ActorType.STONE1x2  => { tile:ActorTILES.tile(TileID.STONE1x2) , anim:AnimID.still },
-			ActorType.STONE2x2  => { tile:ActorTILES.tile(TileID.STONE2x2) , anim:AnimID.still },
-			ActorType.CROSS     => { tile:ActorTILES.tile(TileID.CROSS)    , anim:AnimID.still },
-			ActorType.EDGEBR3x3 => { tile:ActorTILES.tile(TileID.EDGEBR3x3), anim:AnimID.still },
-			ActorType.HAXE      => { tile:ActorTILES.tile(TileID.HAXE)     , anim:AnimID.still },
-			ActorType.LIME      => { tile:ActorTILES.tile(TileID.LIME)     , anim:AnimID.still },
-			ActorType.OPENFL    => { tile:ActorTILES.tile(TileID.OPENFL)   , anim:AnimID.still },
-			ActorType.FLIXEL    => { tile:ActorTILES.tile(TileID.FLIXEL)   , anim:AnimID.still },
-			ActorType.SEMMI     => { tile:ActorTILES.tile(TileID.SEMMI)    , anim:AnimID.still }
-		]);
+		var actorRenderConfig:Map<Int, {tile:Tile, anim:Int}> = [
+			ActorType.STONE1x1  => { tile:ActorTILES.tile(ActorTileID.STONE1x1) , anim:ActorAnimID.still },
+			ActorType.STONE1x2  => { tile:ActorTILES.tile(ActorTileID.STONE1x2) , anim:ActorAnimID.still },
+			ActorType.STONE2x2  => { tile:ActorTILES.tile(ActorTileID.STONE2x2) , anim:ActorAnimID.still },
+			ActorType.CROSS     => { tile:ActorTILES.tile(ActorTileID.CROSS)    , anim:ActorAnimID.still },
+			ActorType.EDGEBR3x3 => { tile:ActorTILES.tile(ActorTileID.EDGEBR3x3), anim:ActorAnimID.still },
+			ActorType.HAXE      => { tile:ActorTILES.tile(ActorTileID.HAXE)     , anim:ActorAnimID.still },
+			ActorType.LIME      => { tile:ActorTILES.tile(ActorTileID.LIME)     , anim:ActorAnimID.still },
+			ActorType.OPENFL    => { tile:ActorTILES.tile(ActorTileID.OPENFL)   , anim:ActorAnimID.still },
+			ActorType.FLIXEL    => { tile:ActorTILES.tile(ActorTileID.FLIXEL)   , anim:ActorAnimID.still },
+			ActorType.SEMMI     => { tile:ActorTILES.tile(ActorTileID.SEMMI)    , anim:ActorAnimID.still }
+		];
+		ActorRender.init(peoteView, SIM_STEP_TIME, asset.generated.actors.Actors.sheets, actorRenderConfig);
 
 		// var renderView = new RenderView(0, 0, 800, 600);
 		var renderView = new RenderView(0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
