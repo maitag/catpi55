@@ -1,5 +1,7 @@
-package automat;
+package;
 
+import automat.Grid;
+import automat.Cell;
 import automat.Cell.CellType;
 import haxe.ds.Vector;
 import util.Maze;

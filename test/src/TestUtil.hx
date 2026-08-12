@@ -1,7 +1,8 @@
-package util;
+package;
 
 import lime.app.Application;
 
+import util.BitGrid;
 import util.Pos;
 // import Pos.xy as P;
 

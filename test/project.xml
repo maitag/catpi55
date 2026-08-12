@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="PeoteViewSamples" package="peote.view" version="0.1.0" company="Sylvio Sell - maitag" />
+	<meta title="CatpiTest" package="" version="0.1.0" company="semmi" />
 	
 	<android target-sdk-version="28" />
 	<!-- <meta build-number="714" /> --> <!-- let set the buildnumber manual (android) -->
@@ -11,11 +11,10 @@
 	<window if="html5||android" width="0" height="0" />
 	
 	
-	<!-- <app main="Main" path="bin" file="Main" /> -->
-	<app main="view.TestView" path="bin" file="TestView" />
-	<!-- <app main="render.cell.TestCellRender" path="bin" file="TestCellRender" /> -->
-	<!-- <app main="automat.TestAutomat" path="bin" file="TestAutomat" /> -->
-	<!-- <app main="util.TestUtil" path="bin" file="TestUtil" /> -->
+	<app main="TestView" path="bin" file="TestView" />
+	<!-- <app main="TestCellRender" path="bin" file="TestCellRender" /> -->
+	<!-- <app main="TestAutomat" path="bin" file="TestAutomat" /> -->
+	<!-- <app main="TestUtil" path="bin" file="TestUtil" /> -->
 	<!-- <app main="util.pool.TestPool" path="bin" file="TestPool" /> -->
 
 	<!-- <app main="asset.TestAsset" path="bin" file="TestAsset" /> -->
@@ -30,6 +29,7 @@
 
 	
 	<source path="src" />
+	<source path="../src" />
 	
 	<haxelib name="lime" />	
 	<haxelib name="peote-view" />
@@ -64,12 +64,12 @@
 	<!-- BUILD OPTIMIZATION by using ANALYZER and adding metas -->
 
 	<!-- HXCPP: "@:unreflective" makes the hxcpp binary some KB smaller (only works for some packages) -->	
-	<!-- <haxeflag name="--macro" value="BuildMacro.setMetas('util, view, render', 'unreflective')" if="windows||linux" /> -->
+	<!-- <haxeflag name="--macro" value="util.BuildMacro.setMetas('util, view, render', 'unreflective')" if="windows||linux" /> -->
 
 	<!-- HLC "@:pure" helps the analyzer to optimize more: https://haxe.org/manual/cr-static-analyzer.html
 		This makes only sense for functions without side-effects (so not change global statics etc)
 		-->
-	<!-- <haxeflag name="--macro" value="BuildMacro.setMetas('asset', 'pure')" if="hlc" /> -->
+	<!-- <haxeflag name="--macro" value="util.BuildMacro.setMetas('asset', 'pure')" if="hlc" /> -->
 	<!-- <haxedef name="analyzer-optimize" if="hlc" /> -->
 	<!-- <haxedef name="analyzer-const_propagation" if="hlc" /> -->
 	<!-- <haxedef name="analyzer-copy_propagation" if="hlc" /> -->

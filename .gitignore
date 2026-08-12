@@ -1,0 +1,4 @@
+test/bin/
+test/ApplicationMain.obj
+test/.vscode
+test/assets/render*

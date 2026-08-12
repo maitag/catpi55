@@ -1,4 +1,4 @@
-package;
+package util;
 
 #if macro
 import haxe.macro.Compiler;

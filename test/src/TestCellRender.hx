@@ -1,4 +1,4 @@
-package render.cell;
+package;
 
 import automat.Cell;
 import haxe.CallStack;
@@ -7,6 +7,14 @@ import lime.app.Application;
 import lime.ui.Window;
 
 import peote.view.PeoteView;
+
+import render.cell.CellRender;
+
+import asset.Tile;
+
+import asset.generated.cells.Cells.Cells;
+import asset.generated.cells.Cells.TileID as CellTileID;
+import asset.generated.cells.Cells.AnimID as CellAnimID;
 
 class TestCellRender extends Application
 {
@@ -32,7 +40,15 @@ class TestCellRender extends Application
 		peoteView = new PeoteView(window);
 
 
-		Render.init(peoteView);
+		var cellRenderConfig:Map<Int, {tile:Tile, anim:Int}> = [
+			CellType.EARTH  => { tile:Cells.tile(CellTileID.EARTH) , anim:CellAnimID.still },
+			CellType.WOOD   => { tile:Cells.tile(CellTileID.WOOD)  , anim:CellAnimID.still },
+			CellType.ROCK   => { tile:Cells.tile(CellTileID.ROCK)  , anim:CellAnimID.still },
+			CellType.METAL  => { tile:Cells.tile(CellTileID.METAL) , anim:CellAnimID.still },
+			CellType.WATER  => { tile:Cells.tile(CellTileID.WATER) , anim:CellAnimID.still },
+			CellType.AIR    => { tile:Cells.tile(CellTileID.AIR)   , anim:CellAnimID.still },
+		];
+		CellRender.init(peoteView, Cells.sheets, cellRenderConfig);
 
 		var cellRender = new CellRender(0, 0, 400, 400);
 

@@ -1,4 +1,4 @@
-package view;
+package;
 
 import haxe.Timer;
 
@@ -11,7 +11,6 @@ import lime.ui.Window;
 
 import peote.view.PeoteView;
 
-import automat.GridTestData;
 import automat.Grid;
 import automat.MultiGridView;
 
@@ -23,7 +22,7 @@ import render.RenderView;
 import view.View;
 
 import actors.*;
-// import automat.actors.ActorType;
+// import actors.ActorType;
 
 import asset.Tile;
 

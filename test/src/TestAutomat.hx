@@ -1,21 +1,21 @@
-package automat;
+package;
 
 import haxe.Timer;
 import lime.app.Application;
 
+import automat.Grid;
 import automat.Cell.CellActor;
-
-import automat.actor.Cross;
-import automat.actor.Haxe;
-import automat.actor.Live;//<-
 
 import automat.sim.Sim;
 import automat.sim.SimEvent;
-import automat.sim.SimEvent.SimEventType;
-
-import automat.GridTestData;
+import automat.sim.SimEventType;
 
 import util.Pos.xy as P;
+
+import actors.Cross;
+import actors.Hilbert;
+import actors.Live;//<-
+
 
 class TestAutomat extends Application {
 
@@ -153,14 +153,14 @@ E                              #
 		f();
 
 
-		// TIME for haxe now:
-		var haxe = new Haxe("forever! \\o/");
-		haxe.addToGrid(grid, P(3,5));
+		// TIME for hilbert now:
+		var hilbert = new Hilbert("forever! \\o/");
+		hilbert.addToGrid(grid, P(2,5));
 		GridTestData.traceGrid(grid, 32, 16);
 		var f;
 		f = ()-> {
-			if ( haxe.freeDown() ) {
-				haxe.goDown();
+			if ( hilbert.freeDown() ) {
+				hilbert.goDown();
 				GridTestData.traceGrid(grid, 32, 16, true);
 				Timer.delay(f, 900);
 			}
