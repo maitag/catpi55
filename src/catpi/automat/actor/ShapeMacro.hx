@@ -21,6 +21,7 @@ class ShapeMacro {
 				}			
 		fields.push({
 			name: "__addToGrid",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APrivate, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -80,6 +81,7 @@ class ShapeMacro {
 		
 		fields.push({
 			name: "_addToGrid",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APrivate, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -122,6 +124,7 @@ class ShapeMacro {
 				}			
 		fields.push({
 			name: "__removeFromGrid",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APrivate, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -174,6 +177,7 @@ class ShapeMacro {
 		
 		fields.push({
 			name: "_removeFromGrid",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APrivate, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -210,6 +214,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "isFitIntoGrid",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -250,6 +255,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeLeft",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -274,6 +280,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeRight",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -285,6 +292,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeUp",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -296,6 +304,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeDown",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -309,6 +318,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeLeftUp",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -321,6 +331,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeLeftDown",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -333,6 +344,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeRightUp",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -345,6 +357,7 @@ class ShapeMacro {
 
 		fields.push({
 			name: "freeRightDown",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -403,6 +416,7 @@ class ShapeMacro {
 		// ------- left -------
 		fields.push({
 			name: "goLeft",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -447,6 +461,7 @@ class ShapeMacro {
 		// ------- right -------
 		fields.push({
 			name: "goRight",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -492,6 +507,7 @@ class ShapeMacro {
 		// ------- top -------
 		fields.push({
 			name: "goUp",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -537,6 +553,7 @@ class ShapeMacro {
 		// ------- down -------
 		fields.push({
 			name: "goDown",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -583,6 +600,7 @@ class ShapeMacro {
 		// ------- leftUp -------
 		fields.push({
 			name: "goLeftUp",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -637,6 +655,7 @@ class ShapeMacro {
 		// ------- leftDown -------
 		fields.push({
 			name: "goLeftDown",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -680,7 +699,7 @@ class ShapeMacro {
 							else {			
 								var newX:Int = (oldX > 0) ? oldX-1 : catpi.automat.Grid.WIDTH-1;
 								var newY:Int = (oldY < catpi.automat.Grid.HEIGHT-1) ? oldY+1 : 0;
-								var newGrid:Grid = (oldX == 0 && oldY == catpi.automat.Grid.HEIGHT-1) ? oldGrid.leftBottom  :  ((oldX == 0) ? oldGrid.left : oldGrid.bottom);
+								var newGrid = (oldX == 0 && oldY == catpi.automat.Grid.HEIGHT-1) ? oldGrid.leftBottom  :  ((oldX == 0) ? oldGrid.left : oldGrid.bottom);
 								var newKey:Int = (pos.x + $v{originXOffset} < catpi.automat.Grid.WIDTH) ? gridKey : gridKeyR;
 								oldGrid.viewsActorToLeftDownOut(this, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
 								newGrid.viewsActorToLeftDownIn(this, oldGrid, newKey, oldX, newX, oldY, newY, time);
@@ -693,6 +712,7 @@ class ShapeMacro {
 		// ------- rightUp -------
 		fields.push({
 			name: "goRightUp",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -735,7 +755,7 @@ class ShapeMacro {
 							else {			
 								var newX:Int = (oldX < catpi.automat.Grid.WIDTH-1) ? oldX+1 : 0;
 								var newY:Int = (oldY > 0) ? oldY-1 : catpi.automat.Grid.HEIGHT-1;
-								var newGrid:Grid = (oldX == catpi.automat.Grid.WIDTH-1 && oldY == 0) ? oldGrid.rightTop  :  ((oldX == catpi.automat.Grid.WIDTH-1) ? oldGrid.right : oldGrid.top);
+								var newGrid = (oldX == catpi.automat.Grid.WIDTH-1 && oldY == 0) ? oldGrid.rightTop  :  ((oldX == catpi.automat.Grid.WIDTH-1) ? oldGrid.right : oldGrid.top);
 								var newKey:Int = (pos.x + $v{originXOffset} < catpi.automat.Grid.WIDTH) ? gridKey : gridKeyR;
 								oldGrid.viewsActorToRightUpOut(this, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
 								newGrid.viewsActorToRightUpIn(this, oldGrid, newKey, oldX, newX, oldY, newY, time);
@@ -748,6 +768,7 @@ class ShapeMacro {
 		// ------- rightDown -------
 		fields.push({
 			name: "goRightDown",
+			meta: [{name:":access", params:[macro catpi.automat], pos:Context.currentPos()}],
 			access: [APublic, AInline],
 			pos: Context.currentPos(),
 			kind: FFun({
@@ -792,7 +813,7 @@ class ShapeMacro {
 							else {
 								var newX:Int = (oldX < catpi.automat.Grid.WIDTH-1) ? oldX+1 : 0;
 								var newY:Int = (oldY < catpi.automat.Grid.HEIGHT-1) ? oldY+1 : 0;
-								var newGrid:Grid = (oldX == catpi.automat.Grid.WIDTH-1 && oldY == catpi.automat.Grid.HEIGHT-1) ? oldGrid.rightBottom  :  ((oldX == catpi.automat.Grid.WIDTH-1) ? oldGrid.right : oldGrid.bottom);
+								var newGrid = (oldX == catpi.automat.Grid.WIDTH-1 && oldY == catpi.automat.Grid.HEIGHT-1) ? oldGrid.rightBottom  :  ((oldX == catpi.automat.Grid.WIDTH-1) ? oldGrid.right : oldGrid.bottom);
 								var newKey:Int = (pos.x + $v{originXOffset} < catpi.automat.Grid.WIDTH) ? gridKey : gridKeyR;
 								oldGrid.viewsActorToRightDownOut(this, newGrid, oldKey, newKey, oldX, newX, oldY, newY, time);
 								newGrid.viewsActorToRightDownIn(this, oldGrid, newKey, oldX, newX, oldY, newY, time);				
