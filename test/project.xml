@@ -15,7 +15,7 @@
 	<!-- <app main="TestCellRender" path="bin" file="TestCellRender" /> -->
 	<!-- <app main="TestAutomat" path="bin" file="TestAutomat" /> -->
 	<!-- <app main="TestUtil" path="bin" file="TestUtil" /> -->
-	<!-- <app main="util.pool.TestPool" path="bin" file="TestPool" /> -->
+	<!-- <app main="catpi.util.pool.TestPool" path="bin" file="TestPool" /> -->
 
 	<!-- <app main="asset.TestAsset" path="bin" file="TestAsset" /> -->
 	<!-- <haxedef name="assets" value="Actors" /> -->
@@ -64,12 +64,12 @@
 	<!-- BUILD OPTIMIZATION by using ANALYZER and adding metas -->
 
 	<!-- HXCPP: "@:unreflective" makes the hxcpp binary some KB smaller (only works for some packages) -->	
-	<!-- <haxeflag name="--macro" value="util.BuildMacro.setMetas('util, view, render', 'unreflective')" if="windows||linux" /> -->
+	<!-- <haxeflag name="--macro" value="catpi.util.BuildMacro.setMetas('util, view, render', 'unreflective')" if="windows||linux" /> -->
 
 	<!-- HLC "@:pure" helps the analyzer to optimize more: https://haxe.org/manual/cr-static-analyzer.html
 		This makes only sense for functions without side-effects (so not change global statics etc)
 		-->
-	<!-- <haxeflag name="--macro" value="util.BuildMacro.setMetas('asset', 'pure')" if="hlc" /> -->
+	<!-- <haxeflag name="--macro" value="catpi.util.BuildMacro.setMetas('asset', 'pure')" if="hlc" /> -->
 	<!-- <haxedef name="analyzer-optimize" if="hlc" /> -->
 	<!-- <haxedef name="analyzer-const_propagation" if="hlc" /> -->
 	<!-- <haxedef name="analyzer-copy_propagation" if="hlc" /> -->

@@ -1,11 +1,11 @@
 package actors;
 
-import automat.actor.IActor;
-import automat.Cell.CellType;
+import catpi.automat.actor.IActor;
+import catpi.automat.Cell.CellType;
 
-import util.Pos;
+import catpi.util.Pos;
 
-@:build(automat.actor.Actor.build("
+@:build(catpi.automat.actor.Actor.build("
 |#|
 |#|
 ")) class Stone1x2 implements IActor {

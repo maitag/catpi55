@@ -1,6 +1,5 @@
 package;
 
-import automat.Cell;
 import haxe.CallStack;
 
 import lime.app.Application;
@@ -8,9 +7,10 @@ import lime.ui.Window;
 
 import peote.view.PeoteView;
 
-import render.cell.CellRender;
+import catpi.automat.Cell;
+import catpi.render.cell.CellRender;
 
-import asset.Tile;
+import catpi.asset.Tile;
 
 import asset.generated.cells.Cells.Cells;
 import asset.generated.cells.Cells.TileID as CellTileID;

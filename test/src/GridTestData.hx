@@ -1,11 +1,12 @@
 package;
 
-import automat.Grid;
-import automat.Cell;
-import automat.Cell.CellType;
 import haxe.ds.Vector;
-import util.Maze;
-import util.Pos.xy as P;
+
+import catpi.automat.Grid;
+import catpi.automat.Cell;
+import catpi.automat.Cell.CellType;
+import catpi.util.Maze;
+import catpi.util.Pos.xy as P;
 
 class GridTestData
 {

@@ -1,30 +1,30 @@
 package;
 
 import haxe.Timer;
-
-import automat.Cell.CellType;
-import render.actor.ActorRender;
-import render.cell.CellRender;
 import haxe.CallStack;
 import lime.app.Application;
 import lime.ui.Window;
 
 import peote.view.PeoteView;
 
-import automat.Grid;
-import automat.MultiGridView;
+import catpi.automat.Cell.CellType;
+import catpi.render.actor.ActorRender;
+import catpi.render.cell.CellRender;
 
-import util.Pos.xy as P;
-import util.Maze;
+import catpi.automat.Grid;
+import catpi.automat.MultiGridView;
 
-import render.Render;
-import render.RenderView;
-import view.View;
+import catpi.util.Pos.xy as P;
+import catpi.util.Maze;
+
+import catpi.render.Render;
+import catpi.render.RenderView;
+import catpi.view.View;
 
 import actors.*;
 // import actors.ActorType;
 
-import asset.Tile;
+import catpi.asset.Tile;
 
 import asset.generated.cells.Cells.Cells;
 import asset.generated.cells.Cells.TileID as CellTileID;

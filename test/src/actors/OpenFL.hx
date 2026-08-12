@@ -2,15 +2,15 @@ package actors;
 
 import peote.view.math.Rnd;
 
-import automat.Grid;
-import automat.actor.IActor;
-import automat.Cell.CellType;
-import automat.sim.SimEvent;
-import automat.sim.SimEventType;
+import catpi.automat.Grid;
+import catpi.automat.actor.IActor;
+import catpi.automat.Cell.CellType;
+import catpi.automat.sim.SimEvent;
+import catpi.automat.sim.SimEventType;
 
-import util.Pos;
+import catpi.util.Pos;
 
-@:build(automat.actor.Actor.build("
+@:build(catpi.automat.actor.Actor.build("
 |#|
 ")) class OpenFL implements IActor {
 

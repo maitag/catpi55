@@ -1,0 +1,41 @@
+package catpi.automat.sim;
+
+import catpi.automat.actor.IActor;
+import catpi.automat.Grid;
+
+class Sim {
+	public static inline function init() {			
+	}
+
+	public static inline function step(grid:Grid, event:SimEvent) {
+
+		switch (event.type) {
+
+			case CELL_MOVE: trace(event);
+
+			case CELL_EMPTY: {
+				trace(event);
+
+				// trigger the above Actor and give position:
+				// grid.getActor(above!!!).simEmptyBelow(position)
+				// if (is not null-actor) 
+
+			}
+
+			case ACTOR_AFTER_MOVE: {
+				// trace(event);
+				var a:IActor = grid.actors.get(event.actorKey);
+				// if (a.name=="C") trace(event);
+				a.onAfterMove();
+			}
+
+			// TODO
+			default: throw("unknown SIM event");
+
+		};
+		
+	}
+
+
+
+}

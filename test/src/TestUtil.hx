@@ -2,9 +2,9 @@ package;
 
 import lime.app.Application;
 
-import util.BitGrid;
-import util.Pos;
-// import Pos.xy as P;
+import catpi.util.BitGrid;
+import catpi.util.Pos;
+// import catpi.util.Pos.xy as P;
 
 class TestUtil extends Application {
 

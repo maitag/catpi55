@@ -3,14 +3,14 @@ package;
 import haxe.Timer;
 import lime.app.Application;
 
-import automat.Grid;
-import automat.Cell.CellActor;
+import catpi.automat.Grid;
+import catpi.automat.Cell.CellActor;
 
-import automat.sim.Sim;
-import automat.sim.SimEvent;
-import automat.sim.SimEventType;
+import catpi.automat.sim.Sim;
+import catpi.automat.sim.SimEvent;
+import catpi.automat.sim.SimEventType;
 
-import util.Pos.xy as P;
+import catpi.util.Pos.xy as P;
 
 import actors.Cross;
 import actors.Hilbert;
