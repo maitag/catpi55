@@ -1,7 +1,6 @@
 package render.cell;
 
 import haxe.ds.Vector;
-import lime.graphics.Image;
 
 import peote.view.PeoteView;
 import peote.view.Buffer;
@@ -9,13 +8,11 @@ import peote.view.Texture;
 import peote.view.TextureFormat;
 import peote.view.TextureConfig;
 
-import asset.Util;
+// TODO: replace by Int or renderCell
 import automat.Cell;
 
-// assets
-import asset.generated.cells.Cells;
-import asset.generated.cells.Cells.TileID;
-// import asset.generated.cells.Cells.AnimID;
+import asset.Util;
+import asset.Sheet;
 
 @:generic class ElemViewBuffer<T> {
 	public var data:Vector<T>;
@@ -39,12 +36,24 @@ class CellRender {
 	public static var peoteView:PeoteView;
 	public static var texture:Texture;
 
-	public static function init(peoteView:PeoteView) {
+	public static var configStatic:Vector<CellElemConfigStatic>;
+
+	// TODO: optimize to "cellSize" only (maybe static inline)
+	public static var cellWidth:Int;
+	public static var cellHeight:Int;
+
+	public static function init(peoteView:PeoteView, sheets:Array<Sheet>, configStatic:CellConfigStatic) {
 		CellRender.peoteView = peoteView;
-		loadTextures();
+		
+		CellRender.cellWidth = sheets[0].width;
+		CellRender.cellHeight = sheets[0].height;
+
+		loadTextures(sheets);
+
+		CellRender.configStatic = configStatic.toConfigVector();
 	}
 
-	public static function loadTextures() {
+	public static function loadTextures(sheets:Array<Sheet>) {
 		var textureConfig:TextureConfig = {
 			format:TextureFormat.RGBA,
 			// smoothExpand: true,
@@ -53,7 +62,7 @@ class CellRender {
 			powerOfTwo: false,
 		};
 
-		texture = Util.loadTextures(Cells.sheets, textureConfig, false)[0];
+		texture = Util.loadTextures(sheets, textureConfig, false)[0]; // only the first one
 	}
 	// -------------------------------------------------
 
@@ -75,7 +84,7 @@ class CellRender {
 		bufferStatic = new Buffer<CellElemStatic>(1024, 512);
 		bufferAnim = new Buffer<CellElemAnim>(1024, 512);
 
-		display = new CellDisplay(x, y, width, height, bufferStatic, bufferAnim, texture);
+		display = new CellDisplay(x, y, width, height, cellWidth, cellHeight, bufferStatic, bufferAnim, texture);
 		peoteView.addDisplay(display);		
 	}
 
@@ -100,44 +109,16 @@ class CellRender {
 	}
 
 	public inline function addCell(x:Int, y:Int, cellType:CellType) {
-		var px = x*32 + scrollOffsetX;
-		var py = y*32 + scrollOffsetY;
-		switch (cellType) {
-			// TODO
-			case EARTH:
-				var tile = Cells.tile(TileID.EARTH);
-				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
-				// var element = new CellElemStatic(TileID.EARTH, px, py, 32, 32);
-				elemViewBuffer.set(x, y, element);
-				bufferStatic.addElement(element);
+		var px = x * cellWidth + scrollOffsetX;
+		var py = y * cellHeight + scrollOffsetY;
 
-			case WOOD:
-				var tile = Cells.tile(TileID.WOOD);
-				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
-				// var element = new CellElemStatic(TileID.WOOD, px, py, 32, 32);
-				elemViewBuffer.set(x, y, element);
-				bufferStatic.addElement(element);
+		// TODO: empty cells
+		var config = configStatic.get(cellType);
+		// var element = new CellElemStatic(config.tileNr, config.sheetNr, px, py);
+		var element = new CellElemStatic(config.tileNr, px, py);
+		elemViewBuffer.set(x, y, element);
+		bufferStatic.addElement(element);
 
-			case ROCK:
-				var tile = Cells.tile(TileID.ROCK);
-				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
-				// var element = new CellElemStatic(TileID.ROCK, px, py, 32, 32);
-				elemViewBuffer.set(x, y, element);
-				bufferStatic.addElement(element);
-
-			case METAL:
-				var tile = Cells.tile(TileID.METAL);
-				var element = new CellElemStatic(tile.anim(tile.animID[0]).start, px, py, 32, 32);
-				// var element = new CellElemStatic(TileID.METAL, px, py, 32, 32);
-				elemViewBuffer.set(x, y, element);
-				bufferStatic.addElement(element);
-
-			// for fluids and air later maybe different Program and Shader
-			case WATER:
-				// T O D O
-
-			default: //throw('CellRender - cellType $cellType not implemented yet!');
-		}
 	}
 
 	public function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
@@ -184,7 +165,7 @@ class CellRender {
 			bufferStatic.update();
 			display.xOffset -= RESET_AT_OFFSET;
 		}
-		display.xOffset += 32;		
+		display.xOffset += cellWidth;		
 	}
 
 	public function scrollRight() {
@@ -197,7 +178,7 @@ class CellRender {
 			bufferStatic.update();
 			display.xOffset += RESET_AT_OFFSET;
 		}
-		display.xOffset -= 32;	
+		display.xOffset -= cellWidth;	
 	}
 
 	public function scrollTop() {
@@ -210,7 +191,7 @@ class CellRender {
 			bufferStatic.update();
 			display.yOffset -= RESET_AT_OFFSET;
 		}
-		display.yOffset += 32;		
+		display.yOffset += cellHeight;		
 	}
 
 	public function scrollBottom() {
@@ -223,7 +204,7 @@ class CellRender {
 			bufferStatic.update();
 			display.yOffset += RESET_AT_OFFSET;
 		}
-		display.yOffset -= 32;
+		display.yOffset -= cellHeight;
 	}
 
 

@@ -1,16 +1,18 @@
 package view;
 
-import automat.actor.ActorType;
 import haxe.ds.Vector;
-
-import peote.view.PeoteView;
 
 import util.Pos;
 import util.Pos.xy as P;
 
 import automat.Grid;
+
+// TODO: replace by Int or special types
 import automat.Cell;
 import automat.Cell.CellActor;
+import automat.actor.ActorType;
+
+
 import render.RenderView;
 
 

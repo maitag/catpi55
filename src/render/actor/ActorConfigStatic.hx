@@ -30,7 +30,7 @@ abstract ActorConfigStatic(Map<Int, {tile:Tile, anim:Int}>) from Map<Int, {tile:
 				height:sheet.height
 			});
 		}
-		trace(conf);
+		
 		return conf;
 	}
 

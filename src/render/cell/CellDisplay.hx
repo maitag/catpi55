@@ -1,5 +1,6 @@
 package render.cell;
 
+import peote.view.intern.Util;
 import peote.view.PeoteView;
 import peote.view.Display;
 import peote.view.Buffer;
@@ -22,13 +23,18 @@ abstract CellDisplay(Display) to Display
 	}
 	*/
 
-	public function new(x:Int, y:Int, w:Int, h:Int, bufferStatic:Buffer<CellElemStatic>, bufferAnim:Buffer<CellElemAnim>, texture:Texture)
+	public function new(x:Int, y:Int, w:Int, h:Int, cellWidth:Int, cellHeight:Int, bufferStatic:Buffer<CellElemStatic>, bufferAnim:Buffer<CellElemAnim>, texture:Texture)
 	{
 		this = new Display(x, y, w, h, Color.BLUE1);
 
 		//----------------------------------------------------
 		
 		var programStatic = new Program(bufferStatic);
+		
+		// element width and height by formula
+		programStatic.setFormula("w", Util.toFloatString(cellWidth), false);
+		programStatic.setFormula("h", Util.toFloatString(cellHeight), false);
+
 
 		programStatic.setTexture(texture);
 		// texture.setSmooth(true, false);

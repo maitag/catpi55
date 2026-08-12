@@ -13,7 +13,8 @@ import automat.actor.ActorType;
 
 import asset.Util;
 import asset.Sheet;
-import asset.Tile;
+
+import render.cell.CellRender;
 
 class ActorRender {
 
@@ -75,15 +76,14 @@ class ActorRender {
 	// public function purgeView() {}
 
 	public inline function addActor(x:Int, y:Int, mapkey:Int, actorType:ActorType) {
-		var px = x*32 + scrollOffsetX;
-		var py = y*32 + scrollOffsetY;
+		var px = x * CellRender.cellWidth + scrollOffsetX;
+		var py = y * CellRender.cellHeight + scrollOffsetY;
 
 		// TODO
 		var config = configStatic.get(actorType);
 		var element = new ActorElemStatic(config.tileNr, config.sheetNr, px, py, config.width, config.height);
 		elemViewBuffer.set(mapkey, element);
 		bufferStatic.addElement(element);
-
 	}
 	
 	public inline function removeActor(mapkey:Int) {
@@ -109,29 +109,29 @@ class ActorRender {
 
 	public function actorGoLeft(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		// var px = x*32 + scrollOffsetX;
-		element.x -= 32;
+		// var px = x*CellRender.cellWidth + scrollOffsetX;
+		element.x -= CellRender.cellWidth;
 		element._yStart = element._yEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRight(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x += 32;
+		element.x += CellRender.cellWidth;
 		element._yStart = element._yEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.y -= 32;
+		element.y -= CellRender.cellHeight;
 		element._xStart = element._xEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.y += 32;
+		element.y += CellRender.cellHeight;
 		element._xStart = element._xEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
@@ -139,25 +139,25 @@ class ActorRender {
 
 	public function actorGoLeftUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x -= 32; element.y -= 32;
+		element.x -= CellRender.cellWidth; element.y -= CellRender.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoLeftDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x -= 32; element.y += 32;
+		element.x -= CellRender.cellWidth; element.y += CellRender.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRightUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x += 32; element.y -= 32;
+		element.x += CellRender.cellWidth; element.y -= CellRender.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRightDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x += 32; element.y += 32;
+		element.x += CellRender.cellWidth; element.y += CellRender.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
@@ -185,7 +185,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.xOffset -= RESET_AT_OFFSET;
 		}
-		display.xOffset += 32;		
+		display.xOffset += CellRender.cellWidth;		
 	}
 
 	public function scrollRight() {
@@ -195,7 +195,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.xOffset += RESET_AT_OFFSET;
 		}
-		display.xOffset -= 32;	
+		display.xOffset -= CellRender.cellWidth;	
 	}
 
 	public function scrollTop() {
@@ -205,7 +205,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.yOffset -= RESET_AT_OFFSET;
 		}
-		display.yOffset += 32;		
+		display.yOffset += CellRender.cellHeight;		
 	}
 
 	public function scrollBottom() {
@@ -215,7 +215,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.yOffset += RESET_AT_OFFSET;
 		}
-		display.yOffset -= 32;
+		display.yOffset -= CellRender.cellHeight;
 	}
 	
 }
