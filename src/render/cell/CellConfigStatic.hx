@@ -3,10 +3,9 @@ package render.cell;
 import haxe.ds.Vector;
 
 // assets
-import asset.Util;
-import asset.Anim;
+// import asset.Sheet;
 import asset.Tile;
-import asset.Sheet;
+// import asset.Anim;
 
 abstract CellConfigStatic(Map<Int, {tile:Tile, anim:Int}>) from Map<Int, {tile:Tile, anim:Int}>
 {

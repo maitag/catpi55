@@ -1,19 +1,20 @@
-package automat.actor;
+package actors;
 
+import automat.actor.IActor;
 import automat.Cell.CellType;
 
 import util.Pos;
 
 @:build(automat.actor.Actor.build("
-|#   # #   # ###|
-|#   #  # #  ## |
-|### #   #   ###|
-")) class Live implements IActor {
+|##|
+|##|
+")) class Semmi implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return LIVE;
-	
+	public var type(get, never):ActorType; inline function get_type() return ActorType.SEMMI;
+
 	public var name:String;
 
+	
 
 	// TODO: let write this better or also by macrofication!
 	// public var blockedCellType:Int = 1<<CellType.METAL;
@@ -23,7 +24,8 @@ import util.Pos;
 
 	public function new(name:String) {
 		this.name = name;
+		// super();
 	}
 
-  
+
 }

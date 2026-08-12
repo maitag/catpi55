@@ -1,18 +1,20 @@
-package automat.actor;
+package actors;
 
 import peote.view.math.Rnd;
+
+import automat.Grid;
+import automat.actor.IActor;
 import automat.Cell.CellType;
 import automat.sim.SimEvent;
-import automat.sim.SimEvent.SimEventType;
+import automat.sim.SimEventType;
 
 import util.Pos;
 
 @:build(automat.actor.Actor.build("
-|##|
-|##|
-")) class Flixel implements IActor {
+|#|
+")) class Lime implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ActorType.FLIXEL;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.LIME;//4sure^
 
 	public var name:String;
 
@@ -34,7 +36,7 @@ import util.Pos;
 
 	// ----- custom movement ----
 	var direction:Int = 1;
-	var delay:Int = 1;
+	var delay:Int = 3;
 	
 	
 	public function onAfterMove() { // <- overwrite default function
@@ -54,7 +56,7 @@ import util.Pos;
 			case 7: if (freeRightDown()) goRightDown(delay) else direction = Rnd.intLimit(0,i);
 			default: 
 		}
-					
+		
 		
 		var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, gridKey);
 		// trace(name, e);

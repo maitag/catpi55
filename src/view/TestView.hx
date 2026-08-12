@@ -1,11 +1,10 @@
 package view;
 
+import haxe.Timer;
+
 import automat.Cell.CellType;
 import render.actor.ActorRender;
 import render.cell.CellRender;
-import automat.Cell.CellActor;
-import haxe.Timer;
-import util.Maze;
 import haxe.CallStack;
 import lime.app.Application;
 import lime.ui.Window;
@@ -15,15 +14,16 @@ import peote.view.PeoteView;
 import automat.GridTestData;
 import automat.Grid;
 import automat.MultiGridView;
-import automat.actor.*;
 
 import util.Pos.xy as P;
+import util.Maze;
 
 import render.Render;
 import render.RenderView;
 import view.View;
 
-import automat.actor.ActorType;
+import actors.*;
+// import automat.actors.ActorType;
 
 import asset.Tile;
 

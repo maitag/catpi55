@@ -10,7 +10,6 @@ import automat.Grid;
 // TODO: replace by Int or special types
 import automat.Cell;
 import automat.Cell.CellActor;
-import automat.actor.ActorType;
 
 
 import render.RenderView;
@@ -120,7 +119,7 @@ class View {
 
 	public inline function mapKey(index:Int, actorKey:Int) return (index << (CellActor.bits-1)) | actorKey;
 
-	public function addActor(x:Int, y:Int, actorKey:Int, actorType:ActorType) {
+	public function addActor(x:Int, y:Int, actorKey:Int, actorType:Int) {
 		// trace("addActor", 'x:${x+gridViewX} y:${y+gridViewY}, actorKey:$actorKey, actorType:$actorType, mapkey:${mapKey(gridViewIndex, actorKey)}');		
 		renderView.actorRender.addActor(x+gridViewX, y+gridViewY, mapKey(gridViewIndex, actorKey), actorType);
 	}

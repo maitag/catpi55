@@ -1,4 +1,4 @@
-package automat.actor;
+package actors;
 
 enum abstract ActorType(Int) to Int {
 	

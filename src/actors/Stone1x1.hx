@@ -1,15 +1,15 @@
-package automat.actor;
+package actors;
 
+import automat.actor.IActor;
 import automat.Cell.CellType;
 
 import util.Pos;
 
 @:build(automat.actor.Actor.build("
-|##|
-|##|
-")) class Stone2x2 implements IActor {
+|#|
+")) class Stone1x1 implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ActorType.STONE2x2;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.STONE1x1;
 
 	public var name:String;
 
@@ -23,7 +23,7 @@ import util.Pos;
 
 	public function new(name:String) {
 		this.name = name;
+		// super();
 	}
 
-  
 }

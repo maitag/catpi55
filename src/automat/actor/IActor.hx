@@ -3,7 +3,7 @@ package automat.actor;
 import util.Pos;
 
 interface IActor {
-	public var type(get, never):ActorType;
+	public var type(get, never):Int;
 	public var name:String;
 	public var pos:Pos;
 	public var width(get, never):Int;

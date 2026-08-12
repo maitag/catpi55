@@ -9,8 +9,6 @@ import peote.view.Texture;
 import peote.view.TextureFormat;
 import peote.view.TextureConfig;
 
-import automat.actor.ActorType;
-
 import asset.Util;
 import asset.Sheet;
 
@@ -75,7 +73,7 @@ class ActorRender {
 	}
 	// public function purgeView() {}
 
-	public inline function addActor(x:Int, y:Int, mapkey:Int, actorType:ActorType) {
+	public inline function addActor(x:Int, y:Int, mapkey:Int, actorType:Int) {
 		var px = x * CellRender.cellWidth + scrollOffsetX;
 		var py = y * CellRender.cellHeight + scrollOffsetY;
 

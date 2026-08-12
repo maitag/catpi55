@@ -1,24 +1,21 @@
-package automat.actor;
+package actors;
 
+import automat.actor.IActor;
 import automat.Cell.CellType;
 
 import util.Pos;
 
-// thx to Nanjizael for inspiration (^_^)
 @:build(automat.actor.Actor.build("
-|#### ####|
-|#  ###  #|
-|#       #|
-|###   ###|
-|  #   #  |
-|###   ###|
-")) class Hilbert extends ActorSim implements IActor {
+|##|
+|##|
+")) class Stone2x2 implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ActorType.HILBERT;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.STONE2x2;
 
 	public var name:String;
 
 	
+
 	// TODO: let write this better or also by macrofication!
 	// public var blockedCellType:Int = 1<<CellType.METAL;
 	public var blockedCellType:Int = 1<<CellType.EARTH | 1<<CellType.METAL;

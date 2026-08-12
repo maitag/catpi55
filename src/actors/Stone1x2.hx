@@ -1,15 +1,16 @@
-package automat.actor;
+package actors;
 
+import automat.actor.IActor;
 import automat.Cell.CellType;
 
 import util.Pos;
 
 @:build(automat.actor.Actor.build("
-|##|
-|##|
-")) class Semmi implements IActor {
+|#|
+|#|
+")) class Stone1x2 implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ActorType.SEMMI;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.STONE1x2;
 
 	public var name:String;
 
@@ -23,8 +24,7 @@ import util.Pos;
 
 	public function new(name:String) {
 		this.name = name;
-		// super();
 	}
 
-
+  
 }

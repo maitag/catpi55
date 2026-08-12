@@ -1,7 +1,7 @@
 package automat.actor;
 
 import automat.sim.SimEvent;
-import automat.sim.SimEvent.SimEventType;
+import automat.sim.SimEventType;
 
 class ActorSim {
 

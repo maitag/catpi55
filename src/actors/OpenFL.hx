@@ -1,25 +1,20 @@
-package automat.actor;
+package actors;
 
 import peote.view.math.Rnd;
+
+import automat.Grid;
+import automat.actor.IActor;
 import automat.Cell.CellType;
 import automat.sim.SimEvent;
-import automat.sim.SimEvent.SimEventType;
+import automat.sim.SimEventType;
 
 import util.Pos;
 
-/*@:build(automat.actor.Actor.build("
-|#  #   ##   #   #  ####|
-|#  #  #  #   # #   #   |
-|####  ####    #    ####|
-|#  #  #  #   # #   #   |
-|#  #  #  #  #   #  ####|
-")) */
 @:build(automat.actor.Actor.build("
-|##|
-|##|
-")) class Haxe implements IActor {
+|#|
+")) class OpenFL implements IActor {
 
-	public var type(get, never):ActorType; inline function get_type() return ActorType.HAXE;
+	public var type(get, never):ActorType; inline function get_type() return ActorType.OPENFL;
 
 	public var name:String;
 
@@ -41,7 +36,7 @@ import util.Pos;
 
 	// ----- custom movement ----
 	var direction:Int = 1;
-	var delay:Int = 3; // max delay time:  Grid.MAX_STEPS-1 
+	var delay:Int = 3;
 	
 	
 	public function onAfterMove() { // <- overwrite default function
