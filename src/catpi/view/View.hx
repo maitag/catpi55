@@ -3,7 +3,9 @@ package catpi.view;
 import haxe.ds.Vector;
 
 import catpi.util.Pos;
-import catpi.util.Pos.xy as P;
+// import catpi.util.Pos.xy as P;
+
+// import catpi.util.Pos.Pos8x8Neg;
 
 import catpi.automat.Grid;
 
@@ -25,7 +27,7 @@ class View {
 	// public var height:Int = 0;
 
 	// each added grid will store its data here (at now only the offset!)
-	public var gridData:Vector<Pos>;
+	var gridData:Vector<Int>;
 
 	// from here it grows into all directions (set on first root-grid initialization)
 	public var rootX:Int = 0;
@@ -54,13 +56,13 @@ class View {
 
 	public function init(maxGrids:Int, maxWidth:Int, maxHeight:Int) {
 		trace("init", maxGrids, maxWidth, maxHeight);
-		gridData = new Vector<Pos>(maxGrids);
+		gridData = new Vector<Int>(maxGrids);
 		renderView.initView(maxWidth, maxHeight);
 	}
 
 	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
 		trace("addGridView", index, offsetX, offsetY);
-		gridData.set(index, P(offsetX, offsetY));
+		gridData.set(index, Pos8x8Neg.xy(offsetX, offsetY));
 	}
 
 	public inline function removeGridView(index:Int) {
@@ -75,7 +77,7 @@ class View {
 	public inline function switchGridViewIndex(index:Int) {
 		// trace("switchGridViewIndex", index);
 		gridViewIndex = index;
-		var offset = gridData.get(index);
+		var offset:Pos8x8Neg = gridData.get(index);
 		gridViewX = offset.x * Grid.WIDTH;
 		gridViewY = offset.y * Grid.HEIGHT;
 	}

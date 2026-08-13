@@ -3,13 +3,16 @@ package catpi.util;
 #if !macro
 @:build(catpi.util.Pos.PosMacro.build(6,6)) abstract Pos(Int) from Int to Int {}
 
-// @:build(util.Pos.PosMacro.build(5,5)) abstract Pos32(Int) to Int {}
-// @:build(util.Pos.PosMacro.build(6,6)) abstract Pos64(Int) to Int {}
-// @:build(util.Pos.PosMacro.build(7,7)) abstract Pos128(Int) to Int {}
-// @:build(util.Pos.PosMacro.build(8,8)) abstract Pos256(Int) to Int {}
+// for the Views grid-offset
+@:build(catpi.util.Pos.PosMacro.build(8,8, true)) abstract Pos8x8Neg(Int) from Int to Int {}
 
-// @:build(util.Pos.PosMacro.build(6,5)) abstract Pos64x32(Int) to Int {}
-// @:build(util.Pos.PosMacro.build(5,6)) abstract Pos32x64(Int) to Int {}
+// @:build(catpi.util.Pos.PosMacro.build(5,5)) abstract Pos5x5(Int) to Int {}
+// @:build(catpi.util.Pos.PosMacro.build(6,6)) abstract Pos6x6(Int) to Int {}
+// @:build(catpi.util.Pos.PosMacro.build(7,7)) abstract Pos7x7(Int) to Int {}
+// @:build(catpi.util.Pos.PosMacro.build(8,8)) abstract Pos8x8(Int) to Int {}
+
+// @:build(catpi.util.Pos.PosMacro.build(6,5)) abstract Pos6x5(Int) to Int {}
+// @:build(catpi.util.Pos.PosMacro.build(5,6)) abstract Pos5x6(Int) to Int {}
 
 
 // this is manual haxe code for using fully Int 32 bitsize
@@ -54,9 +57,24 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class PosMacro {
-	static public function build(xBits:Int, yBits:Int):Array<Field> {
+	static public function build(xBits:Int, yBits:Int, signed:Bool = false):Array<Field>
+	{
+		var abstractName:String;
+		var cl = Context.getLocalClass().get();
+		var abstractType:ComplexType;
+
+		switch (cl.kind) {
+			case KAbstractImpl(abstractRef):
+				abstractType = Context.toComplexType(TAbstract(abstractRef, []));
+				abstractName = abstractRef.get().name;
+				// trace("Abstract Name: " + abstractName);
+			default: Context.error("PosMacro expects an abstract", Context.currentPos());
+		}
+
 		var xMax:Int = (1 << xBits) - 1;
 		var yMax:Int = (1 << yBits) - 1;
+		var xNegOffset:Int = 1 << (xBits - 1);
+		var yNegOffset:Int = 1 << (yBits - 1);
 
 		var fields = Context.getBuildFields();
 		fields.push({
@@ -64,7 +82,15 @@ class PosMacro {
 			doc: null,
 			meta: [],
 			access: [AStatic, APublic, AInline],
-			kind: FVar(macro:Int, macro $v{xMax}),
+			kind: FVar(macro:Int, macro $v{ (signed) ? xMax >> 1 : xMax   }),
+			pos: Context.currentPos()
+		});
+		fields.push({
+			name: "xMin",
+			doc: null,
+			meta: [],
+			access: [AStatic, APublic, AInline],
+			kind: FVar(macro:Int, macro $v{ (signed) ? -xNegOffset : 0   }),
 			pos: Context.currentPos()
 		});
 		fields.push({
@@ -72,7 +98,15 @@ class PosMacro {
 			doc: null,
 			meta: [],
 			access: [AStatic, APublic, AInline],
-			kind: FVar(macro:Int, macro $v{yMax}),
+			kind: FVar(macro:Int, macro $v{ (signed) ? yMax >> 1 : yMax}),
+			pos: Context.currentPos()
+		});
+		fields.push({
+			name: "yMin",
+			doc: null,
+			meta: [],
+			access: [AStatic, APublic, AInline],
+			kind: FVar(macro:Int, macro $v{ (signed) ? -yNegOffset : 0}),
 			pos: Context.currentPos()
 		});
 		fields.push({
@@ -109,7 +143,7 @@ class PosMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [],
-				expr: macro return this & xMax,
+				expr: (signed) ? macro return (this & $v{xMax}) - $v{xNegOffset} : macro return this & $v{xMax},
 				params: [],
 				ret: macro:Int
 			})
@@ -121,7 +155,7 @@ class PosMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"v", opt:false, meta:[], type: macro:Int}],
-				expr: macro return this = (this & (yMax << xBits)) | v,
+				expr: (signed) ? macro return this = (this & ($v{yMax} << $v{xBits})) | (v + $v{xNegOffset}) : macro return this = (this & ($v{yMax} << $v{xBits})) | v,
 				params: [],
 				ret: macro:Int
 			})
@@ -144,7 +178,7 @@ class PosMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [],
-				expr: macro return this >> xBits,
+				expr: (signed) ? macro return (this >> $v{xBits}) - $v{yNegOffset} : macro return this >> $v{xBits},
 				params: [],
 				ret: macro:Int
 			})
@@ -156,7 +190,7 @@ class PosMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"v", opt:false, meta:[], type: macro:Int}],
-				expr: macro return this = (v << xBits) | (this & xMax),
+				expr: (signed) ? macro return this = ((v + $v{yNegOffset}) << $v{xBits}) | (this & $v{xMax}) : macro return this = (v << $v{xBits}) | (this & $v{xMax}),
 				params: [],
 				ret: macro:Int
 			})
@@ -182,21 +216,27 @@ class PosMacro {
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"x", opt:false, meta:[], type: macro:Int}, {name:"y", opt:false, meta:[], type: macro:Int}],
-				expr: macro this = (y << xBits) | x,
+				expr: (signed) ? macro this = ((y + $v{yNegOffset}) << $v{xBits}) | (x + $v{xNegOffset}) : macro this = (y << $v{xBits}) | x,
 				params: [],
 				ret: null
 			})
 		});
 
+		// creates the "new PosName(x,y)" expression by ENew() at first
+		var args = [macro x, macro y];
+		var newExpr:Expr = {expr:ENew({pack:[], name:abstractName}, args), pos:Context.currentPos()};		
 		fields.push({
 			name: "xy",
 			access: [AStatic, AInline, APublic],
 			pos: Context.currentPos(),
 			kind: FFun({
 				args: [{name:"x", opt:false, meta:[], type: macro:Int}, {name:"y", opt:false, meta:[], type: macro:Int}],
-				expr: macro return new Pos(x, y),
+				// expr: macro return new Pos(x, y),
+				// expr: macro return $i{abstractName}(x, y),
+				expr: macro return $newExpr,
 				params: [],
-				ret: macro:Pos
+				// ret: macro Pos
+				ret: abstractType
 			})
 		});
 
@@ -216,7 +256,7 @@ class PosMacro {
 				ret: macro:String
 			})
 		});
-
+		
 		// for (field in fields) trace(new haxe.macro.Printer().printField(field));
 
 		return fields;
