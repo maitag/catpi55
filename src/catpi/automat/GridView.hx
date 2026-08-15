@@ -197,7 +197,7 @@ class GridView {
 		}
 	}
 	public function actorToDownOut(a:IActor, newGrid:Grid, oldKey:Int, newKey:Int, x:Int, oldY:Int, newY:Int, time:Int) {
-		var indexBottom = multiGridView.gridViewCache.topIndex(index);
+		var indexBottom = multiGridView.gridViewCache.bottomIndex(index);
 		var gridViewBottom = multiGridView.gridViewCache.getByIndex(indexBottom);
 		if (isInside(x, oldY)) { // inside before		
 			multiGridView.switchGridViewIndex(index);

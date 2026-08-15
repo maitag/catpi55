@@ -59,16 +59,22 @@ class TestView extends Application
 
 	static inline var SIM_STEP_TIME:Int = 100;
 
+	var zoom:Float;
+
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
 
 		
-		var rootX:Int = 19; // TODO: 20; needs offset like->view.scrollRight();
-		var rootY:Int = 14;
+		var rootX:Int = 0; // TODO: 20; needs offset like->view.scrollRight();
+		var rootY:Int = 0;
+
 		var maxWidth = 40;
 		var maxHeight = 30;
-		var zoom = 0.620921323059155;
+		zoom = 0.620921323059155;
+
+		// TODO: for more then z=3 the rootXY will be outside (needs some modulo then ;)
+		var z=2; maxWidth *= z; maxHeight *= z; zoom = 0.620921323059155 / z; rootX = (maxWidth>>1)-1; rootY = (maxHeight>>1)-1;
 		
 
 		// TODO: Render.init(peoteView, SIM_STEP_TIME);
@@ -176,7 +182,7 @@ class TestView extends Application
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
 		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
 		if (deltaY<0) {
-			if (view.zoom > 0.63) view.zoom /= 1.1;
+			if (view.zoom > zoom) view.zoom /= 1.1;
 		}			
 		else view.zoom *= 1.1;
 		// trace(view.zoom);

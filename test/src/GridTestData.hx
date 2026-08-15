@@ -132,7 +132,7 @@ class GridTestData
 			// connect them into LOOP
 			knotGridsLeftRight([grid11, grid12, grid13, grid11]);
 			knotGridsLeftRight([grid21, grid22, grid23, grid21]);
-			knotGridsLeftRight([grid31, grid32, grid33, grid21]);
+			knotGridsLeftRight([grid31, grid32, grid33, grid31]);
 		} else {
 			knotGridsLeftRight([grid11, grid12, grid13]);
 			knotGridsLeftRight([grid21, grid22, grid23]);
