@@ -6,13 +6,14 @@ import catpi.util.BitGrid;
 import catpi.util.Pos;
 // import catpi.util.Pos.xy as P;
 
+// import catpi.util.Pos.Pos8x8Neg;
+
 class TestUtil extends Application {
 
 
 	public function new() {
 		super();
-		
-		
+				
 		// -------- test Pos ----------
 		
 		trace(Pos.xMax, Pos.yMax);
@@ -20,14 +21,19 @@ class TestUtil extends Application {
 		trace("pos:",p.x,p.y);
 		p = Pos.xy(4,5);
 		trace("pos:",p.x,p.y);
-		
+
 		var p = new Pos(3,4);
 		p.x-=1;
 		p.y+=1;
 		trace(p);
 		
-
-
+		// negative
+		var pNeg = new Pos8x8Neg(-128, 127);
+		// var pNeg = Pos8x8Neg.xy(1, 5);
+		// pNeg.x = -128; pNeg.y = 128;
+		trace("pNeg:", pNeg.x, pNeg.y);
+		trace(Pos8x8Neg.xMin, Pos8x8Neg.xMax, Pos8x8Neg.yMin, Pos8x8Neg.yMax);
+		
 		// -------- test BitGrid ----------
 		
 		var bitGrid:BitGrid = [

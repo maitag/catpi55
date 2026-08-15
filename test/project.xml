@@ -23,10 +23,11 @@
 
 	<!-- <haxedef name="CellGrid_Bytes" /> -->
 
-	<!-- <haxedef name="macro_unroll" /> -->
+	<!-- <haxedef name="catpi_macro_unroll" /> -->
 	<haxedef name="viktor_safe" />
 	<haxedef name="peoteview_fps" />
-
+	
+	<!-- <haxedef name="catpi_debug_view" /> -->
 	
 	<source path="src" />
 	<source path="../src" />

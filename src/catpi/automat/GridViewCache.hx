@@ -29,8 +29,11 @@ class GridViewCache {
 		data.set( 0, new GridView(multiGridView, 0, rootGrid, rootX, rootX, rootY, rootY+1) ); // y+1 to get started somewhere while initialization-grow
 	}
 
-	inline function modX(x:Int):Int return (x<0) ? sizeX+x : x % sizeX;
-	inline function modY(y:Int):Int return (y<0) ? sizeY+y : y % sizeY;
+	// inline function modX(x:Int):Int return (x<0) ? sizeX+x : x % sizeX;
+	// inline function modY(y:Int):Int return (y<0) ? sizeY+y : y % sizeY;
+	inline function modX(x:Int):Int return (x<0) ? sizeX + ((x+1) % sizeX) - 1 : x % sizeX;
+	inline function modY(y:Int):Int return (y<0) ? sizeY + ((y+1) % sizeY) - 1 : y % sizeY;
+
 	inline function index(x:Int, y:Int):Int return modY(y) * sizeX + modX(x);
 
 	// gets the index side of an index -> TODO: can be optimized without using index() cos modulo is only need once

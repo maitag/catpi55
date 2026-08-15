@@ -64,8 +64,8 @@ class TestView extends Application
 		peoteView = new PeoteView(window);
 
 		
-		var rootX:Int = 0;
-		var rootY:Int = 0;
+		var rootX:Int = 19; // TODO: 20; needs offset like->view.scrollRight();
+		var rootY:Int = 14;
 		var maxWidth = 40;
 		var maxHeight = 30;
 		var zoom = 0.620921323059155;
@@ -105,7 +105,7 @@ class TestView extends Application
 		view.zoom = zoom;
 
 
-		grid = GridTestData.create3x3(); // GridTestData.createMaze(2,2);
+		grid = GridTestData.create3x3(true, true); // GridTestData.createMaze(2,2);
 		// GridTestData.traceGrid(grid, 64, 64);
 
 		// only for testing:
@@ -113,7 +113,7 @@ class TestView extends Application
 		
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 		// trace(multiGridView.gridViewCache);
-
+		
 	
 		// ---- test SIMMULATION ---
 		

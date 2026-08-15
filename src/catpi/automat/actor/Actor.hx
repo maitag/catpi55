@@ -6,7 +6,7 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 
 class Actor {
-	static public function build(shape:String, unroll = #if macro_unroll true #else false#end):Array<Field>
+	static public function build(shape:String, unroll = #if catpi_macro_unroll true #else false#end):Array<Field>
 	{
 		var fields = Context.getBuildFields();
 		var fieldNames:Array<String> = [for (field in fields) field.name]; // to check for custom fields and overwrites

@@ -23,8 +23,11 @@ import catpi.asset.Sheet;
 		this.sizeY = sizeY;
 		data = new Vector( sizeX * sizeY );
 	}
-	inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
-	inline function modY(y:Int) return (y<0) ? sizeY+y : y % sizeY;
+	// inline function modX(x:Int) return (x<0) ? sizeX+x : x % sizeX;
+	// inline function modY(y:Int) return (y<0) ? sizeY+y : y % sizeY;
+	inline function modX(x:Int) return (x<0) ? sizeX + ((x+1) % sizeX) - 1 : x % sizeX;
+	inline function modY(y:Int) return (y<0) ? sizeY + ((y+1) % sizeY) - 1 : y % sizeY;
+
 	inline function index(x:Int, y:Int) return modY(y) * sizeX + modX(x);
 	public inline function get(x:Int, y:Int):T return data.get( index(x, y) );
 	public inline function set(x:Int, y:Int, value:T) data.set( index(x, y), value );

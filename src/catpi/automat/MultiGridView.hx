@@ -101,7 +101,8 @@ class MultiGridView {
 	// ------------------- LEFT -----------------------
 	public inline function canGrowLeft(checkMaxSize=true):Bool {
 		if (checkMaxSize && width == maxWidth) return false;
-		if (xFrom % Grid.WIDTH > 0) return true;
+		// if (xFrom % Grid.WIDTH > 0) return true;
+		if (xFrom % Grid.WIDTH != 0) return true;
 		else return gridViewCache.canGrowLeft();
 	}
 	public inline function growLeft() {
@@ -116,7 +117,8 @@ class MultiGridView {
 	// ------------------- RIGHT -----------------------
 	public inline function canGrowRight(checkMaxSize=true):Bool {
 		if (checkMaxSize && width == maxWidth) return false;
-		if (xTo % Grid.WIDTH > 0) return true;
+		// if (xTo % Grid.WIDTH > 0) return true;
+		if (xTo % Grid.WIDTH != 0) return true;
 		else return gridViewCache.canGrowRight();
 	}
 	public inline function growRight() {
@@ -131,7 +133,8 @@ class MultiGridView {
 	// -------------------- TOP ------------------------
 	public inline function canGrowTop(checkMaxSize=true):Bool {
 		if (checkMaxSize && height == maxHeight) return false;
-		if (yFrom % Grid.HEIGHT > 0) return true;
+		// if (yFrom % Grid.HEIGHT > 0) return true;
+		if (yFrom % Grid.HEIGHT != 0) return true;
 		else return gridViewCache.canGrowTop();
 	}
 	public inline function growTop() {
@@ -146,7 +149,8 @@ class MultiGridView {
 	// ------------------- BOTTOM ----------------------
 	public inline function canGrowBottom(checkMaxSize=true):Bool {
 		if (checkMaxSize && height == maxHeight) return false;
-		if (yTo % Grid.HEIGHT > 0) return true;
+		// if (yTo % Grid.HEIGHT > 0) return true;
+		if (yTo % Grid.HEIGHT != 0) return true;
 		else return gridViewCache.canGrowBottom();
 	}
 	public inline function growBottom() {
@@ -185,30 +189,30 @@ class MultiGridView {
 
 	// ------ add cells ---------
 
-	public inline function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Int>) {
-		view.addCells(xFrom, yFrom, xTo, yTo, cells);
+	public inline function addCells(xF:Int, yF:Int, xT:Int, yT:Int, cells:Array<Int>) {
+		view.addCells(xF, yF, xT, yT, cells);
 	}
 
-	public inline function addCellsHorizontal(y:Int, xFrom:Int, xTo:Int, cells:Array<Int>) {
-		view.addCellsHorizontal(y, xFrom, xTo, cells);
+	public inline function addCellsHorizontal(y:Int, xF:Int, xT:Int, cells:Array<Int>) {
+		view.addCellsHorizontal(y, xF, xT, cells);
 	}
 
-	public inline function addCellsVertical(x:Int, yFrom:Int, yTo:Int, cells:Array<Int>) {
-		view.addCellsVertical(x, yFrom, yTo, cells);
+	public inline function addCellsVertical(x:Int, yF:Int, yT:Int, cells:Array<Int>) {
+		view.addCellsVertical(x, yF, yT, cells);
 	}
 
 	// ------ remove cells ---------
 
-	public inline function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
-		view.removeCells(xFrom, yFrom, xTo, yTo);
+	public inline function removeCells(xF:Int, yF:Int, xT:Int, yT:Int) {
+		view.removeCells(xF, yF, xT, yT);
 	}
 
-	public inline function removeCellsHorizontal(y:Int, xFrom:Int, xTo:Int) {
-		view.removeCellsHorizontal(y, xFrom, xTo);
+	public inline function removeCellsHorizontal(y:Int, xF:Int, xT:Int) {
+		view.removeCellsHorizontal(y, xF, xT);
 	}
 
-	public inline function removeCellsVertical(x:Int, yFrom:Int, yTo:Int) {
-		view.removeCellsVertical(x, yFrom, yTo);
+	public inline function removeCellsVertical(x:Int, yF:Int, yT:Int) {
+		view.removeCellsVertical(x, yF, yT);
 	}
 
 

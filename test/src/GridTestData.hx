@@ -115,7 +115,7 @@ class GridTestData
 		return rootGrid;
 	}
 
-	public static function create3x3():Grid {
+	public static function create3x3(loopConnectH=false, loopConnectV=false):Grid {
 		var grid11 = create(TESTGRID_1);
 		var grid12 = create(TESTGRID_2);
 		var grid13 = create(TESTGRID_3);
@@ -128,20 +128,26 @@ class GridTestData
 		var grid32 = create(TESTGRID_2);
 		var grid33 = create(TESTGRID_3);
 
-		knotGridsLeftRight([grid11, grid12, grid13]);
-		knotGridsLeftRight([grid21, grid22, grid23]);
-		knotGridsLeftRight([grid31, grid32, grid33]);
-		
-		/*
-		// connect them into LOOP:  TODO: works not yet on View-initialization
-		knotGridsLeftRight([grid11, grid12, grid13, grid11]);
-		knotGridsLeftRight([grid21, grid22, grid23, grid21]);
-		knotGridsLeftRight([grid31, grid32, grid33, grid21]);
-		*/
+		if (loopConnectH) {
+			// connect them into LOOP
+			knotGridsLeftRight([grid11, grid12, grid13, grid11]);
+			knotGridsLeftRight([grid21, grid22, grid23, grid21]);
+			knotGridsLeftRight([grid31, grid32, grid33, grid21]);
+		} else {
+			knotGridsLeftRight([grid11, grid12, grid13]);
+			knotGridsLeftRight([grid21, grid22, grid23]);
+			knotGridsLeftRight([grid31, grid32, grid33]);
+		}
 
-		knotGridsTopBottom([grid11, grid21, grid31]);
-		knotGridsTopBottom([grid12, grid22, grid32]);
-		knotGridsTopBottom([grid13, grid23, grid33]);
+		if (loopConnectV) {
+			knotGridsTopBottom([grid11, grid21, grid31, grid11]);
+			knotGridsTopBottom([grid12, grid22, grid32, grid12]);
+			knotGridsTopBottom([grid13, grid23, grid33, grid13]);
+		} else {
+			knotGridsTopBottom([grid11, grid21, grid31]);
+			knotGridsTopBottom([grid12, grid22, grid32]);
+			knotGridsTopBottom([grid13, grid23, grid33]);
+		}
 
 		return grid11;
 	}

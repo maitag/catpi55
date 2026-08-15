@@ -33,7 +33,7 @@ class View {
 	public var rootX:Int = 0;
 	public var rootY:Int = 0;
 
-	// actual range into global position values over multigridviews from where it starts
+	// TODO: actual range into global position values over multigridviews from where it starts
 	public var xFrom:Int = 0;
 	public var xTo:Int = 0;
 	public var yFrom:Int = 0;
@@ -55,18 +55,24 @@ class View {
 	// ----------------------------------------------
 
 	public function init(maxGrids:Int, maxWidth:Int, maxHeight:Int) {
+		#if catpi_debug_view
 		trace("init", maxGrids, maxWidth, maxHeight);
+		#end
 		gridData = new Vector<Int>(maxGrids);
 		renderView.initView(maxWidth, maxHeight);
 	}
 
 	public inline function addGridView(index:Int, offset:Pos8x8Neg) {
+		#if catpi_debug_view
 		trace("addGridView", index, offset);
+		#end
 		gridData.set(index, offset);
 	}
 
 	public inline function removeGridView(index:Int) {
+		#if catpi_debug_view
 		trace("removeGridView", index);
+		#end
 	}
 
 	// current gridViewIndex and position-offsets
@@ -75,7 +81,9 @@ class View {
 	var gridViewY:Int = 0;
 
 	public inline function switchGridViewIndex(index:Int) {
-		// trace("switchGridViewIndex", index);
+		#if catpi_debug_view
+		trace("switchGridViewIndex", index);
+		#end
 		gridViewIndex = index;
 		var offset:Pos8x8Neg = gridData.get(index);
 		gridViewX = offset.x * Grid.WIDTH;
@@ -84,48 +92,48 @@ class View {
 
 	// ------- add cells ----------
 
-	public function addCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int, cells:Array<Cell>) {
+	public function addCells(xF:Int, yF:Int, xT:Int, yT:Int, cells:Array<Cell>) {
 		#if catpi_debug_view
-		trace("addCells", 'from:${xFrom+gridViewX},${yFrom+gridViewY} -> to ${xTo+gridViewX},${yTo+gridViewY}', [for (cell in cells) cell.type.toString()].join(",") );		
+		trace("addCells", 'from:${xF+gridViewX},${yF+gridViewY} -> to ${xT+gridViewX},${yT+gridViewY}', [for (cell in cells) cell.type.toString()].join(",") );		
 		#end
-		renderView.cellRender.addCells(xFrom+gridViewX, yFrom+gridViewY, xTo+gridViewX, yTo+gridViewY, cells);
+		renderView.cellRender.addCells(xF+gridViewX, yF+gridViewY, xT+gridViewX, yT+gridViewY, cells);
 	}
 
-	public function addCellsHorizontal(y:Int, xFrom:Int, xTo:Int, cells:Array<Cell>) {
+	public function addCellsHorizontal(y:Int, xF:Int, xT:Int, cells:Array<Cell>) {
 		#if catpi_debug_view
-		trace("addCellsHorizontal", 'y:${y+gridViewY}, xFrom:${xFrom+gridViewX} -> xTo:${xTo+gridViewX}', [for (cell in cells) cell.type.toString()].join(",") );
+		trace("addCellsHorizontal", 'y:${y+gridViewY}, xF:${xF+gridViewX} -> xT:${xT+gridViewX}', [for (cell in cells) cell.type.toString()].join(",") );
 		#end
-		renderView.cellRender.addCellsHorizontal(y+gridViewY, xFrom+gridViewX, xTo+gridViewX, cells);
+		renderView.cellRender.addCellsHorizontal(y+gridViewY, xF+gridViewX, xT+gridViewX, cells);
 	}
 
-	public function addCellsVertical(x:Int, yFrom:Int, yTo:Int, cells:Array<Cell>) {
+	public function addCellsVertical(x:Int, yF:Int, yT:Int, cells:Array<Cell>) {
 		#if catpi_debug_view
-		trace("addCellsVertical", 'x:${x+gridViewX}, yFrom:${yFrom+gridViewY} -> yTo:${yTo+gridViewY}', [for (cell in cells) cell.type.toString()].join(",") );
+		trace("addCellsVertical", 'x:${x+gridViewX}, yF:${yF+gridViewY} -> yT:${yT+gridViewY}', [for (cell in cells) cell.type.toString()].join(",") );
 		#end
-		renderView.cellRender.addCellsVertical(x+gridViewX, yFrom+gridViewY, yTo+gridViewY, cells);
+		renderView.cellRender.addCellsVertical(x+gridViewX, yF+gridViewY, yT+gridViewY, cells);
 	}
 
 	// ------ remove cells ---------
 
-	public function removeCells(xFrom:Int, yFrom:Int, xTo:Int, yTo:Int) {
+	public function removeCells(xF:Int, yF:Int, xT:Int, yT:Int) {
 		#if catpi_debug_view
-		trace("removeCells", 'from:${xFrom+gridViewX},${yFrom+gridViewY} -> to ${xTo+gridViewX},${yTo+gridViewY}');
+		trace("removeCells", 'from:${xF+gridViewX},${yF+gridViewY} -> to ${xT+gridViewX},${yT+gridViewY}');
 		#end
-		renderView.cellRender.removeCells(xFrom+gridViewX, yFrom+gridViewY, xTo+gridViewX, yTo+gridViewY);
+		renderView.cellRender.removeCells(xF+gridViewX, yF+gridViewY, xT+gridViewX, yT+gridViewY);
 	}
 
-	public function removeCellsHorizontal(y:Int, xFrom:Int, xTo:Int) {
+	public function removeCellsHorizontal(y:Int, xF:Int, xT:Int) {
 		#if catpi_debug_view
-		trace("removeCellsHorizontal", 'y:{$y+gridViewY}, xFrom:${xFrom+gridViewX} -> xTo:${xTo+gridViewX}');
+		trace("removeCellsHorizontal", 'y:{$y+gridViewY}, xF:${xF+gridViewX} -> xT:${xT+gridViewX}');
 		#end
-		renderView.cellRender.removeCellsHorizontal(y+gridViewY, xFrom+gridViewX, xTo+gridViewX);
+		renderView.cellRender.removeCellsHorizontal(y+gridViewY, xF+gridViewX, xT+gridViewX);
 	}
 
-	public function removeCellsVertical(x:Int, yFrom:Int, yTo:Int) {
+	public function removeCellsVertical(x:Int, yF:Int, yT:Int) {
 		#if catpi_debug_view
-		trace("removeCellsVertical", 'x:${x+gridViewX}, yFrom:${yFrom+gridViewY} -> yTo:${yTo+gridViewY}');
+		trace("removeCellsVertical", 'x:${x+gridViewX}, yF:${yF+gridViewY} -> yT:${yT+gridViewY}');
 		#end
-		renderView.cellRender.removeCellsVertical(x+gridViewX, yFrom+gridViewY, yTo+gridViewY);
+		renderView.cellRender.removeCellsVertical(x+gridViewX, yF+gridViewY, yT+gridViewY);
 	}
 
 
