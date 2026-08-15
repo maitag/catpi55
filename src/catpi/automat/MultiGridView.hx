@@ -170,7 +170,7 @@ class MultiGridView {
 	}
 
 	public inline function addGridView(index:Int, offsetX:Int, offsetY:Int) {
-		view.addGridView(index, offsetX, offsetY);
+		view.addGridView(index, Pos8x8Neg.xy(offsetX, offsetY));
 	}
 
 	public inline function removeGridView(index:Int) {
