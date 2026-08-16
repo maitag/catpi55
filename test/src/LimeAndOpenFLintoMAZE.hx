@@ -55,10 +55,12 @@ class LimeAndOpenFLintoMAZE extends Application
 	var multiGridView:MultiGridView;
 	var view:View;
 	var grid:Grid;
+	var gridList:Array<Grid>;
 
-	static inline var SIM_STEP_TIME:Int = 100;
+	static inline var SIM_STEP_TIME:Int = 10;
 
 	var zoom:Float;
+
 
 	public function start(window:Window)
 	{
@@ -100,7 +102,8 @@ class LimeAndOpenFLintoMAZE extends Application
 		view.zoom = zoom;
 
 
-		grid = GridTestData.createMaze(5,5);
+		grid = GridTestData.createMaze(20,20);
+		gridList = grid.getAllAsList();
 		
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 	
@@ -129,11 +132,12 @@ class LimeAndOpenFLintoMAZE extends Application
 		{
 			deltaTimeSum -= SIM_STEP_TIME;
 			
-			// HERE WILL BE NEED MORE SPICE IF INTO M A Z E -> HAVE TO DO IT NOW!!!
-			grid.stepThemAll(); // / / / (^_^)
+			// grid.stepAll(); // / / / (^_^)
+			for (g in gridList) g.step();
 
 			// spawn a new on if there is free space:
 			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
+			if (grid.get(P(0,5)).actor == CellActor.EMPTY ) new OpenFL("", grid, P(0,5));
 		}
 	}
 

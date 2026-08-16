@@ -335,36 +335,64 @@ class Grid {
 	}
 
 
-	// FUCK eh \o/ -> lemme tryto traverse the fully G R I D  ggggraaaaphe *lol->NOW:
-	var steppedAlready = new Map<Pos8x8Neg, Bool>();
+	// traverse all knotted grids into step()
+	/*
+	static var steppedAlready = new Map<Pos8x8Neg, Bool>();
 	public inline function stepThemAll() {
-		//-// o k ... now the hard brain rain is need ... (momento )*smokes ...
-
 		// NOT optimized AT NOW:
 		steppedAlready.clear();
-
-		// sammie, laura ... -> RECURSIVELY nowA .) 
-		stepIntoAllDirection(Pos8x8Neg.xy(0,0)); //(^^)
-
-		// (really hope that will work if i am start ;)...
+		stepIntoAllDirection(Pos8x8Neg.xy(0,0), true, true, true, true);
 	}
 
-	public inline function stepIntoAllDirection(pos:Pos8x8Neg) {
+	function stepIntoAllDirection(pos:Pos8x8Neg, doLeft:Bool, doRight:Bool, doTop:Bool, doBottom:Bool) {
 		
 		if (steppedAlready.get(pos) != null) return; // ok, if it is NULL -> NEVER setted at ALL ~)[a n y *lol]
+		
+		step();
 
 		// mark as -> STEPPED:
 		steppedAlready.set(pos, true);
 
-		step();
+		if (doLeft && left != null) left.stepIntoAllDirection(Pos8x8Neg.xy(pos.x-1,pos.y), true, false, true, true);
+		if (doRight && right != null) right.stepIntoAllDirection(Pos8x8Neg.xy(pos.x+1, pos.y), false, true, true, true);
+		if (doTop && top != null) top.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y-1), true, true, true, false);
+		if (doBottom && bottom != null) bottom.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y+1), true, true, false, true);
+	}*/
 
-		// hope that will RUN now .. oh .. forget something .. . .^^ -> MINIMALIZEANDREDUCING IS NEEEE:D (if it is not STATIC one:)
-		if (left != null) left.stepIntoAllDirection(Pos8x8Neg.xy(pos.x-1,pos.y));
-		if (bottom != null) bottom.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y+1));
-		if (top != null) top.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y-1));
-		if (right != null) right.stepIntoAllDirection(Pos8x8Neg.xy(pos.x+1, pos.y));
+	
+	var traversed:Bool = false;
 
+	public function stepAll() {		
+		_stepAllDirection(!traversed, true, true, true, true);
 	}
 
+	// do simmulation step() of all knotted grids
+	inline function _stepAllDirection(isTraversed:Bool, doLeft:Bool, doRight:Bool, doTop:Bool, doBottom:Bool) {
+		if (traversed == isTraversed) return;
+		step();
+		traversed = isTraversed;
+		if (doLeft && left != null) left._stepAllDirection(isTraversed, true, false, true, true);
+		if (doRight && right != null) right._stepAllDirection(isTraversed, false, true, true, true);
+		if (doTop && top != null) top._stepAllDirection(isTraversed, true, true, true, false);
+		if (doBottom && bottom != null) bottom._stepAllDirection(isTraversed, true, true, false, true);
+	}
+
+	// returns a list of all knotted grids
+	public function getAllAsList():Array<Grid> {	
+		var list = new Array<Grid>();	
+		_pushAllDirection(list, !traversed, true, true, true, true);
+		return list;
+	}
+
+	inline function _pushAllDirection(list:Array<Grid>, isTraversed:Bool, doLeft:Bool, doRight:Bool, doTop:Bool, doBottom:Bool) {
+		if (traversed == isTraversed) return;
+		list.push(this);
+		traversed = isTraversed;
+		if (doLeft && left != null) left._pushAllDirection(list, isTraversed, true, false, true, true);
+		if (doRight && right != null) right._pushAllDirection(list, isTraversed, false, true, true, true);
+		if (doTop && top != null) top._pushAllDirection(list, isTraversed, true, true, true, false);
+		if (doBottom && bottom != null) bottom._pushAllDirection(list, isTraversed, true, true, false, true);
+	}
+	
 }
 

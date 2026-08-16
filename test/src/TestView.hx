@@ -1,5 +1,6 @@
 package;
 
+import catpi.automat.Cell.CellActor;
 import haxe.Timer;
 import haxe.CallStack;
 import lime.app.Application;
@@ -171,11 +172,10 @@ class TestView extends Application
 		{
 			deltaTimeSum -= SIM_STEP_TIME;
 
-			grid.step(); grid.right.step();	grid.right.right.step();
-			grid.bottom.step(); grid.bottom.right.step(); grid.bottom.right.right.step();
-			grid.bottom.bottom.step(); grid.bottom.bottom.right.step(); grid.bottom.bottom.right.right.step();
+			grid.stepAll();
+
 			// spawn a new on if there is free space:
-			// if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
+			if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
 		}
 	}
 
