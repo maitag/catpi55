@@ -335,7 +335,36 @@ class Grid {
 	}
 
 
+	// FUCK eh \o/ -> lemme tryto traverse the fully G R I D  ggggraaaaphe *lol->NOW:
+	var steppedAlready = new Map<Pos8x8Neg, Bool>();
+	public inline function stepThemAll() {
+		//-// o k ... now the hard brain rain is need ... (momento )*smokes ...
 
+		// NOT optimized AT NOW:
+		steppedAlready.clear();
+
+		// sammie, laura ... -> RECURSIVELY nowA .) 
+		stepIntoAllDirection(Pos8x8Neg.xy(0,0)); //(^^)
+
+		// (really hope that will work if i am start ;)...
+	}
+
+	public inline function stepIntoAllDirection(pos:Pos8x8Neg) {
+		
+		if (steppedAlready.get(pos) != null) return; // ok, if it is NULL -> NEVER setted at ALL ~)[a n y *lol]
+
+		// mark as -> STEPPED:
+		steppedAlready.set(pos, true);
+
+		step();
+
+		// hope that will RUN now .. oh .. forget something .. . .^^ -> MINIMALIZEANDREDUCING IS NEEEE:D (if it is not STATIC one:)
+		if (left != null) left.stepIntoAllDirection(Pos8x8Neg.xy(pos.x-1,pos.y));
+		if (bottom != null) bottom.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y+1));
+		if (top != null) top.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y-1));
+		if (right != null) right.stepIntoAllDirection(Pos8x8Neg.xy(pos.x+1, pos.y));
+
+	}
 
 }
 
