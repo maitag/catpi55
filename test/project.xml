@@ -11,7 +11,8 @@
 	<window if="html5||android" width="0" height="0" />
 	
 	
-	<app main="TestView" path="bin" file="TestView" />
+	<!-- <app main="TestView" path="bin" file="TestView" /> -->
+	<app main="TestSimmulation" path="bin" file="TestSimmulation" />
 	<!-- <app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" /> -->
 
 	<!-- <app main="TestCellRender" path="bin" file="TestCellRender" /> -->

@@ -21,7 +21,7 @@ import catpi.util.Pos;
 	
 	// TODO: let write this better or also by macrofication!
 	// public var blockedCellType:Int = 1<<CellType.METAL;
-	public var blockedCellType:Int = 1<<CellType.EARTH | 1<<CellType.METAL;
+	public var blockedCellType:Int = 1<<CellType.EARTH | 1<<CellType.METAL | 1<<CellType.EARTH | 1<<CellType.WOOD| 1<<CellType.ROCK;
 	// to store one more CellType
 	// public var blockedCellType:Int = (1<<(CellType.EARTH-1))|(1<<(CellType.METAL-1));
 

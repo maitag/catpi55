@@ -1,27 +1,24 @@
 package;
 
-import peote.view.math.Rnd;
-import catpi.automat.Cell.CellActor;
 import haxe.Timer;
 import haxe.CallStack;
 import lime.app.Application;
 import lime.ui.Window;
 
 import peote.view.PeoteView;
+import peote.view.Color;
 
 import catpi.automat.Cell.CellType;
-import catpi.render.actor.ActorRender;
-import catpi.render.cell.CellRender;
-
 import catpi.automat.Grid;
 import catpi.automat.MultiGridView;
-
-import catpi.util.Pos.xy as P;
-import catpi.util.Maze;
-
-import catpi.render.Render;
+// import catpi.render.Render;
 import catpi.render.RenderView;
+import catpi.render.cell.CellRender;
+import catpi.render.actor.ActorRender;
+import catpi.render.debug.DebugDisplay;
 import catpi.view.View;
+import catpi.util.Pos.xy as P;
+
 
 import actors.*;
 // import actors.ActorType;
@@ -36,7 +33,7 @@ import asset.generated.actors.Actors.Actors;
 import asset.generated.actors.Actors.TileID as ActorTileID;
 import asset.generated.actors.Actors.AnimID as ActorAnimID;
 
-class LimeAndOpenFLintoMAZE extends Application
+class TestSimmulation extends Application
 {
 	override function onWindowCreate():Void
 	{
@@ -53,22 +50,38 @@ class LimeAndOpenFLintoMAZE extends Application
 	// --------------- SAMPLE STARTS HERE -------------------------
 	// ------------------------------------------------------------	
 	var peoteView:PeoteView;
+
+	var debugDisplay:DebugDisplay;
+
 	var multiGridView:MultiGridView;
 	var view:View;
 	var grid:Grid;
-	var gridList:Array<Grid>;
+
+	var actor = new Semmi("player");
 
 	static inline var SIM_STEP_TIME:Int = 100;
 
 	var zoom:Float;
 
-
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
+		#if peoteview_fps
+		peoteView.FPS.x = window.width - peoteView.FPS.width;
+		#end
+
+
+		var debugDisplay = new DebugDisplay(300, 15, 100, 100, Color.RED1 - 0x55);
+		new DebugItem(debugDisplay, "controls:", "cursor keys to move the View");
+		var simTime = new DebugItem(debugDisplay, "simTime:", 4);
+
+		simTime.value = "test";
+		// simTime.valueInt = 1;
+		// simTime.valueInt += 1;
+		// simTime.valueFloat /= 3;
 
 		
-		var rootX:Int = 0;
+		var rootX:Int = 0; // TODO: 20; needs offset like->view.scrollRight();
 		var rootY:Int = 0;
 
 		var maxWidth = 40;
@@ -76,7 +89,7 @@ class LimeAndOpenFLintoMAZE extends Application
 		zoom = 0.620921323059155;
 
 		// TODO: for more then z=3 the rootXY will be outside (needs some modulo then ;)
-		var z=3; maxWidth *= z; maxHeight *= z; zoom = 0.620921323059155 / z; rootX = (maxWidth>>1)-1; rootY = (maxHeight>>1)-1;
+		// var z=2; maxWidth *= z; maxHeight *= z; zoom = 0.620921323059155 / z; rootX = (maxWidth>>1)-1; rootY = (maxHeight>>1)-1;
 		
 
 		// TODO: Render.init(peoteView, SIM_STEP_TIME);
@@ -91,38 +104,43 @@ class LimeAndOpenFLintoMAZE extends Application
 		];
 		CellRender.init(peoteView, Cells.sheets, cellRenderConfig);
 		
+		// TODO: make the "anim" another "map" later to define how animActions are mapped to assets !!!
 		var actorRenderConfig:Map<Int, {tile:Tile, anim:Int}> = [
+			/*ActorType.STONE1x1  => { tile:Actors.tile(ActorTileID.STONE1x1) , anim:ActorAnimID.still },
+			ActorType.STONE1x2  => { tile:Actors.tile(ActorTileID.STONE1x2) , anim:ActorAnimID.still },
+			ActorType.STONE2x2  => { tile:Actors.tile(ActorTileID.STONE2x2) , anim:ActorAnimID.still },
+			ActorType.CROSS     => { tile:Actors.tile(ActorTileID.CROSS)    , anim:ActorAnimID.still },
+			ActorType.EDGEBR3x3 => { tile:Actors.tile(ActorTileID.EDGEBR3x3), anim:ActorAnimID.still },
+			ActorType.HAXE      => { tile:Actors.tile(ActorTileID.HAXE)     , anim:ActorAnimID.still },
 			ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , anim:ActorAnimID.still },
 			ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , anim:ActorAnimID.still },
+			ActorType.FLIXEL    => { tile:Actors.tile(ActorTileID.FLIXEL)   , anim:ActorAnimID.still },*/
+			ActorType.SEMMI     => { tile:Actors.tile(ActorTileID.SEMMI)    , anim:ActorAnimID.still }
 		];
 		ActorRender.init(peoteView, SIM_STEP_TIME, Actors.sheets, actorRenderConfig);
 
+		// var renderView = new RenderView(0, 0, 800, 600);
 		var renderView = new RenderView(0, 0, Std.int(maxWidth*32*zoom), Std.int(maxHeight*32*zoom));
 		
 		view = new View(renderView);
 		view.zoom = zoom;
 
 
-		grid = GridTestData.createMaze(10,10);
-		gridList = grid.getAllAsList();
+		grid = GridTestData.create(GridTestData.TESTGRID64x64); // GridTestData.createMaze(2,2);
+		// GridTestData.traceGrid(grid, 64, 64);
+
+		// only for testing:
+		actor.addToGrid(grid, P(1,1));
 		
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
-	
-		// ---- test SIMMULATION ---
+		// trace(multiGridView.gridViewCache);
 		
-		// ((hope will H E L P ;))
-		var spawnedActors:Int = 0;
-		for (g in gridList) {
-			for (i in 0...1000) {
-				var pos = P(Rnd.intLimit(0, 63), Rnd.intLimit(0, 63));
-				while (g.get(pos).actor != CellActor.EMPTY) pos = P(Rnd.intLimit(0, 63), Rnd.intLimit(0, 63));
-				if (Rnd.fast() < 0.5) new Lime("4theSIGNmajesties", g, pos);
-				else new OpenFL("flash for fantasy", g, pos);
-				spawnedActors++;
-			}
-		}
-		trace('spawned actors: $spawnedActors');
+		
+		// add debugdisplay on top
+		peoteView.addDisplay(debugDisplay);
 
+		// ---- test SIMMULATION ---
+				
 		peoteView.start();		
 	}
 	
@@ -141,13 +159,7 @@ class LimeAndOpenFLintoMAZE extends Application
 		else 
 		{
 			deltaTimeSum -= SIM_STEP_TIME;
-			
-			// grid.stepAll(); // / / / (^_^)
-			for (g in gridList) g.step();
-
-			// spawn a new on if there is free space:
-			// if (grid.get(P(0,4)).actor == CellActor.EMPTY ) new Lime("", grid, P(0,4));
-			// if (grid.get(P(0,5)).actor == CellActor.EMPTY ) new OpenFL("", grid, P(0,5));
+			grid.stepAll();
 		}
 	}
 
@@ -186,6 +198,16 @@ class LimeAndOpenFLintoMAZE extends Application
 					view.scrollBottom();
 				}
 			
+			// move the actor
+			case A: if (actor.freeLeft()) actor.goLeft();
+			case D: if (actor.freeRight()) actor.goRight();
+			case W: if (actor.freeUp()) actor.goUp();
+			case S: if (actor.freeDown()) actor.goDown();
+			case Q: if (actor.freeLeftUp()) actor.goLeftUp();
+			case Y: if (actor.freeLeftDown()) actor.goLeftDown();
+			case E: if (actor.freeRightUp()) actor.goRightUp();
+			case C: if (actor.freeRightDown()) actor.goRightDown();	
+
 			default:
 		}
 	}	

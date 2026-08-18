@@ -9,7 +9,7 @@ import peote.view.Texture;
 import peote.view.TextureFormat;
 import peote.view.Color;
 
-@:forward(width, height, yOffset, fbTexture)
+@:forward(width, height, fbTexture)
 abstract CellDisplay(Display) to Display
 {
 	/*
