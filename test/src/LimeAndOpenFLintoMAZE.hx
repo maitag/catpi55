@@ -103,7 +103,9 @@ class LimeAndOpenFLintoMAZE extends Application
 		view.zoom = zoom;
 
 
-		grid = GridTestData.createMaze(10,10);
+		// grid = GridTestData.createMaze(10,10);
+		// TODO: grid = GridTestData.createMazeKruskal(10, 10, 60000, 12345);
+		grid = GridTestData.createMazeKruskal(4, 4, 8000, 12345);
 		gridList = grid.getAllAsList();
 		
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);

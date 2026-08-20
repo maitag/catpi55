@@ -115,6 +115,34 @@ class GridTestData
 		return rootGrid;
 	}
 
+	public static function createMazeKruskal(width:Int, height:Int, roomCount:Int=0, ?seed:Null<Int>):Grid {
+		var maze = new KruskalCellMerge( width*Grid.WIDTH+1, height*Grid.HEIGHT+1, roomCount, seed);
+		
+		var rootGrid:Grid = new Grid();
+		var grids = new Vector<Grid>(width*height);
+		var i = function(x:Int, y:Int):Int return (x + y*width);
+		
+		for (y in 0...height) for (x in 0...width) {
+			var grid:Grid = (x==0 && y==0) ? rootGrid : new Grid();
+			grids.set( i(x,y), grid );
+			// knot them:
+			if (x>0) {  grids.get(i(x-1,y)).right = grid; grid.left = grids.get(i(x-1,y)); }
+			if (y>0) {  grids.get(i(x,y-1)).bottom = grid; grid.top = grids.get(i(x,y-1)); }
+		}
+		
+		for (y in 0...height) for (x in 0...width) {
+			var grid:Grid = grids.get(i(x,y));
+			for (gy in 0...Grid.HEIGHT) for (gx in 0...Grid.WIDTH) {
+				var cellType:CellType = CellType.AIR;
+				if ( maze.get(x*Grid.WIDTH+gx, y*Grid.HEIGHT+gy) ) cellType = CellType.METAL;
+				grid.set(P(gx, gy), new Cell(cellType) );
+			}
+		}
+
+
+		return rootGrid;
+	}
+
 	public static function create3x3(loopConnectH=false, loopConnectV=false):Grid {
 		var grid11 = create(TESTGRID_1);
 		var grid12 = create(TESTGRID_2);

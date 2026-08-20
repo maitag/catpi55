@@ -13,11 +13,11 @@
 	
 	<!-- <app main="TestView" path="bin" file="TestView" /> -->
 	<!-- <app main="TestSimmulation" path="bin" file="TestSimmulation" /> -->
-	<!-- <app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" /> -->
+	<app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" />
 
 	<!-- <app main="TestCellRender" path="bin" file="TestCellRender" /> -->
 	<!-- <app main="TestAutomat" path="bin" file="TestAutomat" /> -->
-	<app main="TestUtil" path="bin" file="TestUtil" />
+	<!-- <app main="TestUtil" path="bin" file="TestUtil" /> -->
 	<!-- <app main="KruskalCellMergingMazeTest.Test" path="bin" file="TestKruskal" /> -->
 	<!-- <app main="catpi.util.pool.TestPool" path="bin" file="TestPool" /> -->
 

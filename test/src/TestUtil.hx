@@ -65,7 +65,7 @@ class TestUtil extends Application {
 		var maze = new Maze(64, 64, 1234567);
 		trace( "\n"+maze.toString() );
 
-		var maze = new KruskalCellMerge(64, 64, 100, 1234567);
+		var maze = new KruskalCellMerge(65, 65, 100, 1234567);
 		trace( "\n"+maze.toString() );
 
 	}

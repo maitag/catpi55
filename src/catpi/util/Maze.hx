@@ -73,7 +73,7 @@ abstract Maze(BitGrid) {
 @:forward(width, height, set, get, fromArrayString, fromString, toArrayString, toString)
 abstract KruskalCellMerge(BitGrid) {
 
-	inline public function new(width:Int, height:Int, roomCount:Int, ?seed:Null<Int>) 
+	inline public function new(width:Int, height:Int, roomCount:Int=0, ?seed:Null<Int>) 
 	{
 		this = new BitGrid(width, height, 0xffffffff);
 		gimmeKruskalCellMerge(new Random(seed), roomCount);
@@ -107,8 +107,7 @@ abstract KruskalCellMerge(BitGrid) {
 		var numCellsX:Int = (w - 1) >> 1;
 		var numCellsY:Int = (h - 1) >> 1;
 		
-		// 1. Alle Standard-Basis-Zellen aktivieren (ungerade Koordinaten)
-		// TODO: this can be also optimized while initialization
+		// 1. alle Standard-Basis-Zellen aktivieren (ungerade Koordinaten)
 		var x:Int = 1;
 		while (x < w - 1) {
 			var y:Int = 1;
@@ -119,53 +118,43 @@ abstract KruskalCellMerge(BitGrid) {
 			x += 2;
 		}
 
-		// 2. Cell-Merging: Zufällige größere Räume/Gänge vorab verschmelzen		
+		// 2. cell merging: zufällige größere Räume/Gänge vorab verschmelzen		
 		for (_ in 0...roomCount) {
-			// Directly calculate random odd coordinates without array lookup
-			// var cx:Int = Std.int(Math.random() * numCellsX);
-			// var cy:Int = Std.int(Math.random() * numCellsY);
+			// calculate random odd coordinates
 			var cx:Int = random.uint(numCellsX);
 			var cy:Int = random.uint(numCellsY);
 			var startX:Int = (cx << 1) + 1;
 			var startY:Int = (cy << 1) + 1;
 			
-			// Zufällige Ausdehnung (Schritte in 2er-Schritten für gültige Zellen)
-			// var roomW:Int = (Std.int(Math.random() * 2) + 1) << 1;
-			// var roomH:Int = (Std.int(Math.random() * 2) + 1) << 1;
-			var roomW:Int = random.uintLimit(1, 2) << 1;
-			var roomH:Int = random.uintLimit(1, 2) << 1;
+			// zufällige Ausdehnung (Schritte in 2er-Schritten für gültige Zellen)
+			// var roomW:Int = random.uintLimit(1, 2) << 1;
+			// var roomH:Int = random.uintLimit(1, 2) << 1;
+			var roomW:Int = random.uintLimit(1, random.uintLimit(2, random.uintLimit(3, random.uintLimit(4, 5)))) << 1;
+			var roomH:Int = random.uintLimit(1, random.uintLimit(2, random.uintLimit(3, random.uintLimit(4, 5)))) << 1;
 
-			// Prüfen, ob der Raum in die Map passt
+			// nur wenn der Raum in die Map passt
 			if (startX + roomW < w - 1 && startY + roomH < h - 1) {
 				var baseId:Int = startX * h + startY;
 				var endX:Int = startX + roomW;
 				var endY:Int = startY + roomH;
 				
-				// TODO: merge both loops
-
-				// Alle Wände innerhalb dieses Bereichs einreißen
 				for (tx in startX...endX + 1) {
+					var txBase:Int = tx * h;
 					for (ty in startY...endY + 1) {
+						// alle Wände innerhalb des Bereiches einreissen
 						this.set(tx, ty, false);
+						// logische Zellen mit der Basis-Zelle verschmelzen (nur ungerade Koordinaten)
+						if ((tx & 1) == 1 && (ty & 1) == 1) union(parent, baseId, txBase + ty);
 					}
 				}
-				
-				// Logische Zellen mit der Basis-Zelle verschmelzen (nur ungerade Koordinaten)
-				for (tx in startX...endX + 1) {
-					if ((tx & 1) == 1) {
-						var txBase:Int = tx * h;
-						for (ty in startY...endY + 1) {
-							if ((ty & 1) == 1) {
-								union(parent, baseId, txBase + ty);
-							}
-						}
-					}
-				}
+
 			}
 		}
 
-		// 3. Alle potenziellen Trennwände zwischen logischen Zellen sammeln
+		// 3. alle potenziellen Trennwände zwischen logischen Zellen sammeln
 		// pack coordinates into a single 32-bit Int (8 bits per coordinate) for optimization
+
+		// TODO: works only for maze with/height < 256
 		var edges = new Array<Int>();
 		var ex:Int = 1;
 		while (ex < w - 1) {
