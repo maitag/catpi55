@@ -3,6 +3,8 @@ package catpi.util;
 import haxe.ds.GenericStack;
 import haxe.iterators.StringIterator;
 import haxe.ds.Vector;
+import haxe.Int64;
+import haxe.Int32;
 
 import peote.view.math.Random;
 
@@ -107,7 +109,7 @@ abstract KruskalCellMerge(BitGrid) {
 		var numCellsX:Int = (w - 1) >> 1;
 		var numCellsY:Int = (h - 1) >> 1;
 		
-		// 1. alle Standard-Basis-Zellen aktivieren (ungerade Koordinaten)
+		// 1. activate all standard base cells (odd coordinates)
 		var x:Int = 1;
 		while (x < w - 1) {
 			var y:Int = 1;
@@ -118,7 +120,7 @@ abstract KruskalCellMerge(BitGrid) {
 			x += 2;
 		}
 
-		// 2. cell merging: zufällige größere Räume/Gänge vorab verschmelzen		
+		// 2. cell merging: merge larger randomly rooms/hallways beforehand		
 		for (_ in 0...roomCount) {
 			// calculate random odd coordinates
 			var cx:Int = random.uint(numCellsX);
@@ -126,7 +128,7 @@ abstract KruskalCellMerge(BitGrid) {
 			var startX:Int = (cx << 1) + 1;
 			var startY:Int = (cy << 1) + 1;
 			
-			// zufällige Ausdehnung (Schritte in 2er-Schritten für gültige Zellen)
+			// random room expansion (incrementing by 2 for valid cells)
 			// var roomW:Int = random.uintLimit(1, 2) << 1;
 			// var roomH:Int = random.uintLimit(1, 2) << 1;
 			var roomW:Int = random.uintLimit(1, random.uintLimit(2, random.uintLimit(3, random.uintLimit(4, 5)))) << 1;
@@ -151,43 +153,50 @@ abstract KruskalCellMerge(BitGrid) {
 			}
 		}
 
-		// 3. alle potenziellen Trennwände zwischen logischen Zellen sammeln
+		// 3. collect all potential partitions between logical cells
 		// pack coordinates into a single 32-bit Int (8 bits per coordinate) for optimization
 
-		// TODO: works only for maze with/height < 256
-		var edges = new Array<Int>();
+		// var edges = new Array<Int>(); // this works only for maze with/height < 256
+		var edges = new Array<Int64>();
+
 		var ex:Int = 1;
 		while (ex < w - 1) {
-			var ey = 1;
+			var ey:Int = 1;
 			while (ey < h - 1) {
 				if (ex + 2 < w - 1) {
-					edges.push(ex | (ey << 8) | ((ex + 2) << 16) | (ey << 24));
+					// edges.push(ex | (ey << 8) | ((ex + 2) << 16) | (ey << 24));
+					edges.push( Int64.make( (ex + 2) | (ey << 16) ,  ex | (ey << 16) )  );
 				}
 				if (ey + 2 < h - 1) {
-					edges.push(ex | (ey << 8) | (ex << 16) | ((ey + 2) << 24));
+					// edges.push(ex | (ey << 8) | (ex << 16) | ((ey + 2) << 24));
+					edges.push( Int64.make(   ex | ((ey + 2) << 16), ex | (ey << 16) )  );
 				}
 				ey += 2;
 			}
 			ex += 2;
 		}
 
-		// Wände zufällig mischen: Fisher-Yates Shuffle (O(N) instead of O(N log N) sort)
+		// shuffle walls: Fisher-Yates Shuffle (O(N) instead of O(N log N) sort)
 		var i:Int = edges.length;
 		while (i > 1) {
 			// var j:Int = Std.int(Math.random() * i);
 			var j:Int = random.uint(i);
 			i--;
-			var temp:Int = edges[i];
+			var temp:Int64 = edges[i];
 			edges[i] = edges[j];
 			edges[j] = temp;
 		}
 		
-		// 4. Kruskal-Logik: Wände entfernen, wenn die Zellen nicht im selben Set sind
+		// 4. Kruskal-Logic: remove walls if cells not into same set
 		for (edge in edges) {
-			var x1:Int = edge & 0xFF;
-			var y1:Int = (edge >> 8) & 0xFF;
-			var x2:Int = (edge >> 16) & 0xFF;
-			var y2:Int = (edge >> 24) & 0xFF; // & 0xFF ensures safety even if sign-extended
+			// var x1:Int = edge & 0xFF;
+			// var y1:Int = (edge >> 8) & 0xFF;
+			// var x2:Int = (edge >> 16) & 0xFF;
+			// var y2:Int = (edge >> 24) & 0xFF; // & 0xFF ensures safety even if sign-extended
+			var x1:Int = Int64.toInt(edge & 0xFFFF);
+			var y1:Int = Int64.toInt((edge >> 16) & 0xFFFF);
+			var x2:Int = Int64.toInt((edge >> 32) & 0xFFFF);
+			var y2:Int = Int64.toInt((edge >> 48) & 0xFFFF);
 
 			var id1:Int = x1 * h + y1;
 			var id2:Int = x2 * h + y2;
