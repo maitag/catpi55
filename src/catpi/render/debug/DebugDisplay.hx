@@ -28,9 +28,9 @@ class DebugDisplay extends Display
 		zIndex: 0
 	};
 
-	public function new(x:Int, y:Int, w:Int, h:Int, color:Color)
+	public function new(x:Int, y:Int, color:Color)
 	{
-		super(x, y, w, h, color);
+		super(x, y, 0, 0, color);
 
 		xOffset = 5;
 		yOffset = 5;

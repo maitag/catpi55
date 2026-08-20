@@ -5,13 +5,13 @@ import haxe.ds.Vector;
 
 abstract BitGrid(Vector<Int>) {
 
-	inline public function new(width:Int, height:Int) 
+	inline public function new(width:Int, height:Int, fillValue:Int = 0) 
 	{
 		this = new Vector<Int>(1 + Math.ceil(width * height / 32));
 		#if (haxe_ver >= "4.3.7")
-		this.fill(0);
+		this.fill(fillValue);
 		#else
-		for (i in 1...this.length) this.set(i, 0);
+		for (i in 1...this.length) this.set(i, fillValue);
 		#end
 		this.set(0, width<<16 | height);
 	}

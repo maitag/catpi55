@@ -71,14 +71,14 @@ class TestSimmulation extends Application
 		#end
 
 
-		var debugDisplay = new DebugDisplay(300, 15, 100, 100, Color.RED1 - 0x55);
-		new DebugItem(debugDisplay, "controls:", "cursor keys to move the View");
-		var simTime = new DebugItem(debugDisplay, "simTime:", 4);
+		var debugDisplay = new DebugDisplay(300, 0, Color.RED1 - 0x33);
+		new DebugItem(debugDisplay, "controls:", "cursor keys to\nmove the View");
+		var simTime = new DebugItem(debugDisplay, "simTime :", 4);
 
 		simTime.value = "test";
-		// simTime.valueInt = 1;
-		// simTime.valueInt += 1;
-		// simTime.valueFloat /= 3;
+		simTime.valueInt = 1;
+		simTime.valueInt += 1;
+		simTime.valueFloat /= 3;
 
 		
 		var rootX:Int = 0; // TODO: 20; needs offset like->view.scrollRight();

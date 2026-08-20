@@ -4,6 +4,8 @@ import lime.app.Application;
 
 import catpi.util.BitGrid;
 import catpi.util.Pos;
+import catpi.util.Maze
+;
 // import catpi.util.Pos.xy as P;
 
 // import catpi.util.Pos.Pos8x8Neg;
@@ -58,6 +60,13 @@ class TestUtil extends Application {
 		";
 		trace("\n"+bitGrid, bitGrid.width, bitGrid.height, bitGrid.hasGap());
 
+		// -------- test Maze ----------
+
+		var maze = new Maze(64, 64, 1234567);
+		trace( "\n"+maze.toString() );
+
+		var maze = new KruskalCellMerge(64, 64, 100, 1234567);
+		trace( "\n"+maze.toString() );
 
 	}
 	
