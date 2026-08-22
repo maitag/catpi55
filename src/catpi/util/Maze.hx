@@ -131,6 +131,7 @@ abstract KruskalCellMerge(BitGrid) {
 			// random room expansion (incrementing by 2 for valid cells)
 			// var roomW:Int = random.uintLimit(1, 2) << 1;
 			// var roomH:Int = random.uintLimit(1, 2) << 1;
+			// TODO: make max room-sizes more customizable
 			var roomW:Int = random.uintLimit(1, random.uintLimit(2, random.uintLimit(3, random.uintLimit(4, 5)))) << 1;
 			var roomH:Int = random.uintLimit(1, random.uintLimit(2, random.uintLimit(3, random.uintLimit(4, 5)))) << 1;
 

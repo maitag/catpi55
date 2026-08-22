@@ -43,9 +43,16 @@ interface IActor {
 	
 	// SIM:
 	public var isMove:Bool;
+	public var isStartMove:Bool;
+	public var reactOnFreeNeighbor:Bool;
+	
+	private var freeCellsAfterMove:Array<Pos>;
+	public function startNeighborMove():Void;
+
 	public function tryFallDown():Bool;
 
 	public function onAddToGrid():Void;
 	public function onAfterMove():Void;
+	public function onStartMove():Void;
 
 }

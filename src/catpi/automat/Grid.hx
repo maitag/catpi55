@@ -68,6 +68,19 @@ class Grid {
 		return (actorID == CellActor.EMPTY) ? null : actors.get( actorID );
 	}
 
+	public inline function getActorAtOffset(x:Int, y:Int):IActor {
+		var grid = this;
+		if (x < 0) { x = WIDTH - x; grid = grid.left; }
+		else if (x >= WIDTH) { x = 0; grid = grid.right; }
+		if (y < 0) { y = HEIGHT - y; grid = grid.top; }
+		else if (x >= HEIGHT) { y = 0; grid = grid.bottom; }
+		
+		if (grid == null) return null;
+
+		var actorID:Int = grid.get(P(x,y)).actor;
+		return (actorID == CellActor.EMPTY) ? null : grid.actors.get( actorID );
+	}
+
 	// TODO: optimize arguments by change CellActor into Int!
 	
 	inline function setCellActorAt(pos:Pos, cellActor:CellActor, isOrigin:Bool) {
@@ -335,30 +348,9 @@ class Grid {
 	}
 
 
-	// traverse all knotted grids into step()
-	/*
-	static var steppedAlready = new Map<Pos8x8Neg, Bool>();
-	public inline function stepThemAll() {
-		// NOT optimized AT NOW:
-		steppedAlready.clear();
-		stepIntoAllDirection(Pos8x8Neg.xy(0,0), true, true, true, true);
-	}
-
-	function stepIntoAllDirection(pos:Pos8x8Neg, doLeft:Bool, doRight:Bool, doTop:Bool, doBottom:Bool) {
-		
-		if (steppedAlready.get(pos) != null) return; // ok, if it is NULL -> NEVER setted at ALL ~)[a n y *lol]
-		
-		step();
-
-		// mark as -> STEPPED:
-		steppedAlready.set(pos, true);
-
-		if (doLeft && left != null) left.stepIntoAllDirection(Pos8x8Neg.xy(pos.x-1,pos.y), true, false, true, true);
-		if (doRight && right != null) right.stepIntoAllDirection(Pos8x8Neg.xy(pos.x+1, pos.y), false, true, true, true);
-		if (doTop && top != null) top.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y-1), true, true, true, false);
-		if (doBottom && bottom != null) bottom.stepIntoAllDirection(Pos8x8Neg.xy(pos.x, pos.y+1), true, true, false, true);
-	}*/
-
+	// ------------------------------------------------------------
+	// ---------- traverse all knotted grids into step() ----------
+	// ------------------------------------------------------------
 	
 	var traversed:Bool = false;
 

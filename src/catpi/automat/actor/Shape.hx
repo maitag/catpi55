@@ -16,6 +16,7 @@ import catpi.util.Pos.xy as P;
 	// TODO
 // }
 
+@:access(catpi.automat.actor)
 class Shape {
 
 	static inline function _addToGridFromTo(pos:Pos, xOff:Int, yOff:Int, xFrom:Int, xTo:Int, yFrom:Int, yTo:Int, grid:Grid, actorKey:CellActor, shape:BitGrid)	{
@@ -67,7 +68,10 @@ class Shape {
 		// trace('REMOVE: shapeX:$xFrom-$xTo, shapeY:$yFrom-$yTo - x:${pos.x + xFrom - xOff}-${pos.x + xTo - xOff}, y:${pos.y + yFrom - yOff}-${pos.y + yTo - yOff}');
 		for (y in yFrom...yTo)
 			for (x in xFrom...xTo)
-				if (shape.get(x,y)) grid.delCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff));
+				if (shape.get(x,y)) {
+					// if ()
+					grid.delCellActorAt(P(pos.x + x - xOff, pos.y + y - yOff));
+				}
 	}
 
 	public static inline function removeFromGrid(a:IActor, shape:BitGrid, syncToView:Bool, delKey:Bool=true, delKeyR:Bool=true, delKeyB:Bool=true, delKeyRB:Bool=true) {
@@ -157,7 +161,24 @@ class Shape {
 		else return _isFreeSide( 1, 1, grid, pos, blockedCellType, shape);
 	}
 
-
+	// TODO: get all free cells after move (optimize later: get that listdirectly from removeFromGrid)
+	public static function getFreeCellsAfterMove(a:IActor, shape:BitGrid, dx:Int, dy:Int) {
+		// dx and dy is directions where it was moved to 
+		for (y in 0...shape.height) {
+			var yOld = y-dy;
+			for (x in 0...shape.width) {
+				var xOld = x-dx;
+				var oldShapeBitFree = true;
+				if (xOld >= 0 && xOld < shape.width && yOld >= 0 && yOld < shape.height)
+					oldShapeBitFree = !shape.get(xOld,yOld);
+				if ( oldShapeBitFree && shape.get(x,y) )
+				{
+					// trace("cell get free at:", a.pos.x+xOld, a.pos.y+yOld);
+					a.freeCellsAfterMove.push(P(a.pos.x+xOld, a.pos.y+yOld));
+				}
+			}
+		}
+	}
 
 	// TODO: refactor constant arguments for view-sync out!
 
@@ -176,7 +197,10 @@ class Shape {
 			removeFromGrid(a, shape, false, false, (a.pos.x + shape.width == Grid.WIDTH+1), false, (a.pos.x + shape.width == Grid.WIDTH+1));		
 			addToGrid(a, g, P(a.pos.x-1, a.pos.y), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
-		
+
+		// TODO:
+		getFreeCellsAfterMove(a, shape, -1, 0);
+
 		if (syncToView) { // sync views
 			if (oldX > 0) oldGrid.viewsActorToLeft(a, oldKey, oldX, oldX-1, time);
 			else {
@@ -204,7 +228,10 @@ class Shape {
 			removeFromGrid(a, shape, false, false, false, false, false);
 			addToGrid(a, g, P(a.pos.x+1, a.pos.y), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
-		
+
+		// TODO:
+		getFreeCellsAfterMove(a, shape, 1, 0);
+
 		if (syncToView) { // sync views
 			if (oldX < Grid.WIDTH-1) oldGrid.viewsActorToRight(a, oldKey, oldX, oldX+1, time);
 			else {
@@ -232,7 +259,10 @@ class Shape {
 			removeFromGrid(a, shape, false, false, false, (a.pos.y + shape.height == Grid.HEIGHT+1), (a.pos.y + shape.height == Grid.HEIGHT+1) );
 			addToGrid(a, g, P(a.pos.x, a.pos.y-1), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
-		
+
+		// TODO:
+		getFreeCellsAfterMove(a, shape, 0, -1);
+
 		if (syncToView) { // sync views
 			if (oldY > 0) oldGrid.viewsActorToUp(a, oldKey, oldX, oldY, oldY-1, time);
 			else {
@@ -262,6 +292,9 @@ class Shape {
 			addToGrid(a, g, P(a.pos.x, a.pos.y+1), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
 		
+		// TODO:
+		getFreeCellsAfterMove(a, shape, 0, 1);
+
 		if (syncToView) { // sync views
 			if (oldY < Grid.HEIGHT-1) oldGrid.viewsActorToDown(a, oldKey, oldX, oldY, oldY+1, time);
 			else {
@@ -300,7 +333,10 @@ class Shape {
 			removeFromGrid(a, shape, false, false, (a.pos.x + shape.width == Grid.WIDTH+1), (a.pos.y + shape.height == Grid.HEIGHT+1), (a.pos.x + shape.width == Grid.WIDTH+1) || (a.pos.y + shape.height == Grid.HEIGHT+1));
 			addToGrid(a, g, P(a.pos.x-1, a.pos.y-1), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
-		
+
+		// TODO:
+		getFreeCellsAfterMove(a, shape, -1, -1);
+	
 		if (syncToView) { // sync views
 			if (oldX > 0 && oldY > 0) oldGrid.viewsActorToLeftUp(a, oldKey, oldX, oldX-1, oldY, oldY-1, time);
 			else {
@@ -340,6 +376,9 @@ class Shape {
 			addToGrid(a, g, P(a.pos.x-1, a.pos.y+1), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
 		
+		// TODO:
+		getFreeCellsAfterMove(a, shape, -1, 1);
+	
 		if (syncToView) { // sync views
 			if (oldX > 0 && oldY < Grid.HEIGHT-1) oldGrid.viewsActorToLeftDown(a, oldKey, oldX, oldX-1, oldY, oldY+1, time);
 			else {
@@ -379,6 +418,9 @@ class Shape {
 			addToGrid(a, g, P(a.pos.x+1, a.pos.y-1), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
 		
+		// TODO:
+		getFreeCellsAfterMove(a, shape, 1, -1);
+	
 		if (syncToView) { // sync views
 			if (oldX < Grid.WIDTH-1 && oldY > 0) oldGrid.viewsActorToRightUp(a, oldKey, oldX, oldX+1, oldY, oldY-1, time);
 			else {
@@ -419,6 +461,9 @@ class Shape {
 			addToGrid(a, g, P(a.pos.x+1, a.pos.y+1), shape, false, a.gridKey, a.gridKeyR, a.gridKeyB, a.gridKeyRB);
 		}
 		
+		// TODO:
+		getFreeCellsAfterMove(a, shape, 1, 1);
+	
 		if (syncToView) { // sync views
 			if (oldX < Grid.WIDTH-1 && oldY < Grid.HEIGHT-1) oldGrid.viewsActorToRightDown(a, oldKey, oldX, oldX+1, oldY, oldY+1, time);
 			else {

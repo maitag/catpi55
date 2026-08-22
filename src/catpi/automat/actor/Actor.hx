@@ -39,7 +39,6 @@ class Actor {
 
 		fields.push({ name: "width", doc: "shape width",
 			access: [APublic],
-			// kind: FProp("get", "never", macro:Int, null),
 			kind: FProp("get", "never", macro:Int, null),
 			pos: Context.currentPos()
 		});
@@ -55,7 +54,6 @@ class Actor {
 
 		fields.push({ name: "height", doc: "shape height",
 			access: [APublic],
-			// kind: FProp("get", "never", macro:Int, null),
 			kind: FProp("get", "never", macro:Int, null),
 			pos: Context.currentPos()
 		});
@@ -70,16 +68,39 @@ class Actor {
 			})
 		});
 		
-		fields.push({ name: "isMove",
-			access: [APublic],
-			// kind: FProp("default", "null", macro:Bool, macro false),
-			kind: FVar(macro:Bool, macro false),
+		// ------------------------------------------------
+		// -------- SIM props and functions ---------------
+		// ------------------------------------------------
+		fields.push({ name: "freeCellsAfterMove",
+			access: [APrivate],
+			kind: FVar(macro:Array<catpi.util.Pos>, macro new Array<catpi.util.Pos>()),
 			pos: Context.currentPos()
 		});
 
-		// ------------------------------------------------
-		// --------------- SIM functions ------------------
-		// ------------------------------------------------
+		fields.push({ name: "startNeighborMove",
+			access: [APublic, AInline],
+			pos: Context.currentPos(),
+			kind: FFun({
+				args: [],
+				expr: macro return catpi.automat.actor.ActorSim.startNeighborMove(this),
+				ret: null
+			})
+		});
+
+
+		for (fname in ["isStartMove", "isMove"])
+			fields.push({ name: fname,
+				access: [APublic],
+				kind: FVar(macro:Bool, macro false),
+				pos: Context.currentPos()
+			});
+
+		fields.push({ name: "reactOnFreeNeighbor",
+			access: [APublic],
+			kind: FVar(macro:Bool, macro true),
+			pos: Context.currentPos()
+		});
+
 
 		// delegates to the functions of ActorSim.hx
 
@@ -94,7 +115,7 @@ class Actor {
 		});
 
 		
-		for (fname in ["onAddToGrid", "onAfterMove"]) {
+		for (fname in ["onAddToGrid", "onStartMove", "onAfterMove"]) {
 			var customFunctionName:String = null; 
 			
 			// check for custom actor-sim-eventfunctions with same name to give the generated a SUPER postfix:

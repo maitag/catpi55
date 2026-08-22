@@ -156,7 +156,7 @@ class LimeAndOpenFLintoMAZE extends Application
 	override function onMouseWheel (deltaX:Float, deltaY:Float, deltaMode:lime.ui.MouseWheelMode):Void {
 		// if (deltaY<0) peoteView.zoom /= 1.1; else peoteView.zoom *= 1.1;
 		if (deltaY<0) {
-			if (view.zoom > zoom) view.zoom /= 1.1;
+			if (view.zoom > zoom+0.01) view.zoom /= 1.1;
 		}			
 		else view.zoom *= 1.1;
 		// trace(view.zoom);

@@ -67,13 +67,14 @@ class TestSimmulation extends Application
 	{
 		peoteView = new PeoteView(window);
 		#if peoteview_fps
-		peoteView.FPS.x = window.width - peoteView.FPS.width;
+		// peoteView.FPS.x = window.width - peoteView.FPS.width;
 		#end
 
 
 		var debugDisplay = new DebugDisplay(300, 0, Color.RED1 - 0x33);
 		new DebugItem(debugDisplay, "controls:", "cursor keys to\nmove the View");
 		var simTime = new DebugItem(debugDisplay, "simTime :", 4);
+		debugDisplay.x = window.width - debugDisplay.width;
 
 		simTime.value = "test";
 		simTime.valueInt = 1;
@@ -106,12 +107,12 @@ class TestSimmulation extends Application
 		
 		// TODO: make the "anim" another "map" later to define how animActions are mapped to assets !!!
 		var actorRenderConfig:Map<Int, {tile:Tile, anim:Int}> = [
-			/*ActorType.STONE1x1  => { tile:Actors.tile(ActorTileID.STONE1x1) , anim:ActorAnimID.still },
+			ActorType.STONE1x1  => { tile:Actors.tile(ActorTileID.STONE1x1) , anim:ActorAnimID.still },
 			ActorType.STONE1x2  => { tile:Actors.tile(ActorTileID.STONE1x2) , anim:ActorAnimID.still },
 			ActorType.STONE2x2  => { tile:Actors.tile(ActorTileID.STONE2x2) , anim:ActorAnimID.still },
 			ActorType.CROSS     => { tile:Actors.tile(ActorTileID.CROSS)    , anim:ActorAnimID.still },
 			ActorType.EDGEBR3x3 => { tile:Actors.tile(ActorTileID.EDGEBR3x3), anim:ActorAnimID.still },
-			ActorType.HAXE      => { tile:Actors.tile(ActorTileID.HAXE)     , anim:ActorAnimID.still },
+			/*ActorType.HAXE      => { tile:Actors.tile(ActorTileID.HAXE)     , anim:ActorAnimID.still },
 			ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , anim:ActorAnimID.still },
 			ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , anim:ActorAnimID.still },
 			ActorType.FLIXEL    => { tile:Actors.tile(ActorTileID.FLIXEL)   , anim:ActorAnimID.still },*/
@@ -129,8 +130,18 @@ class TestSimmulation extends Application
 		grid = GridTestData.create(GridTestData.TESTGRID64x64); // GridTestData.createMaze(2,2);
 		// GridTestData.traceGrid(grid, 64, 64);
 
-		// only for testing:
-		actor.addToGrid(grid, P(1,1));
+		
+		actor.addToGrid(grid, P(1,9));
+
+		var stone1 = new Stone1x1("stone 1"); stone1.addToGrid(grid, P(1,1)); 
+		var stone2 = new Stone1x1("stone 2"); stone2.addToGrid(grid, P(1,2)); 
+		var stone3 = new Stone1x1("stone 3"); stone3.addToGrid(grid, P(1,3));
+		
+		var stone4 = new Stone2x2("stone 4"); stone4.addToGrid(grid, P(2,1));
+		// stone1.tryFallDown();
+		// stone2.tryFallDown();
+		stone3.tryFallDown();
+		// stone4.tryFallDown();
 		
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 		// trace(multiGridView.gridViewCache);
@@ -199,14 +210,38 @@ class TestSimmulation extends Application
 				}
 			
 			// move the actor
-			case A: if (actor.freeLeft()) actor.goLeft();
-			case D: if (actor.freeRight()) actor.goRight();
-			case W: if (actor.freeUp()) actor.goUp();
-			case S: if (actor.freeDown()) actor.goDown();
-			case Q: if (actor.freeLeftUp()) actor.goLeftUp();
-			case Y: if (actor.freeLeftDown()) actor.goLeftDown();
-			case E: if (actor.freeRightUp()) actor.goRightUp();
-			case C: if (actor.freeRightDown()) actor.goRightDown();	
+			case A: if (actor.freeLeft()) {
+				actor.goLeft();
+				actor.startNeighborMove();
+			}
+			case D: if (actor.freeRight()) {
+				actor.goRight();
+				actor.startNeighborMove();
+			}
+			case W: if (actor.freeUp()) {
+				actor.goUp();
+				actor.startNeighborMove();
+			}
+			case S: if (actor.freeDown()) {
+				actor.goDown();
+				actor.startNeighborMove();
+			}
+			case Q: if (actor.freeLeftUp()) {
+				actor.goLeftUp();
+				actor.startNeighborMove();
+			}
+			case Y: if (actor.freeLeftDown()) {
+				actor.goLeftDown();
+				actor.startNeighborMove();
+			}
+			case E: if (actor.freeRightUp()) {
+				actor.goRightUp();
+				actor.startNeighborMove();
+			}
+			case C: if (actor.freeRightDown()) {
+				actor.goRightDown();	
+				actor.startNeighborMove();
+			}
 
 			default:
 		}

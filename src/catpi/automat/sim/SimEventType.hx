@@ -9,6 +9,7 @@ enum abstract SimEventType(Int) from Int to Int {
 	var CELL_MOVE;
 	var CELL_EMPTY;
 
+	var ACTOR_START_MOVE;
 	var ACTOR_AFTER_MOVE;
 
 	// ... more here

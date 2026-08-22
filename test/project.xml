@@ -11,9 +11,9 @@
 	<window if="html5||android" width="0" height="0" />
 	
 	
+	<!-- <app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" /> -->
 	<!-- <app main="TestView" path="bin" file="TestView" /> -->
-	<!-- <app main="TestSimmulation" path="bin" file="TestSimmulation" /> -->
-	<app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" />
+	<app main="TestSimmulation" path="bin" file="TestSimmulation" />
 
 	<!-- <app main="TestCellRender" path="bin" file="TestCellRender" /> -->
 	<!-- <app main="TestAutomat" path="bin" file="TestAutomat" /> -->
