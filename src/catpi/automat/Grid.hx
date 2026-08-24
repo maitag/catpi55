@@ -72,8 +72,11 @@ class Grid {
 		var grid = this;
 		if (x < 0) { x = WIDTH - x; grid = grid.left; }
 		else if (x >= WIDTH) { x = 0; grid = grid.right; }
+
+		if (grid == null) return null;// TODO
+
 		if (y < 0) { y = HEIGHT - y; grid = grid.top; }
-		else if (x >= HEIGHT) { y = 0; grid = grid.bottom; }
+		else if (y >= HEIGHT) { y = 0; grid = grid.bottom; }
 		
 		if (grid == null) return null;
 
@@ -81,6 +84,7 @@ class Grid {
 		return (actorID == CellActor.EMPTY) ? null : grid.actors.get( actorID );
 	}
 
+	
 	// TODO: optimize arguments by change CellActor into Int!
 	
 	inline function setCellActorAt(pos:Pos, cellActor:CellActor, isOrigin:Bool) {

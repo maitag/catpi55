@@ -461,4 +461,297 @@ public static inline var TESTGRID_3:String = "
 ###########          ######################         ############
 ";
 
+public static function create2x2(loopConnectH=false, loopConnectV=false):Grid {
+	var grid11 = create(TESTGRID_STONES_1);
+	var grid12 = create(TESTGRID_STONES_2);
+
+	var grid21 = create(TESTGRID_STONES_3);
+	var grid22 = create(TESTGRID_STONES_4);
+
+	if (loopConnectH) {
+		// connect them into LOOP
+		knotGridsLeftRight([grid11, grid12, grid11]);
+		knotGridsLeftRight([grid21, grid22, grid21]);
+	} else {
+		knotGridsLeftRight([grid11, grid12]);
+		knotGridsLeftRight([grid21, grid22]);
+	}
+
+	if (loopConnectV) {
+		knotGridsTopBottom([grid11, grid21, grid11]);
+		knotGridsTopBottom([grid12, grid22, grid12]);
+	} else {
+		knotGridsTopBottom([grid11, grid21]);
+		knotGridsTopBottom([grid12, grid22]);
+	}
+
+	return grid11;
+}
+
+public static inline var TESTGRID_STONES_1:String = "
+###                                                          ###
+#                                                               
+#                                                               
+#                                                               
+#   ##                                                     ##   
+#    ##                  ##   ##   ##                     ##    
+#     ##                                 ###             ##     
+#      ##          #                                    ##      
+#       ##         #       ##   ##     ##              ##       
+#        ##        ##                  ##             ##      # 
+# ##      ##                                         ##         
+#          ##                          #            ##          
+#           ##           ##                        ##           
+#   #        ##          ##      ##               ##            
+#             ##                        #        ##          #  
+#              ##                               ##              
+#  #            ##            ##               ##               
+#    #           ##                 ##        ##                
+#                 ##       #                 ##          #      
+#                  ##                 #     ##                  
+# #   ##            ##                     ##                 # 
+#                    ##           #       ##      ##            
+#                     ##                 ##                     
+#  #                   ##               ##             ##       
+#   #   ##              ##             ##                       
+#                        ##           ##                        
+#                         ##         ##                         
+#                          ##       ##      ##           #      
+##      ##     ##           ##     ##                           
+#                            ##   ##              ##            
+#                                                           #   
+#           ##                                                  
+#                               #                       #       
+#         #                         #                           
+#           #                #              #      ##           
+#                           #   ##  ##                  ##      
+#                                       ##                      
+#    ##                   #           #   #     #               
+#                        #   ##   #        #                    
+#                       #               #   #                   
+#      ##                                                       
+#                  #  #    ###    ##    ##   #####              
+#                  #  #   ## ##    ##  ##    #                  
+#                  #  #   #   #     ####     #                  
+#                  ####   #####      ##      #####          #   
+#                  #  #   #   #     ####     #             ###  
+#       #          #  #   #   #    ##  ##    #                  
+#      ###         #  #   #   #   ##    ##   #####              
+#                                                               
+#                                           #           #       
+#         #                                   #        ##       
+#        ###                                 ###                
+#                               #           #####               
+#               #              ###                              
+#             ####           #######                            
+#          #   ####                              #              
+#                                               ###             
+#    #      #          #               ##             ##        
+#   ###          ##   ###             ####                      
+#                    #####                     #                
+#                   #######                       ##            
+#      #        #                    #                          
+#      #                            ###         #               
+#      #                   #                                    
+";
+public static inline var TESTGRID_STONES_3:String = "
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#               ##                                              
+#                ##                                             
+#                 ##                                            
+#                  ##                                           
+#                   ##                                          
+#                    ##                                         
+#                             ##                                
+#                              ##                               
+#                               ##                              
+#                                ##                             
+#                                 ##                            
+#                                  ##                           
+#                                   ##                          
+#                                    ##                         
+#                                     ##                        
+#                                              ##               
+#                                               ##              
+#                                                ##             
+#                                                 ##            
+#                                                  ##           
+#                                                   ##          
+#                        ##                                     
+#                         ##                                    
+#                          ##                                   
+#                           ##                                  
+#                            ##                                 
+#                             ##                                
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+#                                                               
+";
+public static inline var TESTGRID_STONES_2:String = "
+###                                                          ###
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                           ##  #
+                                                          ##   #
+                                                         ##    #
+                                                        ##     #
+                                                       ##      #
+                                                      ##       #
+                                                     ##        #
+                                                    ##         #
+                                                   ##          #
+                                                  ##           #
+                                                 ##            #
+                                                ##             #
+                                               ##              #
+                                              ##               #
+                                             ##                #
+                                            ##                 #
+                                           ##                  #
+                                          ##                   #
+                                         ##                    #
+                                        ##                     #
+                                       ##                      #
+##                                    ##                       #
+ ##                                  ##                        #
+  ##                                ##                         #
+   ##                              ##                          #
+    ##                            ##                           #
+     ##                          ##                            #
+      ##                        ##                             #
+       ##                                                      #
+        ##                                                     #
+         ##                                                    #
+          ##                                                   #
+           ##                                                  #
+            ##                                                 #
+             ##                                                #
+              ##                                               #
+               ##                                              #
+                ##                                             #
+                 ##                                            #
+                  ##                                           #
+                   ##                                          #
+                    ##                                         #
+                     ##                                        #
+                      ##                                       #
+                       ##                                      #
+                        ##                                     #
+                         ##                                    #
+                          ##                                   #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+";
+
+public static inline var TESTGRID_STONES_4:String = "
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                           ##  #
+                                                          ##   #
+                                                         ##    #
+                                                        ##     #
+                                                       ##      #
+                                                      ##       #
+                                                     ##        #
+                                                    ##         #
+                                                   ##          #
+                                                  ##           #
+                                                 ##            #
+                                                ##             #
+                                               ##              #
+                                              ##               #
+                                             ##                #
+                                            ##                 #
+                                           ##                  #
+                                          ##                   #
+                                         ##                    #
+                                        ##                     #
+                                       ##                      #
+                                      ##                       #
+                                     ##                        #
+                                    ##                         #
+                                   ##                          #
+                                  ##                           #
+                                 ##                            #
+                                ##                             #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+                                                               #
+";
+
 }

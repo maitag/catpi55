@@ -33,7 +33,7 @@ import asset.generated.actors.Actors.Actors;
 import asset.generated.actors.Actors.TileID as ActorTileID;
 import asset.generated.actors.Actors.AnimID as ActorAnimID;
 
-class TestSimmulation extends Application
+class FallingStones extends Application
 {
 	override function onWindowCreate():Void
 	{
@@ -62,6 +62,7 @@ class TestSimmulation extends Application
 	static inline var SIM_STEP_TIME:Int = 100;
 
 	var zoom:Float;
+	var simRun = false;
 
 	public function start(window:Window)
 	{
@@ -76,21 +77,22 @@ class TestSimmulation extends Application
 		var simTime = new DebugItem(debugDisplay, "simTime :", 4);
 		debugDisplay.x = window.width - debugDisplay.width;
 
-		simTime.value = "test";
-		simTime.valueInt = 1;
-		simTime.valueInt += 1;
-		simTime.valueFloat /= 3;
+		// simTime.value = "test";
+		// simTime.valueInt = 1;
+		// simTime.valueInt += 1;
+		// simTime.valueFloat /= 3;
+
 
 		
-		var rootX:Int = 0; // TODO: 20; needs offset like->view.scrollRight();
-		var rootY:Int = 0;
+		var rootX:Int = 19; // TODO: 20; needs offset like->view.scrollRight();
+		var rootY:Int = 15;
 
 		var maxWidth = 40;
 		var maxHeight = 30;
 		zoom = 0.620921323059155;
 
 		// TODO: for more then z=3 the rootXY will be outside (needs some modulo then ;)
-		// var z=2; maxWidth *= z; maxHeight *= z; zoom = 0.620921323059155 / z; rootX = (maxWidth>>1)-1; rootY = (maxHeight>>1)-1;
+		var z=2; maxWidth *= z; maxHeight *= z; zoom = 0.620921323059155 / z; rootX = (maxWidth>>1)-1; rootY = (maxHeight>>1)-1;
 		
 
 		// TODO: Render.init(peoteView, SIM_STEP_TIME);
@@ -127,24 +129,42 @@ class TestSimmulation extends Application
 		view.zoom = zoom;
 
 
-		grid = GridTestData.create(GridTestData.TESTGRID64x64); // GridTestData.createMaze(2,2);
+		grid = GridTestData.create2x2(false, true); // GridTestData.createMaze(2,2);
 		// GridTestData.traceGrid(grid, 64, 64);
 
 		
-		actor.addToGrid(grid, P(1,9));
+		actor.addToGrid(grid, P(31,39));
 
-		// var cross = new Cross("cross",grid,P(6,3));
+		// var cross = new Cross("cross",grid,P(16,3));
 
-		var stone1 = new Stone1x1("stone 1"); stone1.addToGrid(grid, P(1,1)); 
-		var stone2 = new Stone1x1("stone 2"); stone2.addToGrid(grid, P(1,2)); 
-		var stone3 = new Stone1x1("stone 3"); stone3.addToGrid(grid, P(1,3));
+		var stone1 = new Stone1x1("stone 1"); stone1.addToGrid(grid, P(10,1)); 
+		var stone2 = new Stone1x1("stone 2"); stone2.addToGrid(grid, P(10,2)); 
+		var stone3 = new Stone1x1("stone 3"); stone3.addToGrid(grid, P(10,3));
 		
-		var stone4 = new Stone2x2("stone 4"); stone4.addToGrid(grid, P(2,1));
+		var stone4 = new Stone2x2("stone 4"); stone4.addToGrid(grid, P(31,26));
+		var stone5 = new Stone2x2("stone 5"); stone5.addToGrid(grid, P(33,24));
 		stone1.tryFallDown();
 		stone2.tryFallDown();
 		stone3.tryFallDown();
-		// stone4.tryFallDown();
+		stone4.tryFallDown();
+		stone5.tryFallDown();
+
+
+		// spawn mass of stones into grid.bottom
+
+		for (x in 1...31) {
+			var stone = new Stone2x2(""); stone.addToGrid(grid.bottom, P(x*2,39));
+		}
+
+		for (y in 41...61)
+			for (x in 2...63) {
+				var stone = new Stone1x1(""); stone.addToGrid(grid.bottom, P(x,y)); //stone.onStartMove();
+			}
 		
+		for (x in 1...32) {
+			var stone = new Stone1x1(""); stone.addToGrid(grid.bottom, P(x*2,61)); stone.tryFallDown();
+		}
+ 
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 		// trace(multiGridView.gridViewCache);
 		
@@ -154,7 +174,8 @@ class TestSimmulation extends Application
 
 		// ---- test SIMMULATION ---
 				
-		peoteView.start();		
+		peoteView.start();
+		// simRun = true;
 	}
 	
 	// ------------------------------------------------------------
@@ -164,7 +185,7 @@ class TestSimmulation extends Application
 	var deltaTimeSum:Int = SIM_STEP_TIME;
 
 	override function update(deltaTime:Int):Void {
-		if (grid==null) return;
+		if (!simRun) return;
 
 		if (deltaTimeSum < SIM_STEP_TIME) {
 			deltaTimeSum += deltaTime;
@@ -211,6 +232,10 @@ class TestSimmulation extends Application
 					view.scrollBottom();
 				}
 			
+			
+			case SPACE:  simRun = !simRun;
+
+
 			// move the actor
 			case A: if (actor.freeLeft()) {
 				actor.goLeft();

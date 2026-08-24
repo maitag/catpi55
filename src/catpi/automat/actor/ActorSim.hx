@@ -14,7 +14,7 @@ class ActorSim {
 	}
 
 	public static inline function tryFallDown(a:IActor):Bool {
-		var delay:Int = 4;
+		var delay:Int = 2;
 		
 		// trace("tryFallDown");
 		if ( a.freeDown() ) {			
@@ -67,7 +67,7 @@ class ActorSim {
 			// trace("trigger onStartMove:", neighborActor.name);
 			var e = new SimEvent(SimEventType.ACTOR_START_MOVE, neighborActor.gridKey);
 			neighborActor.isStartMove = true;
-			neighborActor.grid.setSimEvent(e, 2);
+			neighborActor.grid.setSimEvent(e, 1);
 		}
 	}
 
@@ -82,19 +82,6 @@ class ActorSim {
 		// trace("onAfterMove");
 		a.isMove = false;
 
-		// TODO: check the cells that was getting empty after move
-		// loop throught and check:
-		//    a) if cell is empty (no other still get into that place while iterating)
-		//    b) trigger an actor not twice
-		//          by check actors "isMoving"-flag AND
-		//          by store the already-checked in a map to not trigger double (.clear afterwards) 
-		// 1) the upper ones
-		// 2) the left and right upper outsides
-		// UNLOCK them if no one is movin inside(that will lock it again into future optimization)!
-
-		// -> needs a shape-function-helper at first what gives all "shape-offsets" from one direction!!!!!!
-
-		// some SIMPLE at FIRST :)
 		a.tryFallDown();
 	}
 }

@@ -29,6 +29,7 @@ import catpi.util.Pos;
 
 	public function new(name:String="",grid:Grid, pos:Pos) {
 		this.name = name;
+		reactOnFreeNeighbor = false;
 		addToGrid(grid, pos);
 
 		// start custom moving

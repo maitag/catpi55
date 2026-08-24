@@ -12,6 +12,8 @@ import peote.view.Display;
 import peote.view.Program;
 import peote.view.Color;
 
+import catpi.asset.Util;
+
 #if (assets=="Cells")
 import asset.generated.cells.Cells as Asset;
 import asset.generated.cells.Cells.TileID as TileID;
