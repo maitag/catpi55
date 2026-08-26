@@ -82,8 +82,8 @@ class TestSimmulation extends Application
 		simTime.valueFloat /= 3;
 
 		
-		var rootX:Int = 0; // TODO: 20; needs offset like->view.scrollRight();
-		var rootY:Int = 0;
+		var rootX:Int = 19; // TODO: 20; needs offset like->view.scrollRight();
+		var rootY:Int = 14;
 
 		var maxWidth = 40;
 		var maxHeight = 30;
@@ -127,15 +127,16 @@ class TestSimmulation extends Application
 		view.zoom = zoom;
 
 
-		grid = GridTestData.create(GridTestData.TESTGRID64x64); // GridTestData.createMaze(2,2);
+		// grid = GridTestData.create(GridTestData.TESTGRID64x64); // GridTestData.createMaze(2,2);
+		grid = GridTestData.create2x2(false, true); // GridTestData.createMaze(2,2);
 		// GridTestData.traceGrid(grid, 64, 64);
 
 		
-		actor.addToGrid(grid, P(1,9));
+		actor.addToGrid(grid, P(4,0));
 
 		// var cross = new Cross("cross",grid,P(6,3));
 
-		var stone1 = new Stone1x1("stone 1"); stone1.addToGrid(grid, P(1,1)); 
+		/*var stone1 = new Stone1x1("stone 1"); stone1.addToGrid(grid, P(1,1)); 
 		var stone2 = new Stone1x1("stone 2"); stone2.addToGrid(grid, P(1,2)); 
 		var stone3 = new Stone1x1("stone 3"); stone3.addToGrid(grid, P(1,3));
 		
@@ -143,8 +144,10 @@ class TestSimmulation extends Application
 		stone1.tryFallDown();
 		stone2.tryFallDown();
 		stone3.tryFallDown();
-		// stone4.tryFallDown();
+		// stone4.tryFallDown();*/
 		
+		var stone1 = new Stone1x1("stone 1"); stone1.addToGrid(grid.top, P(4,63));
+
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 		// trace(multiGridView.gridViewCache);
 		

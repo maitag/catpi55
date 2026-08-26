@@ -64,6 +64,10 @@ class FallingStones extends Application
 	var zoom:Float;
 	var simRun = false;
 
+	// debug
+	var simTime:Float = 0.0; var simTimeCount:Int = 0; var debugSimTime:DebugItem;
+	var debugActors:DebugItem;
+
 	public function start(window:Window)
 	{
 		peoteView = new PeoteView(window);
@@ -73,14 +77,13 @@ class FallingStones extends Application
 
 
 		var debugDisplay = new DebugDisplay(300, 0, Color.RED1 - 0x33);
-		new DebugItem(debugDisplay, "controls:", "cursor keys to\nmove the View");
-		var simTime = new DebugItem(debugDisplay, "simTime :", 4);
+		new DebugItem(debugDisplay, " move View  :", "cursor keys");
+		new DebugItem(debugDisplay, " move Player:", "awsd");
+		new DebugItem(debugDisplay, " start/stop:", "space");
+		new DebugItem(debugDisplay, "----------------------");
+		debugActors  = new DebugItem(debugDisplay, "actors :");
+		debugSimTime = new DebugItem(debugDisplay, "simTime:", 3);
 		debugDisplay.x = window.width - debugDisplay.width;
-
-		// simTime.value = "test";
-		// simTime.valueInt = 1;
-		// simTime.valueInt += 1;
-		// simTime.valueFloat /= 3;
 
 
 		
@@ -133,7 +136,7 @@ class FallingStones extends Application
 		// GridTestData.traceGrid(grid, 64, 64);
 
 		
-		actor.addToGrid(grid, P(31,39));
+		actor.addToGrid(grid, P(31,30));
 
 		// var cross = new Cross("cross",grid,P(16,3));
 
@@ -149,9 +152,19 @@ class FallingStones extends Application
 		stone4.tryFallDown();
 		stone5.tryFallDown();
 
+		// spawn mass of stones into grid.right.top
+		for (x in 1...31) {
+			var stone = new Stone2x2(""); stone.addToGrid(grid.right.top, P(x*2,39));
+		}
+		for (y in 41...61)
+			for (x in 2...63) {
+				var stone = new Stone1x1(""); stone.addToGrid(grid.right.top, P(x,y)); //stone.onStartMove();
+			}	
+		for (x in 1...32) {
+			var stone = new Stone1x1(""); stone.addToGrid(grid.right.top, P(x*2,61)); stone.tryFallDown();
+		}
 
 		// spawn mass of stones into grid.bottom
-
 		for (x in 1...31) {
 			var stone = new Stone2x2(""); stone.addToGrid(grid.bottom, P(x*2,39));
 		}
@@ -159,12 +172,13 @@ class FallingStones extends Application
 		for (y in 41...61)
 			for (x in 2...63) {
 				var stone = new Stone1x1(""); stone.addToGrid(grid.bottom, P(x,y)); //stone.onStartMove();
-			}
-		
+			}		
 		for (x in 1...32) {
 			var stone = new Stone1x1(""); stone.addToGrid(grid.bottom, P(x*2,61)); stone.tryFallDown();
 		}
- 
+
+		debugActors.valueInt = grid.actors.length  + grid.right.actors.length + grid.bottom.actors.length + grid.rightBottom.actors.length;
+
 		multiGridView = new MultiGridView(view, grid, rootX, rootY, maxWidth, maxHeight);
 		// trace(multiGridView.gridViewCache);
 		
@@ -175,7 +189,7 @@ class FallingStones extends Application
 		// ---- test SIMMULATION ---
 				
 		peoteView.start();
-		// simRun = true;
+		simRun = true;
 	}
 	
 	// ------------------------------------------------------------
@@ -193,7 +207,9 @@ class FallingStones extends Application
 		else 
 		{
 			deltaTimeSum -= SIM_STEP_TIME;
+			var time = Timer.stamp();
 			grid.stepAll();
+			simTime += Timer.stamp()-time; simTimeCount++;
 		}
 	}
 
@@ -274,7 +290,17 @@ class FallingStones extends Application
 		}
 	}	
 
-	// override function render(context:lime.graphics.RenderContext):Void {}
+	var debugUpdateStep:Int = 0;
+
+	override function render(context:lime.graphics.RenderContext):Void {
+		if (debugUpdateStep++ == 10) {
+			if (simTimeCount>0) debugSimTime.valueFloat = simTime/simTimeCount;
+			simTime = 0.0;
+			simTimeCount = 0;
+
+			debugUpdateStep = 0;
+		}
+	}
 	// override function onRenderContextLost ():Void trace(" --- WARNING: LOST RENDERCONTEXT --- ");		
 	// override function onRenderContextRestored (context:lime.graphics.RenderContext):Void trace(" --- onRenderContextRestored --- ");		
 		
@@ -306,7 +332,7 @@ class FallingStones extends Application
 	// override function onWindowFocusIn():Void { trace("onWindowFocusIn"); }
 	// override function onWindowFocusOut():Void { trace("onWindowFocusOut"); }
 	// override function onWindowFullscreen():Void { trace("onWindowFullscreen"); }
-	// override function onWindowMove(x:Float, y:Float):Void { trace("onWindowMove"); }
+	override function onWindowMove(x:Float, y:Float):Void { deltaTimeSum=SIM_STEP_TIME; }
 	// override function onWindowMinimize():Void { trace("onWindowMinimize"); }
 	// override function onWindowRestore():Void { trace("onWindowRestore"); }
 	

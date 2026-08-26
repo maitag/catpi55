@@ -46,7 +46,7 @@ interface IActor {
 	public var isStartMove:Bool;
 	public var reactOnFreeNeighbor:Bool;
 	
-	private var freeCellsAfterMove:Array<Pos>;
+	private var freeCellsAfterMove:Array<Pos8x8Neg>;
 	public function startNeighborMove():Void;
 
 	public function tryFallDown():Bool;

@@ -73,7 +73,7 @@ class Actor {
 		// ------------------------------------------------
 		fields.push({ name: "freeCellsAfterMove",
 			access: [APrivate],
-			kind: FVar(macro:Array<catpi.util.Pos>, macro new Array<catpi.util.Pos>()),
+			kind: FVar(macro:Array<Pos8x8Neg>, macro new Array<catpi.util.Pos8x8Neg>()),
 			pos: Context.currentPos()
 		});
 

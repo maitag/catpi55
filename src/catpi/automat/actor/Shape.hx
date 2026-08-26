@@ -174,7 +174,7 @@ class Shape {
 				if ( oldShapeBitFree && shape.get(x,y) )
 				{
 					// trace("cell get free at:", a.pos.x+xOld, a.pos.y+yOld);
-					a.freeCellsAfterMove.push(P(a.pos.x+xOld, a.pos.y+yOld));
+					a.freeCellsAfterMove.push(Pos8x8Neg.xy(a.pos.x+xOld, a.pos.y+yOld));
 				}
 			}
 		}

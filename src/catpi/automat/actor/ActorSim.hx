@@ -13,10 +13,11 @@ class ActorSim {
 		// tryFallDown(a);
 	}
 
-	public static inline function tryFallDown(a:IActor):Bool {
+	public static function tryFallDown(a:IActor):Bool {
 		var delay:Int = 2;
 		
 		// trace("tryFallDown");
+
 		if ( a.freeDown() ) {			
 			a.goDown(delay);
 			a.isMove = true;
@@ -25,23 +26,44 @@ class ActorSim {
 			startNeighborMove(a);
 			return true;
 		}
-		else if (a.freeLeftDown(true)) {
-			a.goLeftDown(delay);
-			a.isMove = true;
-			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
-			a.grid.setSimEvent(e, delay);
-			startNeighborMove(a);
-			return true;
+		// shuffle:
+		if (Math.random() > 0.5) {
+			if (a.freeLeftDown(true)) {
+				a.goLeftDown(delay);
+				a.isMove = true;
+				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
+				a.grid.setSimEvent(e, delay);
+				startNeighborMove(a);
+				return true;
+			}
+			if (a.freeRightDown(true)) {
+				a.goRightDown(delay);
+				a.isMove = true;
+				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
+				a.grid.setSimEvent(e, delay);
+				startNeighborMove(a);
+				return true;
+			}
+		} 
+		else {
+			if (a.freeRightDown(true)) {
+				a.goRightDown(delay);
+				a.isMove = true;
+				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
+				a.grid.setSimEvent(e, delay);
+				startNeighborMove(a);
+				return true;
+			}
+			if (a.freeLeftDown(true)) {
+				a.goLeftDown(delay);
+				a.isMove = true;
+				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
+				a.grid.setSimEvent(e, delay);
+				startNeighborMove(a);
+				return true;
+			}
 		}
-		else if (a.freeRightDown(true)) {
-			a.goRightDown(delay);
-			a.isMove = true;
-			var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
-			a.grid.setSimEvent(e, delay);
-			startNeighborMove(a);
-			return true;
-		}
-		else return false;
+		return false;
 	}
 
 	// TODO
@@ -51,10 +73,13 @@ class ActorSim {
 	public static inline function startNeighborMove(a:IActor) {
 
 		for (freeCell in a.freeCellsAfterMove) {
-			// trace(freeCell);
 			// upper first
-			for (dx in [0, -1, 1]) _startNeighborMove(a, freeCell.x+dx, freeCell.y-1);
-			for (dx in [-1, 1]) _startNeighborMove(a, freeCell.x+dx, freeCell.y);
+			if (Math.random() > 0.5)
+				for (dx in [0, -1, 1]) _startNeighborMove(a, freeCell.x+dx, freeCell.y-1);
+			else for (dx in [0, 1, -1]) _startNeighborMove(a, freeCell.x+dx, freeCell.y-1);
+			if (Math.random() > 0.5)
+				for (dx in [-1, 1]) _startNeighborMove(a, freeCell.x+dx, freeCell.y);
+			else for (dx in [1, -1]) _startNeighborMove(a, freeCell.x+dx, freeCell.y);
 			
 		}
 		a.freeCellsAfterMove = [];
