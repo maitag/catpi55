@@ -58,6 +58,7 @@ class ActorRender {
 	var display:ActorDisplay;
 
 	var progSimple:ProgSimple;
+	// var progAnim:ProgAnim;
 	// var prog1x1:Prog1x1Simple; // for 1x1 actor shapes and tilesheets
 
 	var elemViewBuffer:IntMap<ActorElem>;
@@ -167,7 +168,8 @@ class ActorRender {
 
 
 	// TODO
-	public function updateActor(mapkey:Int, action:Int) { // TODO: action!
+	public function updateActor(mapkey:Int, action:Int) { // TODO: action! 
+		// TODO -> can also need to switch the renderType (so remove and add a new one of these type)!
 	}
 
 

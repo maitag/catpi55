@@ -10,6 +10,8 @@ import peote.view.PeoteView;
 
 import catpi.automat.Cell.CellType;
 import catpi.render.actor.ActorRender;
+import catpi.render.ActorRenderType;
+import catpi.render.ActorRenderConfig;
 import catpi.render.cell.CellRender;
 
 import catpi.automat.Grid;
@@ -90,18 +92,19 @@ class TestView extends Application
 		];
 		CellRender.init(peoteView, Cells.sheets, cellRenderConfig);
 		
-		// TODO: make the "anim" another "map" later to define how animActions are mapped to assets !!!
-		var actorRenderConfig:Map<Int, {tile:Tile, anim:Int}> = [
-			ActorType.STONE1x1  => { tile:Actors.tile(ActorTileID.STONE1x1) , anim:ActorAnimID.still },
-			ActorType.STONE1x2  => { tile:Actors.tile(ActorTileID.STONE1x2) , anim:ActorAnimID.still },
-			ActorType.STONE2x2  => { tile:Actors.tile(ActorTileID.STONE2x2) , anim:ActorAnimID.still },
-			ActorType.CROSS     => { tile:Actors.tile(ActorTileID.CROSS)    , anim:ActorAnimID.still },
-			ActorType.EDGEBR3x3 => { tile:Actors.tile(ActorTileID.EDGEBR3x3), anim:ActorAnimID.still },
-			ActorType.HAXE      => { tile:Actors.tile(ActorTileID.HAXE)     , anim:ActorAnimID.still },
-			ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , anim:ActorAnimID.still },
-			ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , anim:ActorAnimID.still },
-			ActorType.FLIXEL    => { tile:Actors.tile(ActorTileID.FLIXEL)   , anim:ActorAnimID.still },
-			ActorType.SEMMI     => { tile:Actors.tile(ActorTileID.SEMMI)    , anim:ActorAnimID.still }
+		var actorRenderConfig:ActorRenderConfig = [
+			ActorRenderType.SIMPLE => [
+				ActorType.STONE1x1  => { tile:Actors.tile(ActorTileID.STONE1x1) , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.STONE1x2  => { tile:Actors.tile(ActorTileID.STONE1x2) , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.STONE2x2  => { tile:Actors.tile(ActorTileID.STONE2x2) , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.CROSS     => { tile:Actors.tile(ActorTileID.CROSS)    , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.EDGEBR3x3 => { tile:Actors.tile(ActorTileID.EDGEBR3x3), action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.HAXE      => { tile:Actors.tile(ActorTileID.HAXE)     , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.FLIXEL    => { tile:Actors.tile(ActorTileID.FLIXEL)   , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.SEMMI     => { tile:Actors.tile(ActorTileID.SEMMI)    , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] }
+			]
 		];
 		ActorRender.init(peoteView, SIM_STEP_TIME, Actors.sheets, actorRenderConfig);
 

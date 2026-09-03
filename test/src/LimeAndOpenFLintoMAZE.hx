@@ -11,6 +11,8 @@ import peote.view.PeoteView;
 
 import catpi.automat.Cell.CellType;
 import catpi.render.actor.ActorRender;
+import catpi.render.ActorRenderConfig;
+import catpi.render.ActorRenderType;
 import catpi.render.cell.CellRender;
 
 import catpi.automat.Grid;
@@ -91,9 +93,11 @@ class LimeAndOpenFLintoMAZE extends Application
 		];
 		CellRender.init(peoteView, Cells.sheets, cellRenderConfig);
 		
-		var actorRenderConfig:Map<Int, {tile:Tile, anim:Int}> = [
-			ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , anim:ActorAnimID.still },
-			ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , anim:ActorAnimID.still },
+		var actorRenderConfig:ActorRenderConfig = [
+			ActorRenderType.SIMPLE => [
+				ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+				ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , action: [ ActorAction.STILL => {anim:ActorAnimID.still} ] },
+			]
 		];
 		ActorRender.init(peoteView, SIM_STEP_TIME, Actors.sheets, actorRenderConfig);
 
