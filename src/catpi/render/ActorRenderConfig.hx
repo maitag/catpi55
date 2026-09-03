@@ -34,8 +34,7 @@ abstract ActorRenderConfig(Map<ActorRenderType, Map<Int, { tile:Tile, action:Map
 				{
 					if (sheetArray.indexOf(tile.sheet) < 0) {
 						sheetArray.push(tile.sheet);
-						sheetArray.sort((a, b) -> a - b);
-						renderTypeSheets.set(renderTypeKey, sheetArray);
+						// renderTypeSheets.set(renderTypeKey, sheetArray);
 					}
 				} 
 
@@ -52,17 +51,19 @@ abstract ActorRenderConfig(Map<ActorRenderType, Map<Int, { tile:Tile, action:Map
 		
 		for ( renderTypeKey => renderTypeValue in this) 
 		{
+			var sheetArray:Array<Int> = renderTypeSheets.get(renderTypeKey);
+			sheetArray.sort((a, b) -> a - b);
+			// renderTypeSheets.set(renderTypeKey, sheetArray);
+
 			for ( actorTypeKey => actorTypeValue in renderTypeValue)
 			{
 				var tile:Tile = actorTypeValue.tile;
 				var sheet:Sheet = sheets[ tile.sheet ];
 
-				var sheetArray:Array<Int> = renderTypeSheets.get(renderTypeKey);
-
 				for (actionTypeKey => actionTypeValue in actorTypeValue.action)
 				{	
 					var anim:Anim = tile.anim(tile.animID[actionTypeValue.anim]);	
-								
+
 					conf.set(actorTypeKey * maxActions + actionTypeKey, {
 						renderType: renderTypeKey,
 						tileStart: anim.start,
