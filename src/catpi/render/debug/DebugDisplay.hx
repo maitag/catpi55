@@ -71,6 +71,7 @@ class DebugItem {
 		return n;
 	}
 
+
 	public var roundFloatsAt:Int;
 
 	public function new(debugDisplay:DebugDisplay, label:String, value:String = "", roundFloatsAt:Int = -1)

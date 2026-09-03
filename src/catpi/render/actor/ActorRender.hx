@@ -12,7 +12,7 @@ import peote.view.TextureConfig;
 import catpi.asset.Util;
 import catpi.asset.Sheet;
 
-import catpi.render.cell.CellRender;
+import catpi.render.RenderView;
 
 class ActorRender {
 
@@ -22,14 +22,14 @@ class ActorRender {
 
 	public static var stepTime:Float = 0.0;
 
-	public static var configStatic:Vector<ActorElemConfigStatic>;
+	public static var config:Vector<ActorElemConfig>;
 
-	public static function init(peoteView:PeoteView, stepTime:Int, sheets:Array<Sheet>, configStatic:ActorConfigStatic) {
+	public static function init(peoteView:PeoteView, stepTime:Int, sheets:Array<Sheet>, config:ActorConfig) {
 		ActorRender.peoteView = peoteView;
 		ActorRender.stepTime = stepTime / 860; // <- TODO
 		loadTextures(sheets);
 
-		ActorRender.configStatic = configStatic.toConfigVector(sheets);
+		ActorRender.config = config.toConfigVector(sheets);
 	}
 
 	public static function loadTextures(sheets:Array<Sheet>) {
@@ -74,12 +74,12 @@ class ActorRender {
 	// public function purgeView() {}
 
 	public inline function addActor(x:Int, y:Int, mapkey:Int, actorType:Int) {
-		var px = x * CellRender.cellWidth + scrollOffsetX;
-		var py = y * CellRender.cellHeight + scrollOffsetY;
+		var px = x * RenderView.cellWidth + scrollOffsetX;
+		var py = y * RenderView.cellHeight + scrollOffsetY;
 
 		// TODO
-		var config = configStatic.get(actorType);
-		var element = new ActorElemStatic(config.tileNr, config.sheetNr, px, py, config.width, config.height);
+		var conf = config.get(actorType);
+		var element = new ActorElemStatic(conf.tileNr, conf.sheetNr, px, py, conf.width, conf.height);
 		elemViewBuffer.set(mapkey, element);
 		bufferStatic.addElement(element);
 	}
@@ -107,29 +107,29 @@ class ActorRender {
 
 	public function actorGoLeft(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		// var px = x*CellRender.cellWidth + scrollOffsetX;
-		element.x -= CellRender.cellWidth;
+		// var px = x*RenderView.cellWidth + scrollOffsetX;
+		element.x -= RenderView.cellWidth;
 		element._yStart = element._yEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRight(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x += CellRender.cellWidth;
+		element.x += RenderView.cellWidth;
 		element._yStart = element._yEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.y -= CellRender.cellHeight;
+		element.y -= RenderView.cellHeight;
 		element._xStart = element._xEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.y += CellRender.cellHeight;
+		element.y += RenderView.cellHeight;
 		element._xStart = element._xEnd;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
@@ -137,25 +137,25 @@ class ActorRender {
 
 	public function actorGoLeftUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x -= CellRender.cellWidth; element.y -= CellRender.cellHeight;
+		element.x -= RenderView.cellWidth; element.y -= RenderView.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoLeftDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x -= CellRender.cellWidth; element.y += CellRender.cellHeight;
+		element.x -= RenderView.cellWidth; element.y += RenderView.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRightUp(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x += CellRender.cellWidth; element.y -= CellRender.cellHeight;
+		element.x += RenderView.cellWidth; element.y -= RenderView.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
 	public function actorGoRightDown(mapkey:Int, time:Int) {
 		var element = elemViewBuffer.get(mapkey);
-		element.x += CellRender.cellWidth; element.y += CellRender.cellHeight;
+		element.x += RenderView.cellWidth; element.y += RenderView.cellHeight;
 		element.time(peoteView.time, stepTime*time);
 		bufferStatic.updateElement(element);
 	}
@@ -183,7 +183,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.xOffset -= RESET_AT_OFFSET;
 		}
-		display.xOffset += CellRender.cellWidth;		
+		display.xOffset += RenderView.cellWidth;		
 	}
 
 	public function scrollRight() {
@@ -193,7 +193,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.xOffset += RESET_AT_OFFSET;
 		}
-		display.xOffset -= CellRender.cellWidth;	
+		display.xOffset -= RenderView.cellWidth;	
 	}
 
 	public function scrollTop() {
@@ -203,7 +203,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.yOffset -= RESET_AT_OFFSET;
 		}
-		display.yOffset += CellRender.cellHeight;		
+		display.yOffset += RenderView.cellHeight;		
 	}
 
 	public function scrollBottom() {
@@ -213,7 +213,7 @@ class ActorRender {
 			bufferStatic.update();
 			display.yOffset += RESET_AT_OFFSET;
 		}
-		display.yOffset -= CellRender.cellHeight;
+		display.yOffset -= RenderView.cellHeight;
 	}
 	
 }

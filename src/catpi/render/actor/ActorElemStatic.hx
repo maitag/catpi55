@@ -2,7 +2,6 @@ package catpi.render.actor;
 
 class ActorElemStatic implements peote.view.Element
 {
-
 	public var x(get, set):Int;
 	inline function get_x():Int {
 		return _xEnd;

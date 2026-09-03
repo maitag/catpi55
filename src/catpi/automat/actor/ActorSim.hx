@@ -32,7 +32,7 @@ class ActorSim {
 				a.goLeftDown(delay);
 				a.isMove = true;
 				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
-				a.grid.setSimEvent(e, delay);
+				a.grid.setSimEvent(e, delay+1);
 				startNeighborMove(a);
 				return true;
 			}
@@ -40,25 +40,25 @@ class ActorSim {
 				a.goRightDown(delay);
 				a.isMove = true;
 				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
-				a.grid.setSimEvent(e, delay);
+				a.grid.setSimEvent(e, delay+1);
 				startNeighborMove(a);
 				return true;
 			}
 		} 
 		else {
 			if (a.freeRightDown(true)) {
-				a.goRightDown(delay);
+				a.goRightDown(delay+1);
 				a.isMove = true;
 				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
-				a.grid.setSimEvent(e, delay);
+				a.grid.setSimEvent(e, delay+1);
 				startNeighborMove(a);
 				return true;
 			}
 			if (a.freeLeftDown(true)) {
-				a.goLeftDown(delay);
+				a.goLeftDown(delay+1);
 				a.isMove = true;
 				var e = new SimEvent(SimEventType.ACTOR_AFTER_MOVE, a.gridKey);
-				a.grid.setSimEvent(e, delay);
+				a.grid.setSimEvent(e, delay+1);
 				startNeighborMove(a);
 				return true;
 			}

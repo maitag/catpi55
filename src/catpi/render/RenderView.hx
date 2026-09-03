@@ -8,6 +8,11 @@ class RenderView {
 	public var cellRender:CellRender;
 	public var actorRender:ActorRender;
 
+	// TODO: optimize to "cellSize" only (maybe static inline)
+	public static var cellWidth:Int = 32;
+	public static var cellHeight:Int = 32;
+
+
 	public var zoom(get,set):Float;
 	inline function get_zoom():Float return cellRender.zoom;
 	inline function set_zoom(z:Float):Float return cellRender.zoom = actorRender.zoom = z;

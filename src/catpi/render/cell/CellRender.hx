@@ -11,6 +11,8 @@ import peote.view.TextureConfig;
 // TODO: replace by Int or renderCell
 import catpi.automat.Cell;
 
+import catpi.render.RenderView;
+
 import catpi.asset.Util;
 import catpi.asset.Sheet;
 
@@ -41,16 +43,9 @@ class CellRender {
 
 	public static var configStatic:Vector<CellElemConfigStatic>;
 
-	// TODO: optimize to "cellSize" only (maybe static inline)
-	public static var cellWidth:Int;
-	public static var cellHeight:Int;
-
 	public static function init(peoteView:PeoteView, sheets:Array<Sheet>, configStatic:CellConfigStatic) {
 		CellRender.peoteView = peoteView;
 		
-		CellRender.cellWidth = sheets[0].width;
-		CellRender.cellHeight = sheets[0].height;
-
 		loadTextures(sheets);
 
 		CellRender.configStatic = configStatic.toConfigVector();
@@ -87,7 +82,7 @@ class CellRender {
 		bufferStatic = new Buffer<CellElemStatic>(1024, 512);
 		bufferAnim = new Buffer<CellElemAnim>(1024, 512);
 
-		display = new CellDisplay(x, y, width, height, cellWidth, cellHeight, bufferStatic, bufferAnim, texture);
+		display = new CellDisplay(x, y, width, height, RenderView.cellWidth, RenderView.cellHeight, bufferStatic, bufferAnim, texture);
 		peoteView.addDisplay(display);		
 	}
 
@@ -112,8 +107,8 @@ class CellRender {
 	}
 
 	public inline function addCell(x:Int, y:Int, cellType:CellType) {
-		var px = x * cellWidth + scrollOffsetX;
-		var py = y * cellHeight + scrollOffsetY;
+		var px = x * RenderView.cellWidth + scrollOffsetX;
+		var py = y * RenderView.cellHeight + scrollOffsetY;
 
 		// TODO: empty cells
 		var config = configStatic.get(cellType);
@@ -168,7 +163,7 @@ class CellRender {
 			bufferStatic.update();
 			display.xOffset -= RESET_AT_OFFSET;
 		}
-		display.xOffset += cellWidth;		
+		display.xOffset += RenderView.cellWidth;		
 	}
 
 	public function scrollRight() {
@@ -181,7 +176,7 @@ class CellRender {
 			bufferStatic.update();
 			display.xOffset += RESET_AT_OFFSET;
 		}
-		display.xOffset -= cellWidth;	
+		display.xOffset -= RenderView.cellWidth;	
 	}
 
 	public function scrollTop() {
@@ -194,7 +189,7 @@ class CellRender {
 			bufferStatic.update();
 			display.yOffset -= RESET_AT_OFFSET;
 		}
-		display.yOffset += cellHeight;		
+		display.yOffset += RenderView.cellHeight;		
 	}
 
 	public function scrollBottom() {
@@ -207,7 +202,7 @@ class CellRender {
 			bufferStatic.update();
 			display.yOffset += RESET_AT_OFFSET;
 		}
-		display.yOffset -= cellHeight;
+		display.yOffset -= RenderView.cellHeight;
 	}
 
 

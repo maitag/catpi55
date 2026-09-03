@@ -522,9 +522,9 @@ public static inline var TESTGRID_STONES_1:String = "
 #    #                                                      #   
 #    ##     ##                                                  
 #                               #                       #       
-#         #                         #                           
-#  #        #                #              #      ##           
-#  ##                       #   ##  ##                  ##      
+#         #      ##                 #                           
+#  #        #    ##          #              #      ##           
+#  ##            ##         #   ##  ##                  ##      
 #            #                          ##                      
 #    ##                   #           #   #     #               
 #                        #   ##   #        #                    
@@ -700,10 +700,10 @@ public static inline var TESTGRID_STONES_4:String = "
                                                                #
            ##                                                  #
                                                                #
-                                                           ##  #
-                            ##                            ##   #
-                                                         ##    #
-                                                        ##     #
+                                            ###            ##  #
+                            ##              ###           ##   #
+                                            ###          ##    #
+                                            ###         ##     #
                                #                       ##      #
                                                       ##       #
                                                      ##        #

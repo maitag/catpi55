@@ -1,6 +1,6 @@
 package actors;
 
-enum abstract ActorType(Int) to Int {
+enum abstract ActorType(Int) from Int to Int {
 	
 	var STONE1x1;
 	var STONE1x2;

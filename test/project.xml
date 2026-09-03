@@ -11,12 +11,12 @@
 	<window if="html5||android" width="0" height="0" />
 	
 	
-	<!-- <app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" /> -->
-	<!-- <app main="TestView" path="bin" file="TestView" /> -->
 	<!-- <app main="TestSimmulation" path="bin" file="TestSimmulation" /> -->
-	<app main="FallingStones" path="bin" file="FallingStones" />
+	<!-- <app main="TestView" path="bin" file="TestView" /> -->
+	<!-- <app main="LimeAndOpenFLintoMAZE" path="bin" file="LimeAndOpenFLintoMAZE" /> -->
+	<!-- <app main="FallingStones" path="bin" file="FallingStones" /> -->
 
-	<!-- <app main="TestCellRender" path="bin" file="TestCellRender" /> -->
+	<app main="TestRender" path="bin" file="TestRender" />
 	<!-- <app main="TestAutomat" path="bin" file="TestAutomat" /> -->
 	<!-- <app main="TestUtil" path="bin" file="TestUtil" /> -->
 	<!-- <app main="KruskalCellMergingMazeTest.Test" path="bin" file="TestKruskal" /> -->

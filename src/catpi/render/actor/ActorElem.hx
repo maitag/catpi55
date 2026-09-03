@@ -1,8 +1,19 @@
-package catpi.render;
+package catpi.render.actor;
 
 
-interface Elem {
+interface ActorElem {
     
+    public function add():Void;
+    public function remove():Void;
 
+    public function goLeft (startTime:Float, duration:Float):Void;
+	public function goRight(startTime:Float, duration:Float):Void;
+	public function goUp   (startTime:Float, duration:Float):Void;
+	public function goDown (startTime:Float, duration:Float):Void;
+	
+	public function goLeftUp   (startTime:Float, duration:Float):Void;
+	public function goLeftDown (startTime:Float, duration:Float):Void;
+	public function goRightUp  (startTime:Float, duration:Float):Void;
+	public function goRightDown(startTime:Float, duration:Float):Void;
 
 }
