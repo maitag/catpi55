@@ -2,11 +2,7 @@ package catpi.render.actor;
 
 import peote.view.PeoteView;
 import peote.view.Display;
-import peote.view.Buffer;
 import peote.view.Program;
-import peote.view.Texture;
-import peote.view.TextureFormat;
-import peote.view.Color;
 
 @:forward(width, height, fbTexture)
 abstract ActorDisplay(Display) to Display
@@ -22,38 +18,10 @@ abstract ActorDisplay(Display) to Display
 	}
 	*/
 
-	public function new(x:Int, y:Int, w:Int, h:Int, bufferStatic:Buffer<ActorElemStatic>, bufferAnim:Buffer<ActorElemAnim>, textures:Array<Texture>)
+	public function new(x:Int, y:Int, w:Int, h:Int, programs:Array<Program>)
 	{
 		this = new Display(x, y, w, h);
-
-		//----------------------------------------------------
-		
-		var programStatic = new Program(bufferStatic);
-		// programAnim = new Program(bufferAnim);
-
-		// programStatic.setTexture(texture);
-		programStatic.setMultiTexture(textures);
-		// texture.setSmooth(true, false);
-
-		programStatic.blendEnabled = true;
-		
-		/*
-		// to reduce visual gap while zooming, not need whitout texture-interpolation (smooth) or by using framebuffer-way
-		var zoomFix = 0.0;
-		// var zoomFix = 0.37;
-		programStatic.setFormula("texSizeX", '${Util.toFloatString(
-			zoomFix + Tiles.tileWidth+Tiles.gap+Tiles.gap
-		)}');
-		programStatic.setFormula("texSizeY", '${Util.toFloatString(
-			zoomFix + Tiles.tileHeight+Tiles.gap+Tiles.gap
-		)}');
-		*/
-
-		// TODO: extra programs for animated elements etc.
-		// programAnim = new Program(bufferAnim);
-
-		this.addProgram(programStatic);
-		// this.addProgram(programAnim);
+		for (program in programs) this.addProgram(program);
 	}
 
 	public var zoom(get,set):Float;

@@ -19,7 +19,7 @@ abstract ProgSimple(Program) to Program
 
 		ElemSimple.buffer = buffer;
 		
-		// this.setMultiTexture(textures);
+		this.setMultiTexture(textures);
 
 		// texture.setSmooth(true, false);
 

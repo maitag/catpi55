@@ -1,6 +1,7 @@
 package catpi.render.actor;
 
-class ActorElemAnim implements peote.view.Element
+// TODO: interface etc
+class ElemAnim implements peote.view.Element
 {
 	// position in pixel (relative to upper left corner of Display)
 	@posX @anim("Pos") public var x:Int = 0;

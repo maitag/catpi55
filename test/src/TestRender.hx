@@ -60,7 +60,7 @@ class TestRender extends Application
 		peoteView.FPS.x = window.width - peoteView.FPS.width;
 		#end
 
-		var display = new Display(0,0,800,600,Color.GREEN1);
+		/*var display = new Display(0,0,800,600,Color.GREEN1);
 		peoteView.addDisplay(display);
 		var prog = new ProgSimple(null, 1024, 1024);
 		display.addProgram(prog);
@@ -70,7 +70,7 @@ class TestRender extends Application
 		e.add();
 		e.goLeft(peoteView.time, 2);peoteView.start();	
 
-		return;
+		return;*/
 
 		// ------------------ CellRender -----------------------
 		
@@ -93,28 +93,6 @@ class TestRender extends Application
 		cellRender.addCellsVertical( 0, 1, 3, [new Cell(CellType.EARTH), new Cell(CellType.ROCK)] );
 		
 		// ------------------ ActorRender -----------------------
-
-		var actorRenderConfigOld:catpi.render.actor.ActorConfig = [
-			ActorType.STONE1x1  => { tile:Actors.tile(ActorTileID.STONE1x1) , anim:ActorAnimID.still },
-			/*ActorType.STONE1x1  => { 
-				tile:Actors.tile(ActorTileID.STONE1x1),
-				type:ActorRenderType.SIMPLE,
-				defaultAction:ActorAction.STILL,
-				actions: [
-					ActorAction.STILL: {anim:ActorAnimID.still},
-					ActorAction.WALK: {anim:ActorAnimID.walk}
-				]
-			}*/
-			ActorType.STONE1x2  => { tile:Actors.tile(ActorTileID.STONE1x2) , anim:ActorAnimID.still },
-			ActorType.STONE2x2  => { tile:Actors.tile(ActorTileID.STONE2x2) , anim:ActorAnimID.still },
-			ActorType.CROSS     => { tile:Actors.tile(ActorTileID.CROSS)    , anim:ActorAnimID.still },
-			ActorType.EDGEBR3x3 => { tile:Actors.tile(ActorTileID.EDGEBR3x3), anim:ActorAnimID.still },
-			ActorType.HAXE      => { tile:Actors.tile(ActorTileID.HAXE)     , anim:ActorAnimID.still },
-			ActorType.LIME      => { tile:Actors.tile(ActorTileID.LIME)     , anim:ActorAnimID.still },
-			ActorType.OPENFL    => { tile:Actors.tile(ActorTileID.OPENFL)   , anim:ActorAnimID.still },
-			ActorType.FLIXEL    => { tile:Actors.tile(ActorTileID.FLIXEL)   , anim:ActorAnimID.still },
-			ActorType.SEMMI     => { tile:Actors.tile(ActorTileID.SEMMI)    , anim:ActorAnimID.still }
-		];
 		
 		var actorRenderConfig:ActorRenderConfig = [
 			ActorRenderType.SIMPLE => [
@@ -138,16 +116,17 @@ class TestRender extends Application
 
 		];
 		trace(actorRenderConfig.toConfigVector(Actors.sheets).maxActions);
-		trace(actorRenderConfig.toConfigVector(Actors.sheets).conf);
+		trace(actorRenderConfig.toConfigVector(Actors.sheets).config);
 		trace(actorRenderConfig.toConfigVector(Actors.sheets).renderTypeSheets);
 
-		ActorRender.init(peoteView, 100, Actors.sheets, actorRenderConfigOld);
+		ActorRender.init(peoteView, 100, Actors.sheets, actorRenderConfig);
 
 		var actorRender = new ActorRender(0, 0, 400, 400);
 		
 		actorRender.initView(64, 64);
 		
-		actorRender.addActor(1, 1, 0, ActorType.HAXE);
+		actorRender.addActor(1, 1, 0, ActorType.STONE1x1);
+		actorRender.addActor(2, 1, 0, ActorType.STONE2x2);
 
 	}
 	

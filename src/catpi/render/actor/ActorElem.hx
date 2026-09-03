@@ -3,6 +3,9 @@ package catpi.render.actor;
 
 interface ActorElem {
     
+    public var x(get, set):Int;
+    public var y(get, set):Int;
+
     public function add():Void;
     public function remove():Void;
 
