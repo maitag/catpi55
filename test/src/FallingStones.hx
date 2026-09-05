@@ -253,7 +253,9 @@ class FallingStones extends Application
 				}
 			
 			
-			case SPACE:  simRun = !simRun;
+			case SPACE:
+				if (simRun) peoteView.stop() else peoteView.start();
+				simRun = !simRun;
 
 
 			// move the actor

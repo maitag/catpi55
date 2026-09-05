@@ -161,7 +161,7 @@ class TestSimmulation extends Application
 
 		// ---- test SIMMULATION ---
 				
-		peoteView.start();		
+		peoteView.start();
 	}
 	
 	// ------------------------------------------------------------
